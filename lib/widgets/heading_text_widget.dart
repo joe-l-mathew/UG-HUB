@@ -12,7 +12,7 @@ class HeadingTextWidget extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-          color: Color(0xff4338CA), fontSize: 20, fontWeight: FontWeight.w500),
+          color: Color(0xff4338CA), fontSize: 30, fontWeight: FontWeight.w500),
     );
   }
 }

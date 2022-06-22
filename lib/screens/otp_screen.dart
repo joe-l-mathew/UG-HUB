@@ -35,7 +35,7 @@ class _OtpScreenState extends State<OtpScreen> {
     width: 56,
     height: 56,
     decoration: BoxDecoration(
-      color:const Color.fromARGB(136, 226, 223, 223),
+      color: const Color.fromARGB(136, 226, 223, 223),
       border: Border.all(color: primaryColor),
       borderRadius: BorderRadius.circular(7),
     ),
@@ -81,6 +81,7 @@ class _OtpScreenState extends State<OtpScreen> {
             Expanded(child: Container()),
             Center(
               child: ButtonFilled(
+                
                   text: "Submit OTP",
                   onPressed: () {
                     FocusManager.instance.primaryFocus?.unfocus();
@@ -88,13 +89,18 @@ class _OtpScreenState extends State<OtpScreen> {
                     if (finalTxt.length != 6) {
                       showSnackbar(context, "Please fill all fields!");
                     } else {
+                      if (Provider.of<AuthProvider>(context, listen: false)
+                              .verificationCode !=
+                          null) {
+                        AuthMethods().loginWithOtp(
+                            context: context,
+                            verificationCode: Provider.of<AuthProvider>(context,
+                                    listen: false)
+                                .verificationCode!,
+                            smsCode: otpController.text);
+                      }
                       //get otp here
-                      AuthMethods().loginWithOtp(
-                          context: context,
-                          verificationCode:
-                              Provider.of<AuthProvider>(context, listen: false)
-                                  .verificationCode!,
-                          smsCode: otpController.text);
+
                     }
                   }),
             ),

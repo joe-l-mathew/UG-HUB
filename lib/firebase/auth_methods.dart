@@ -20,6 +20,7 @@ class AuthMethods {
           });
         },
         verificationFailed: (FirebaseAuthException exp) {
+          Navigator.pop(context);
           showSnackbar(context, exp.toString());
         },
         codeSent: (String verificationCode, int? resentToken) {
@@ -34,7 +35,7 @@ class AuthMethods {
           Provider.of<AuthProvider>(context, listen: false).verificationCode =
               verificationCode;
         },
-        timeout:const Duration(minutes: 2));
+        timeout: const Duration(minutes: 2));
   }
 
   loginWithOtp(

@@ -45,6 +45,8 @@ class PhoneInputField extends StatelessWidget {
             keyboardType: TextInputType.phone,
             style: const TextStyle(fontSize: 14, color: Colors.black),
             decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 25.0, horizontal: 10.0),
               prefix: const Text(
                 '+91 ',
                 style: TextStyle(color: Colors.black),
@@ -56,8 +58,8 @@ class PhoneInputField extends StatelessWidget {
               fillColor: accentColor,
               hintText: 'Mobile Number',
               hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+              // contentPadding:
+              //     const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
               border: const OutlineInputBorder(
                 borderSide: BorderSide(color: primaryColor, width: 1.0),
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),

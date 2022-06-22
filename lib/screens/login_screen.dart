@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 8, left: 8),
                 child: Text(
                   "We'll sent an OTP for verification",
-                  style: TextStyle(fontSize: 10),
+                  style: TextStyle(fontSize: 15),
                 ),
               ),
               const SizedBox(
