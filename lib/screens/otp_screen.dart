@@ -1,20 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
+import 'package:ug_hub/firebase/auth_methods.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
+import 'package:ug_hub/provider/auth_provider.dart';
+import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/heading_text_widget.dart';
 
-import '../widgets/otp_widget.dart';
-
-class OtpScreen extends StatelessWidget {
-  final TextEditingController _controller1 = TextEditingController();
-  final TextEditingController _controller2 = TextEditingController();
-  final TextEditingController _controller3 = TextEditingController();
-  final TextEditingController _controller4 = TextEditingController();
-  final TextEditingController _controller5 = TextEditingController();
-  final TextEditingController _controller6 = TextEditingController();
-
+class OtpScreen extends StatefulWidget {
   final String phoneNo;
-  OtpScreen({Key? key, required this.phoneNo}) : super(key: key);
+  const OtpScreen({Key? key, required this.phoneNo}) : super(key: key);
+
+  @override
+  State<OtpScreen> createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
+  callAuthMethods() async {
+    await AuthMethods().verifyPhoneNumber(widget.phoneNo, context);
+  }
+
+  @override
+  void initState() {
+    callAuthMethods();
+    super.initState();
+  }
+
+  final TextEditingController otpController = TextEditingController();
+
+  final FocusNode _pinPutFocusNode = FocusNode();
+
+  final defaultPinTheme = PinTheme(
+    width: 56,
+    height: 56,
+    decoration: BoxDecoration(
+      color:const Color.fromARGB(136, 226, 223, 223),
+      border: Border.all(color: primaryColor),
+      borderRadius: BorderRadius.circular(7),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,31 +55,24 @@ class OtpScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const HeadingTextWidget(text: 'Verify OTP'),
-            Text("We've sent it on $phoneNo ",
+
+            Text("We've sent it on ${widget.phoneNo} ",
                 style: const TextStyle(fontSize: 10)),
             const SizedBox(
               height: 10,
             ),
-            Form(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  OtpWidget(
-                    controller: _controller1,
-                    isFirst: true,
-                  ),
-                  OtpWidget(
-                    controller: _controller2,
-                  ),
-                  OtpWidget(controller: _controller3),
-                  OtpWidget(controller: _controller4),
-                  OtpWidget(controller: _controller5),
-                  OtpWidget(
-                    controller: _controller6,
-                    isLast: true,
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 15,
+            ),
+            //Add otp field here
+            Pinput(
+              focusNode: _pinPutFocusNode,
+              // errorText: "fff",
+              defaultPinTheme: defaultPinTheme,
+              // forceErrorState: true,
+              controller: otpController,
+              autofocus: true,
+              length: 6,
             ),
             TextButton(
               onPressed: () {},
@@ -65,16 +83,18 @@ class OtpScreen extends StatelessWidget {
               child: ButtonFilled(
                   text: "Submit OTP",
                   onPressed: () {
-                    String finalTxt = _controller1.text +
-                        _controller2.text +
-                        _controller3.text +
-                        _controller4.text +
-                        _controller5.text +
-                        _controller6.text;
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    String finalTxt = otpController.text;
                     if (finalTxt.length != 6) {
                       showSnackbar(context, "Please fill all fields!");
                     } else {
                       //get otp here
+                      AuthMethods().loginWithOtp(
+                          context: context,
+                          verificationCode:
+                              Provider.of<AuthProvider>(context, listen: false)
+                                  .verificationCode!,
+                          smsCode: otpController.text);
                     }
                   }),
             ),

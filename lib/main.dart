@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/screens/login_screen.dart';
+// import 'package:ug_hub/screens/otp_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 
 void main() async {
@@ -15,11 +18,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'UG HUB',
-      theme: ThemeData(primarySwatch: primaryColor),
-      home: const LoginScreen(),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => AuthProvider())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'UG HUB',
+        theme: ThemeData(primarySwatch: primaryColor),
+        home: const LoginScreen(),
+        // home: OtpScreen(phoneNo: '9496283576'),
+      ),
     );
   }
 }

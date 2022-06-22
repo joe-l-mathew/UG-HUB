@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/screens/otp_screen.dart';
+// import 'package:ug_hub/screens/otp_screen.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
 import '../widgets/heading_text_widget.dart';
 import '../widgets/login_screen_widget.dart';
@@ -13,7 +14,7 @@ class LoginScreen extends StatelessWidget {
     TextEditingController _phoneNumberController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
-        iconTheme:const  IconThemeData(color: Colors.indigo),
+        iconTheme: const IconThemeData(color: Colors.indigo),
         elevation: 0,
         backgroundColor: Colors.white10,
       ),
@@ -49,17 +50,16 @@ class LoginScreen extends StatelessWidget {
               Center(
                 child: ButtonFilled(
                     text: "Continue",
-                    onPressed: () {
+                    onPressed: () async {
+                      FocusManager.instance.primaryFocus?.unfocus();
                       if (_phoneNumberController.text.length != 10) {
                         showSnackbar(context, "Enter a valid phone number");
                       } else {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (builder) =>
-                                OtpScreen(phoneNo: _phoneNumberController.text),
-                          ),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => OtpScreen(
+                                    phoneNo: _phoneNumberController.text)));
                       }
                     }),
               ),
