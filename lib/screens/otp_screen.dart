@@ -81,9 +81,8 @@ class _OtpScreenState extends State<OtpScreen> {
             Expanded(child: Container()),
             Center(
               child: ButtonFilled(
-                
                   text: "Submit OTP",
-                  onPressed: () {
+                  onPressed: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
                     String finalTxt = otpController.text;
                     if (finalTxt.length != 6) {
@@ -92,12 +91,16 @@ class _OtpScreenState extends State<OtpScreen> {
                       if (Provider.of<AuthProvider>(context, listen: false)
                               .verificationCode !=
                           null) {
-                        AuthMethods().loginWithOtp(
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .isOtpLoadingFun(true);
+                        await AuthMethods().loginWithOtp(
                             context: context,
                             verificationCode: Provider.of<AuthProvider>(context,
                                     listen: false)
                                 .verificationCode!,
                             smsCode: otpController.text);
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .isOtpLoadingFun(false);
                       }
                       //get otp here
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/screens/login_screen.dart';
-// import 'package:ug_hub/screens/otp_screen.dart';
+import 'package:ug_hub/screens/otp_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 
 void main() async {

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:ug_hub/provider/auth_provider.dart';
 
 class ButtonFilled extends StatelessWidget {
   final String text;
@@ -31,9 +34,11 @@ class ButtonFilled extends StatelessWidget {
                       borderRadius: BorderRadius.circular(borderRadius)),
                 )),
             onPressed: onPressed,
-            child: Text(
-              text,
-              style: const TextStyle(color: accentColor, fontSize: 16),
-            )));
+            child: Provider.of<AuthProvider>(context).isOtpLoading
+                ? LoadingAnimationWidget.inkDrop(color: Colors.white, size: 14)
+                : Text(
+                    text,
+                    style: const TextStyle(color: accentColor, fontSize: 16),
+                  )));
   }
 }
