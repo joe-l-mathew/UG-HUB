@@ -5,8 +5,11 @@ import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
+import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/home_screen.dart';
+import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/enterName_screen.dart';
+import 'package:ug_hub/screens/user_data_pages/select_university_screen.dart';
 
 class AuthMethods {
   final _auth = FirebaseAuth.instance;
@@ -30,16 +33,41 @@ class AuthMethods {
           showSnackbar(context, exp.toString());
         },
         codeSent: (String verificationCode, int? resentToken) {
-          Provider.of<AuthProvider>(context, listen: false).verificationCode =
-              verificationCode;
+          Provider.of<AuthProvider>(context, listen: false)
+              .setVerification(verificationCode);
         },
         codeAutoRetrievalTimeout: (String verificationCode) {
-          Provider.of<AuthProvider>(context, listen: false).verificationCode =
-              verificationCode;
+          Provider.of<AuthProvider>(context, listen: false)
+              .setVerification(verificationCode);
         },
         timeout: const Duration(minutes: 2));
   }
 
+//redirect after signing in datas like name, univ, etc will be analysed
+  Future<Widget> afterLoginPageRedirector(BuildContext context) async {
+    if (await _firestoreMethods.doesUserExist(
+        Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
+      if (await _firestoreMethods.doesUniversityExist(
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
+        return HomeScreen();
+      }
+
+      if (await _firestoreMethods.doesNameExist(
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
+        return SelectUniversityScreen();
+      } else {
+        return EnterNameScreen();
+      }
+    } else {
+      UserModel user = UserModel(
+          uid:
+              Provider.of<UserProvider>(context, listen: false).userModel!.uid);
+      await _firestoreMethods.addUserToFirestore(user);
+      return EnterNameScreen();
+    }
+  }
+
+//login code
   loginWithOtp(
       {required String verificationCode,
       required String smsCode,
@@ -48,35 +76,31 @@ class AuthMethods {
       await _auth
           .signInWithCredential(PhoneAuthProvider.credential(
               verificationId: verificationCode, smsCode: smsCode))
-          .then((value) async {
-        if (await _firestoreMethods.doesUserExist(value.user!.uid)) {
-          // check for user name
-          _firestoreMethods.doesNameExist(value.user!.uid);
-        } else {
-          //check for user.name
-          UserModel user = UserModel(uid: value.user!.uid);
-          await _firestoreMethods.addUserToFirestore(user);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (builder) => EnterNameScreen(),
-            ),
-          );
-        }
-      }
+          .then((value) => Provider.of<UserProvider>(context, listen: false)
+              .setUserModel(userModelc: UserModel(uid: value.user!.uid)));
 
-              //  Navigator.of(context).pushAndRemoveUntil(
-              //     MaterialPageRoute(builder: (builder) => const HomeScreen()),
-              //     (route) => false)
+      afterLoginPageRedirector(context);
+      Widget navWidget = await AuthMethods().afterLoginPageRedirector(context);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (builder) {
+        return navWidget;
+      }), (route) => false);
 
-              );
+      //  Navigator.of(context).pushAndRemoveUntil(
+      //     MaterialPageRoute(builder: (builder) => const HomeScreen()),
+      //     (route) => false)
+
     } catch (e) {
-      showSnackbar(context, "Invalid OTP");
+      showSnackbar(context, 'Invalid OTP');
     }
   }
 
   //Signout User
-  Future<void> signoutUser() async {
+  Future<void> signoutUser(BuildContext context) async {
     await _auth.signOut();
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (builder) => LoginScreen()),
+        (route) => false);
   }
 }

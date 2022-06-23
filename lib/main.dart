@@ -2,11 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/firebase/auth_methods.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
+import 'package:ug_hub/provider/university_provider.dart';
+import 'package:ug_hub/provider/user_provider.dart';
+import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/home_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 // import 'package:ug_hub/screens/otp_screen.dart';
 import 'package:ug_hub/utils/color.dart';
+import 'package:ug_hub/widgets/university_tile_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +26,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => AuthProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => UniversityProvider())
+      ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'UG HUB',
@@ -31,7 +40,8 @@ class MyApp extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.active) {
                 if (snapshot.hasData) {
-                  return const HomeScreen();
+                  return const FlashScreen();
+                  // return CustomCarouselFB2();
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text('${snapshot.error}'),

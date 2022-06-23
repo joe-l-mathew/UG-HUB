@@ -5,8 +5,10 @@ import 'package:ug_hub/provider/auth_provider.dart';
 
 class ButtonFilled extends StatelessWidget {
   final String text;
+  Widget? widget;
   final Function() onPressed;
-  const ButtonFilled({required this.text, required this.onPressed, Key? key})
+  ButtonFilled(
+      {required this.text, required this.onPressed, this.widget, Key? key})
       : super(key: key);
 
   @override
@@ -18,27 +20,31 @@ class ButtonFilled extends StatelessWidget {
     const double borderRadius = 15;
 
     return DecoratedBox(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
-            gradient:
-                const LinearGradient(colors: [primaryColor, secondaryColor])),
-        child: ElevatedButton(
-            style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                alignment: Alignment.center,
-                padding: MaterialStateProperty.all(const EdgeInsets.only(
-                    right: 75, left: 75, top: 15, bottom: 15)),
-                backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(borderRadius)),
-                )),
-            onPressed: onPressed,
-            child: Provider.of<AuthProvider>(context).isOtpLoading
-                ? LoadingAnimationWidget.inkDrop(color: Colors.white, size: 14)
-                : Text(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(borderRadius),
+          gradient:
+              const LinearGradient(colors: [primaryColor, secondaryColor])),
+      child: ElevatedButton(
+        style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            alignment: Alignment.center,
+            padding: MaterialStateProperty.all(const EdgeInsets.only(
+                right: 75, left: 75, top: 15, bottom: 15)),
+            backgroundColor: MaterialStateProperty.all(Colors.transparent),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius)),
+            )),
+        onPressed: onPressed,
+        child: Provider.of<AuthProvider>(context).isLoading
+            ? LoadingAnimationWidget.inkDrop(color: Colors.white, size: 14)
+            : widget == null
+                ? Text(
                     text,
                     style: const TextStyle(color: accentColor, fontSize: 16),
-                  )));
+                  )
+                : widget,
+      ),
+    );
   }
 }

@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 
-class PhoneInputField extends StatelessWidget {
+// ignore: must_be_immutable
+class CustomInputField extends StatelessWidget {
+  final TextInputType keybordType;
   final TextEditingController inputController;
-  const PhoneInputField({Key? key, required this.inputController})
+  int? maxLength;
+  final String textaboveBorder;
+  final String prefixText;
+  final String hintText;
+  CustomInputField(
+      {Key? key,
+      required this.maxLength,
+      required this.inputController,
+      required this.textaboveBorder,
+      required this.prefixText,
+      required this.hintText,
+      required this.keybordType})
       : super(key: key);
 
   @override
@@ -17,7 +30,7 @@ class PhoneInputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Phone",
+          textaboveBorder,
           style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.normal,
@@ -37,26 +50,26 @@ class PhoneInputField extends StatelessWidget {
           ]),
           child: TextFormField(
             autofocus: true,
-            maxLength: 10,
+            maxLength: maxLength,
             controller: inputController,
             onChanged: (value) {
               //Do something wi
             },
-            keyboardType: TextInputType.phone,
-            style: const TextStyle(fontSize: 14, color: Colors.black),
+            keyboardType: keybordType,
+            style: const TextStyle(fontSize: 15, color: Colors.black),
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 25.0, horizontal: 10.0),
-              prefix: const Text(
-                '+91 ',
-                style: TextStyle(color: Colors.black),
+              prefix: Text(
+                prefixText,
+                style: const TextStyle(color: Colors.black),
               ),
-              label: const Text("Phone"),
+              label: Text(textaboveBorder),
               labelStyle: const TextStyle(color: primaryColor),
               // prefixIcon: Icon(Icons.email),
               filled: true,
               fillColor: accentColor,
-              hintText: 'Mobile Number',
+              hintText: hintText,
               hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
               // contentPadding:
               //     const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),

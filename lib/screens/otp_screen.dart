@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/auth_methods.dart';
@@ -79,34 +80,44 @@ class _OtpScreenState extends State<OtpScreen> {
               child: const Text("Resent OTP"),
             ),
             Expanded(child: Container()),
-            Center(
-              child: ButtonFilled(
-                  text: "Submit OTP",
-                  onPressed: () async {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    String finalTxt = otpController.text;
-                    if (finalTxt.length != 6) {
-                      showSnackbar(context, "Please fill all fields!");
-                    } else {
-                      if (Provider.of<AuthProvider>(context, listen: false)
-                              .verificationCode !=
-                          null) {
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .isOtpLoadingFun(true);
-                        await AuthMethods().loginWithOtp(
-                            context: context,
-                            verificationCode: Provider.of<AuthProvider>(context,
-                                    listen: false)
-                                .verificationCode!,
-                            smsCode: otpController.text);
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .isOtpLoadingFun(false);
-                      }
-                      //get otp here
+            Consumer<AuthProvider>(builder: (BuildContext, value, Widget) {
+              return Center(
+                  child: value.verificationCode != null
+                      ? ButtonFilled(
+                          text: "Submit OTP",
+                          onPressed: () async {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            String finalTxt = otpController.text;
+                            if (finalTxt.length != 6) {
+                              showSnackbar(context, "Please fill all fields!");
+                            } else {
+                              if (Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                      .verificationCode !=
+                                  null) {
+                                Provider.of<AuthProvider>(context,
+                                        listen: false)
+                                    .isLoadingFun(true);
+                                await AuthMethods().loginWithOtp(
+                                    context: context,
+                                    verificationCode: Provider.of<AuthProvider>(
+                                            context,
+                                            listen: false)
+                                        .verificationCode!,
+                                    smsCode: otpController.text);
 
-                    }
-                  }),
-            ),
+                                Provider.of<AuthProvider>(context,
+                                        listen: false)
+                                    .isLoadingFun(false);
+                              } //get otp here
+                            }
+                          })
+                      : ButtonFilled(
+                          text: 'text',
+                          widget: LoadingAnimationWidget.waveDots(
+                              color: Colors.white, size: 14),
+                          onPressed: () {}));
+            }),
             const SizedBox(
               height: 40,
             )
