@@ -8,7 +8,7 @@ import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/home_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
-import 'package:ug_hub/screens/user_data_pages/enterName_screen.dart';
+import 'package:ug_hub/screens/user_data_pages/enter_name_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
 import 'package:ug_hub/screens/user_data_pages/select_university_screen.dart';
 
@@ -52,20 +52,20 @@ class AuthMethods {
           Provider.of<UserProvider>(context, listen: false).userModel!.uid,
           context)) {
         await _firestoreMethods.getUserDetail(context);
-        return HomeScreen();
+        return const HomeScreen();
       }
       if (await _firestoreMethods.doesUniversityExist(
           Provider.of<UserProvider>(context, listen: false).userModel!.uid,
           context)) {
         await _firestoreMethods.getUserDetail(context);
-        return SelectBranchScreen();
+        return const SelectBranchScreen();
       }
 
       if (await _firestoreMethods.doesNameExist(
           Provider.of<UserProvider>(context, listen: false).userModel!.uid,
           context)) {
         await _firestoreMethods.getUserDetail(context);
-        return SelectUniversityScreen();
+        return const SelectUniversityScreen();
       } else {
         await _firestoreMethods.getUserDetail(context);
         return EnterNameScreen();
@@ -113,7 +113,7 @@ class AuthMethods {
     await _auth.signOut();
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (builder) => LoginScreen()),
+        MaterialPageRoute(builder: (builder) => const LoginScreen()),
         (route) => false);
   }
 }

@@ -1,19 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:ug_hub/firebase/auth_methods.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/flash_screen.dart';
-import 'package:ug_hub/screens/home_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 // import 'package:ug_hub/screens/otp_screen.dart';
 import 'package:ug_hub/utils/color.dart';
-import 'package:ug_hub/widgets/university_tile_widget.dart';
 
+//need to change sha256 on real build
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -51,8 +50,9 @@ class MyApp extends StatelessWidget {
                 }
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return Center(
+                  child: LoadingAnimationWidget.fourRotatingDots(
+                      color: primaryColor, size: 50),
                 );
               }
               return const LoginScreen();

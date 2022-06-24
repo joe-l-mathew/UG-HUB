@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/screens/otp_screen.dart';
-// import 'package:ug_hub/screens/otp_screen.dart';
+
 import 'package:ug_hub/widgets/button_filled.dart';
-import '../provider/auth_provider.dart';
+
 import '../widgets/heading_text_widget.dart';
 import '../widgets/custom_input_field.dart';
 

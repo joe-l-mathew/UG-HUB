@@ -24,10 +24,10 @@ void addUniversity(BuildContext context) {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              HeadingTextWidget(text: "Add Branch"),
+              const HeadingTextWidget(text: "Add Branch"),
 
               //full name
               CustomInputField(

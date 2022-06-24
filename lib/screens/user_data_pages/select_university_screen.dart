@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +25,7 @@ class SelectUniversityScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
       floatingActionButton: adminList.contains(uid)
           ? FloatingActionButton(
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
               onPressed: () {
                 addUniversity(context);
               })
@@ -83,7 +82,7 @@ class SelectUniversityScreen extends StatelessWidget {
                       }),
                 ),
                 Consumer<UniversityProvider>(builder:
-                    (BuildContext context, UniversityProvider val, Widget) {
+                    (BuildContext context, UniversityProvider val, widget) {
                   return Container(
                     child: val.selectedUniversityName == null
                         ? Container()
@@ -98,7 +97,7 @@ class SelectUniversityScreen extends StatelessWidget {
                                     Expanded(
                                         child: Text(
                                       val.selectedUniversityName!,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )),
                                     ButtonFilled(
@@ -120,7 +119,7 @@ class SelectUniversityScreen extends StatelessWidget {
                                         })
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 )
                               ],

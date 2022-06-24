@@ -5,9 +5,9 @@ import 'package:ug_hub/provider/auth_provider.dart';
 
 class ButtonFilled extends StatelessWidget {
   final String text;
-  Widget? widget;
+  final Widget? widget;
   final Function() onPressed;
-  ButtonFilled(
+  const ButtonFilled(
       {required this.text, required this.onPressed, this.widget, Key? key})
       : super(key: key);
 
@@ -38,12 +38,11 @@ class ButtonFilled extends StatelessWidget {
         onPressed: onPressed,
         child: Provider.of<AuthProvider>(context).isLoading
             ? LoadingAnimationWidget.inkDrop(color: Colors.white, size: 14)
-            : widget == null
-                ? Text(
-                    text,
-                    style: const TextStyle(color: accentColor, fontSize: 16),
-                  )
-                : widget,
+            : widget ??
+                Text(
+                  text,
+                  style: const TextStyle(color: accentColor, fontSize: 16),
+                ),
       ),
     );
   }

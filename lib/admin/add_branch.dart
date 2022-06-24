@@ -25,10 +25,10 @@ void addBranch(BuildContext context) {
           child: SafeArea(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                HeadingTextWidget(text: "Add Branch"),
+                const HeadingTextWidget(text: "Add Branch"),
 
                 //full name
                 CustomInputField(

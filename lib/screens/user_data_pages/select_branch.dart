@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
@@ -8,12 +7,10 @@ import 'package:ug_hub/constants/admins.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
-import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/heading_text_widget.dart';
 
-import '../../admin/add_university.dart';
 import '../../provider/auth_provider.dart';
 import '../../utils/color.dart';
 import '../../widgets/university_tile_widget.dart';
@@ -28,7 +25,7 @@ class SelectBranchScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
       floatingActionButton: adminList.contains(uid)
           ? FloatingActionButton(
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
               onPressed: () {
                 addBranch(context);
               })
@@ -87,7 +84,7 @@ class SelectBranchScreen extends StatelessWidget {
                       }),
                 ),
                 Consumer<BranchProvider>(builder:
-                    (BuildContext context, BranchProvider val, Widget) {
+                    (BuildContext context, BranchProvider val, widget) {
                   return Container(
                     child: val.selectedBranchName == null
                         ? Container()
@@ -102,7 +99,7 @@ class SelectBranchScreen extends StatelessWidget {
                                     Expanded(
                                         child: Text(
                                       val.selectedBranchName!,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )),
                                     ButtonFilled(
@@ -125,7 +122,7 @@ class SelectBranchScreen extends StatelessWidget {
                                         })
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 )
                               ],

@@ -80,7 +80,7 @@ class _OtpScreenState extends State<OtpScreen> {
               child: const Text("Resent OTP"),
             ),
             Expanded(child: Container()),
-            Consumer<AuthProvider>(builder: (BuildContext, value, Widget) {
+            Consumer<AuthProvider>(builder: (buildContext, value, widget) {
               return Center(
                   child: value.verificationCode != null
                       ? ButtonFilled(
