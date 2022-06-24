@@ -12,6 +12,7 @@ import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/heading_text_widget.dart';
 
 import '../../admin/add_university.dart';
+import '../../provider/auth_provider.dart';
 import '../../utils/color.dart';
 import '../../widgets/university_tile_widget.dart';
 
@@ -103,6 +104,9 @@ class SelectUniversityScreen extends StatelessWidget {
                                     ButtonFilled(
                                         text: 'Next',
                                         onPressed: () async {
+                                          Provider.of<AuthProvider>(context,
+                                                  listen: false)
+                                              .isLoadingFun(false);
                                           await Firestoremethods()
                                               .addUniversityToFirestore(
                                                   Provider.of<UniversityProvider>(
@@ -110,6 +114,9 @@ class SelectUniversityScreen extends StatelessWidget {
                                                           listen: false)
                                                       .selectedUniversityDocId!,
                                                   context);
+                                          Provider.of<AuthProvider>(context,
+                                                  listen: false)
+                                              .isLoadingFun(false);
                                         })
                                   ],
                                 ),

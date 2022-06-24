@@ -71,6 +71,7 @@ void addBranch(BuildContext context) {
                         );
                         Provider.of<AuthProvider>(context, listen: false)
                             .isLoadingFun(false);
+                        Navigator.pop(builder);
                       } else {
                         Navigator.pop(builder);
                         showSnackbar(builder, "Please Fill all Fields");

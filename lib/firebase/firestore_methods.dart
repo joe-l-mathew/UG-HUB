@@ -20,6 +20,7 @@ class Firestoremethods {
     List docList = res.docs.map((e) => e.id).toList();
     return docList.contains(uid);
   }
+
 //get user details from firestore
   Future<void> getUserDetail(BuildContext context) async {
     Provider.of<UserProvider>(context, listen: false).setUserModel(
@@ -34,11 +35,11 @@ class Firestoremethods {
 
   //check for username
 
-  Future<bool> doesNameExist(String uid) async {
-    var userDetails =
-        await _firestore.collection(collectionUser).doc(uid).get();
-    UserModel userModel = UserModel.fromSnap(userDetails);
-    if (userModel.name == null) {
+  Future<bool> doesNameExist(String uid, BuildContext context) async {
+    await getUserDetail(context);
+
+    if (Provider.of<UserProvider>(context, listen: false).userModel!.name ==
+        null) {
       return false;
     } else {
       return true;
@@ -47,11 +48,13 @@ class Firestoremethods {
 
   //check for university
 
-  Future<bool> doesUniversityExist(String uid) async {
-    var userDetails =
-        await _firestore.collection(collectionUser).doc(uid).get();
-    UserModel userModel = UserModel.fromSnap(userDetails);
-    if (userModel.university == null) {
+  Future<bool> doesUniversityExist(String uid, BuildContext context) async {
+    await getUserDetail(context);
+
+    if (Provider.of<UserProvider>(context, listen: false)
+            .userModel!
+            .university ==
+        null) {
       return false;
     } else {
       return true;
@@ -59,11 +62,11 @@ class Firestoremethods {
   }
 
 //check for branch
-  Future<bool> doesBranchtExist(String uid) async {
-    var userDetails =
-        await _firestore.collection(collectionUser).doc(uid).get();
-    UserModel userModel = UserModel.fromSnap(userDetails);
-    if (userModel.branch == null) {
+  Future<bool> doesBranchtExist(String uid, BuildContext context) async {
+    await getUserDetail(context);
+
+    if (Provider.of<UserProvider>(context, listen: false).userModel!.branch ==
+        null) {
       return false;
     } else {
       return true;
@@ -84,10 +87,7 @@ class Firestoremethods {
         .collection(collectionUser)
         .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
         .update({collectionUserName: name});
-    UserModel? user =
-        Provider.of<UserProvider>(context, listen: false).userModel;
-    Provider.of<UserProvider>(context, listen: false)
-        .setUserModel(userModelc: UserModel(uid: user!.uid, name: name));
+    await getUserDetail(context);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -95,19 +95,30 @@ class Firestoremethods {
   }
 
   //add universityName to database
-  addUniversityToFirestore(String univId, BuildContext context) async {
+  Future<void> addUniversityToFirestore(
+      String univId, BuildContext context) async {
     await _firestore
         .collection(collectionUser)
         .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
         .update({collectionUniversity: univId, 'branch': null});
-    UserModel? user =
-        Provider.of<UserProvider>(context, listen: false).userModel;
-    Provider.of<UserProvider>(context, listen: false).setUserModel(
-        userModelc:
-            UserModel(uid: user!.uid, name: user.name, university: univId));
+    await getUserDetail(context);
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (builder) => SelectBranchScreen()),
+        (route) => false);
+  }
+
+  //add branch name to database
+  Future<void> addBranchToFirestore(
+      {required String branchId, required BuildContext context}) async {
+    await _firestore
+        .collection(collectionUser)
+        .doc(_auth.currentUser!.uid)
+        .update({collectionUserBranch: branchId});
+    getUserDetail(context);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (builder) => HomeScreen()),
         (route) => false);
   }
 

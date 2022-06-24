@@ -49,18 +49,21 @@ class AuthMethods {
     if (await _firestoreMethods.doesUserExist(
         Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
       if (await _firestoreMethods.doesBranchtExist(
-          Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid,
+          context)) {
         await _firestoreMethods.getUserDetail(context);
         return HomeScreen();
       }
       if (await _firestoreMethods.doesUniversityExist(
-          Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid,
+          context)) {
         await _firestoreMethods.getUserDetail(context);
         return SelectBranchScreen();
       }
 
       if (await _firestoreMethods.doesNameExist(
-          Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid,
+          context)) {
         await _firestoreMethods.getUserDetail(context);
         return SelectUniversityScreen();
       } else {

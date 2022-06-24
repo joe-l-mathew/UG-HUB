@@ -14,6 +14,7 @@ import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/heading_text_widget.dart';
 
 import '../../admin/add_university.dart';
+import '../../provider/auth_provider.dart';
 import '../../utils/color.dart';
 import '../../widgets/university_tile_widget.dart';
 
@@ -75,20 +76,20 @@ class SelectBranchScreen extends StatelessWidget {
                               imageUrl: snap['logo uri'],
                               subtitle: "+30 books",
                               onPressed: () {
-                                Provider.of<BranchyProvider>(context,
+                                Provider.of<BranchProvider>(context,
                                         listen: false)
-                                    .setUnivName(snap['name']);
-                                Provider.of<BranchyProvider>(context,
+                                    .setBranchName(snap['name']);
+                                Provider.of<BranchProvider>(context,
                                         listen: false)
                                     .setBranchId(snapshot.data!.docs[index].id);
                               }),
                         );
                       }),
                 ),
-                Consumer<BranchyProvider>(builder:
-                    (BuildContext context, BranchyProvider val, Widget) {
+                Consumer<BranchProvider>(builder:
+                    (BuildContext context, BranchProvider val, Widget) {
                   return Container(
-                    child: val.selectedUniversityName == null
+                    child: val.selectedBranchName == null
                         ? Container()
                         : Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -100,20 +101,27 @@ class SelectBranchScreen extends StatelessWidget {
                                   children: [
                                     Expanded(
                                         child: Text(
-                                      val.selectedUniversityName!,
+                                      val.selectedBranchName!,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )),
                                     ButtonFilled(
                                         text: 'Next',
                                         onPressed: () async {
+                                          Provider.of<AuthProvider>(context,
+                                                  listen: false)
+                                              .isLoadingFun(true);
                                           await Firestoremethods()
-                                              .addUniversityToFirestore(
-                                                  Provider.of<BranchyProvider>(
+                                              .addBranchToFirestore(
+                                                  branchId: Provider.of<
+                                                              BranchProvider>(
                                                           context,
                                                           listen: false)
-                                                      .selectedUniversityDocId!,
-                                                  context);
+                                                      .selectedBranchDocId!,
+                                                  context: context);
+                                          Provider.of<AuthProvider>(context,
+                                                  listen: false)
+                                              .isLoadingFun(false);
                                         })
                                   ],
                                 ),

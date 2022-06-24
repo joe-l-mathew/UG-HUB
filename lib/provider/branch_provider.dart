@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-class BranchyProvider with ChangeNotifier {
-  String? selectedUniversityName;
-  String? selectedUniversityDocId;
-  setUnivName(String name) {
-    selectedUniversityName = name;
+
+class BranchProvider with ChangeNotifier {
+  String? selectedBranchName;
+  String? selectedBranchDocId;
+  setBranchName(String name) {
+    selectedBranchName = name;
     notifyListeners();
   }
 
   setBranchId(String docId) {
-    selectedUniversityDocId = docId;
+    selectedBranchDocId = docId;
   }
 }
