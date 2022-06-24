@@ -9,6 +9,7 @@ import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/home_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/enterName_screen.dart';
+import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
 import 'package:ug_hub/screens/user_data_pages/select_university_screen.dart';
 
 class AuthMethods {
@@ -47,15 +48,23 @@ class AuthMethods {
   Future<Widget> afterLoginPageRedirector(BuildContext context) async {
     if (await _firestoreMethods.doesUserExist(
         Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
+      if (await _firestoreMethods.doesBranchtExist(
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
+        await _firestoreMethods.getUserDetail(context);
+        return HomeScreen();
+      }
       if (await _firestoreMethods.doesUniversityExist(
           Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
-        return HomeScreen();
+        await _firestoreMethods.getUserDetail(context);
+        return SelectBranchScreen();
       }
 
       if (await _firestoreMethods.doesNameExist(
           Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
+        await _firestoreMethods.getUserDetail(context);
         return SelectUniversityScreen();
       } else {
+        await _firestoreMethods.getUserDetail(context);
         return EnterNameScreen();
       }
     } else {
@@ -63,6 +72,7 @@ class AuthMethods {
           uid:
               Provider.of<UserProvider>(context, listen: false).userModel!.uid);
       await _firestoreMethods.addUserToFirestore(user);
+      await _firestoreMethods.getUserDetail(context);
       return EnterNameScreen();
     }
   }

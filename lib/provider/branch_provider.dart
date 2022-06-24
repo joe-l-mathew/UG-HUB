@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-class UniversityProvider with ChangeNotifier {
+class BranchyProvider with ChangeNotifier {
   String? selectedUniversityName;
   String? selectedUniversityDocId;
   setUnivName(String name) {
@@ -8,7 +7,7 @@ class UniversityProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setUnivId(String docId) {
+  setBranchId(String docId) {
     selectedUniversityDocId = docId;
   }
 }

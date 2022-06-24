@@ -3,9 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/admin/add_branch.dart';
 import 'package:ug_hub/constants/admins.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
+import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
@@ -15,8 +17,8 @@ import '../../admin/add_university.dart';
 import '../../utils/color.dart';
 import '../../widgets/university_tile_widget.dart';
 
-class SelectUniversityScreen extends StatelessWidget {
-  const SelectUniversityScreen({Key? key}) : super(key: key);
+class SelectBranchScreen extends StatelessWidget {
+  const SelectBranchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class SelectUniversityScreen extends StatelessWidget {
           ? FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                addUniversity(context);
+                addBranch(context);
               })
           : null,
       appBar: AppBar(
@@ -36,12 +38,14 @@ class SelectUniversityScreen extends StatelessWidget {
         elevation: 0,
         title: const HeadingTextWidget(
           fontsize: 25,
-          text: "Select your university",
+          text: "Select your branch",
         ),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection(collectionUniversity)
+            .doc(Provider.of<UserProvider>(context).userModel!.university)
+            .collection(collectionBranch)
             .snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -71,18 +75,18 @@ class SelectUniversityScreen extends StatelessWidget {
                               imageUrl: snap['logo uri'],
                               subtitle: "+30 books",
                               onPressed: () {
-                                Provider.of<UniversityProvider>(context,
+                                Provider.of<BranchyProvider>(context,
                                         listen: false)
                                     .setUnivName(snap['name']);
-                                Provider.of<UniversityProvider>(context,
+                                Provider.of<BranchyProvider>(context,
                                         listen: false)
-                                    .setUnivId(snapshot.data!.docs[index].id);
+                                    .setBranchId(snapshot.data!.docs[index].id);
                               }),
                         );
                       }),
                 ),
-                Consumer<UniversityProvider>(builder:
-                    (BuildContext context, UniversityProvider val, Widget) {
+                Consumer<BranchyProvider>(builder:
+                    (BuildContext context, BranchyProvider val, Widget) {
                   return Container(
                     child: val.selectedUniversityName == null
                         ? Container()
@@ -105,7 +109,7 @@ class SelectUniversityScreen extends StatelessWidget {
                                         onPressed: () async {
                                           await Firestoremethods()
                                               .addUniversityToFirestore(
-                                                  Provider.of<UniversityProvider>(
+                                                  Provider.of<BranchyProvider>(
                                                           context,
                                                           listen: false)
                                                       .selectedUniversityDocId!,
