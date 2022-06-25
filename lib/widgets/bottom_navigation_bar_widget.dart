@@ -116,7 +116,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
         elevation: 0,
-        enableFeedback: false,
+        selectedIconTheme: IconThemeData(color: primaryColor),
+        enableFeedback: true,
         showUnselectedLabels: false,
         showSelectedLabels: false,
         currentIndex: Provider.of<BottomNavigationBarProvider>(context).getPage,

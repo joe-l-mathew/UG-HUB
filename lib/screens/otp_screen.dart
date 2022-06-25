@@ -46,7 +46,7 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.indigo),
+        iconTheme: const IconThemeData(color: primaryColor),
         elevation: 0,
         backgroundColor: Colors.white10,
       ),

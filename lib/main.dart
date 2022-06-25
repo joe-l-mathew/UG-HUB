@@ -39,7 +39,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'UG HUB',
-          theme: ThemeData(primarySwatch: primaryColor),
+          theme: ThemeData(primarySwatch: Colors.indigo)
+              .copyWith(primaryColor: primaryColor),
           home: StreamBuilder(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
@@ -55,9 +56,11 @@ class MyApp extends StatelessWidget {
                 }
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: LoadingAnimationWidget.fourRotatingDots(
-                      color: primaryColor, size: 50),
+                return Scaffold(
+                  body: Center(
+                    child: LoadingAnimationWidget.fourRotatingDots(
+                        color: primaryColor, size: 50),
+                  ),
                 );
               }
               return const LoginScreen();

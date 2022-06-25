@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/color.dart';
+
 // ignore: must_be_immutable
 class CustomInputField extends StatelessWidget {
   final TextInputType keybordType;
@@ -20,8 +22,8 @@ class CustomInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xff4338CA);
-    const secondaryColor = Color(0xff6D28D9);
+    // const primaryColor = Color(0xff4338CA);
+    const secondaryColor = primaryColor;
     const accentColor = Color(0xffffffff);
     // const backgroundColor = Color(0xffffffff);
     const errorColor = Color(0xffEF4444);
@@ -78,7 +80,7 @@ class CustomInputField extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
               ),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: secondaryColor, width: 1.0),
+                borderSide: BorderSide(color: secondaryColor, width: 2.0),
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
               ),
               errorBorder: const OutlineInputBorder(

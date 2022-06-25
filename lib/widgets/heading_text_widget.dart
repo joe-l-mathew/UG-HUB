@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ug_hub/utils/color.dart';
 
 class HeadingTextWidget extends StatelessWidget {
   final String text;
@@ -14,9 +15,7 @@ class HeadingTextWidget extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          color: const Color(0xff4338CA),
-          fontSize: fontsize,
-          fontWeight: FontWeight.w500),
+          color: primaryColor, fontSize: fontsize, fontWeight: FontWeight.w500),
     );
   }
 }
