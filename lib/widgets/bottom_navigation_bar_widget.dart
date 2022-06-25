@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ug_hub/utils/color.dart';
+
+import '../provider/bottom_navigation_bar_provider.dart';
 
 class BottomNavBarFb2 extends StatelessWidget {
   const BottomNavBarFb2({Key? key}) : super(key: key);
@@ -22,22 +26,41 @@ class BottomNavBarFb2 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconBottomBar(
-                  text: "", icon: Icons.home, selected: true, onPressed: () {}),
+                  text: "",
+                  icon: Icons.home,
+                  selected: true,
+                  onPressed: () {
+                    Provider.of<BottomNavigationBarProvider>(context,
+                            listen: false)
+                        .setPage = 0;
+                  }),
               IconBottomBar(
                   text: "",
                   icon: Icons.chat,
                   selected: false,
-                  onPressed: () {}),
+                  onPressed: () {
+                    Provider.of<BottomNavigationBarProvider>(context,
+                            listen: false)
+                        .setPage = 1;
+                  }),
               IconBottomBar(
                   text: "",
                   icon: Icons.favorite,
                   selected: false,
-                  onPressed: () {}),
+                  onPressed: () {
+                    Provider.of<BottomNavigationBarProvider>(context,
+                            listen: false)
+                        .setPage = 2;
+                  }),
               IconBottomBar(
                   text: "",
                   icon: Icons.person,
                   selected: false,
-                  onPressed: () {})
+                  onPressed: () {
+                    Provider.of<BottomNavigationBarProvider>(context,
+                            listen: false)
+                        .setPage = 3;
+                  })
             ],
           ),
         ),
@@ -83,5 +106,30 @@ class IconBottomBar extends StatelessWidget {
         )
       ],
     );
+  }
+}
+
+class CustomBottomNavigationBar extends StatelessWidget {
+  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+        elevation: 0,
+        enableFeedback: false,
+        showUnselectedLabels: false,
+        showSelectedLabels: false,
+        currentIndex: Provider.of<BottomNavigationBarProvider>(context).getPage,
+        unselectedItemColor: Colors.grey.withOpacity(.75),
+        selectedItemColor: primaryColor,
+        onTap: ((value) =>
+            Provider.of<BottomNavigationBarProvider>(context, listen: false)
+                .setPage = value),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favorit"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
+        ]);
   }
 }

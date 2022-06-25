@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
+import 'package:ug_hub/provider/bottom_navigation_bar_provider.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
@@ -12,6 +13,8 @@ import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 
 //need to change sha256 on real build
+//go back to select university on select branch screen on restart
+//need to create new fields in user model such as university name, branch name etc
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -26,6 +29,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+            create: (context) => BottomNavigationBarProvider()),
         ChangeNotifierProvider(create: (context) => BranchProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),

@@ -8,6 +8,7 @@ import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
+import 'package:ug_hub/screens/user_data_pages/select_university_screen.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/heading_text_widget.dart';
 
@@ -31,6 +32,19 @@ class SelectBranchScreen extends StatelessWidget {
               })
           : null,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              color: primaryColor,
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => const SelectUniversityScreen()),
+                    (route) => false);
+              },
+              icon: const Icon(Icons.edit))
+        ],
         centerTitle: false,
         backgroundColor: Colors.white10,
         elevation: 0,

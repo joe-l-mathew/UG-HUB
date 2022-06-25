@@ -6,8 +6,9 @@ import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/model/branch_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
+import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
-import 'package:ug_hub/screens/home_screen.dart';
+import 'package:ug_hub/screens/landing_page.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
 import 'package:ug_hub/screens/user_data_pages/select_university_screen.dart';
 
@@ -99,7 +100,12 @@ class Firestoremethods {
     await _firestore
         .collection(collectionUser)
         .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
-        .update({collectionUniversity: univId, 'branch': null});
+        .update({
+      collectionUniversity: univId,
+      'branch': null,
+      "universityName": Provider.of<UniversityProvider>(context, listen: false)
+          .selectedUniversityName
+    });
     await getUserDetail(context);
     Navigator.push(
       context,
@@ -112,15 +118,19 @@ class Firestoremethods {
   //add branch name to database
   Future<void> addBranchToFirestore(
       {required String branchId, required BuildContext context}) async {
-    await _firestore
-        .collection(collectionUser)
-        .doc(_auth.currentUser!.uid)
-        .update({collectionUserBranch: branchId});
+    var path =
+        _firestore.collection(collectionUser).doc(_auth.currentUser!.uid);
+    await path.update({
+      collectionUserBranch: branchId,
+      'branchName': Provider.of<BranchProvider>(context, listen: false)
+          .selectedBranchName,
+    });
+
     getUserDetail(context);
     // await getBranchModel(context);
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (builder) => const HomeScreen()),
+        MaterialPageRoute(builder: (builder) => const LandingPage()),
         (route) => false);
   }
 

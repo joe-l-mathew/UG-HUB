@@ -7,14 +7,19 @@ class UserModel {
   final String? branch;
   final String? semester;
   final String? college;
+  final String? universityName;
+  final String? branchName;
 
-  UserModel(
-      {required this.uid,
-      this.name,
-      this.university,
-      this.branch,
-      this.semester,
-      this.college});
+  UserModel({
+    required this.uid,
+    this.name,
+    this.university,
+    this.branch,
+    this.semester,
+    this.college,
+    this.universityName,
+    this.branchName,
+  });
 
   Map<String, dynamic> toJson() => {
         "uid": uid,
@@ -22,7 +27,9 @@ class UserModel {
         "university": university,
         "branch": branch,
         "semester": semester,
-        "college": college
+        "college": college,
+        "universityName": universityName,
+        "branchName": branchName
       };
 
   static UserModel fromSnap(DocumentSnapshot snap) {
@@ -34,6 +41,8 @@ class UserModel {
         college: snapshot['college'],
         name: snapshot['name'],
         semester: snapshot['semester'],
-        university: snapshot['university']);
+        university: snapshot['university'],
+        universityName: snapshot['universityName'],
+        branchName: snapshot['branchName']);
   }
 }

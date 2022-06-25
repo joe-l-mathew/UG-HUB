@@ -6,8 +6,8 @@ import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
-import 'package:ug_hub/screens/flash_screen.dart';
-import 'package:ug_hub/screens/home_screen.dart';
+// import 'package:ug_hub/screens/flash_screen.dart';
+import 'package:ug_hub/screens/landing_page.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/enter_name_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
@@ -59,7 +59,7 @@ class AuthMethods {
           context)) {
         await _firestoreMethods.getUserDetail(context);
         await _firestoreMethods.getBranchModel(context);
-        return const HomeScreen();
+        return const LandingPage();
       }
       if (await _firestoreMethods.doesUniversityExist(
           Provider.of<UserProvider>(context, listen: false).userModel!.uid,
@@ -123,7 +123,9 @@ class AuthMethods {
     await _auth.signOut();
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (builder) => const LoginScreen()),
+        MaterialPageRoute(
+          builder: (builder) => const LoginScreen(),
+        ),
         (route) => false);
   }
 }

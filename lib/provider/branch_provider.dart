@@ -19,4 +19,5 @@ class BranchProvider with ChangeNotifier {
   setBranchId(String docId) {
     selectedBranchDocId = docId;
   }
+  
 }
