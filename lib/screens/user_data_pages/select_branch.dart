@@ -71,11 +71,12 @@ class SelectBranchScreen extends StatelessWidget {
                           child: CardFb1(
                               text: snap['Display name'],
                               imageUrl: snap['logo uri'],
-                              subtitle: "+30 books",
+                              subtitle: "",
                               onPressed: () {
                                 Provider.of<BranchProvider>(context,
                                         listen: false)
                                     .setBranchName(snap['name']);
+                                //getting branch id
                                 Provider.of<BranchProvider>(context,
                                         listen: false)
                                     .setBranchId(snapshot.data!.docs[index].id);

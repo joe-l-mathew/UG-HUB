@@ -135,14 +135,21 @@ class Firestoremethods {
 //add branch model
   Future<void> addBranchModel(
       BranchModel branchModel, BuildContext context) async {
+    int numOfSem = int.parse(branchModel.numberOfSemester);
     await getUserDetail(context);
-    await _firestore
+    var refrence = _firestore
         .collection(collectionUniversity)
         .doc(Provider.of<UserProvider>(context, listen: false)
             .userModel!
             .university)
-        .collection(collectionBranch)
-        .add(branchModel.toJson());
+        .collection(collectionBranch);
+    var returnValue = await refrence.add(branchModel.toJson());
+    for (int i = 0; i < numOfSem; i++) {
+      await refrence
+          .doc(returnValue.id)
+          .collection(collectionSemester)
+          .add({'name': "Semester " + (i + 1).toString()});
+    }
   }
 
   Future<void> getBranchModel(BuildContext context) async {
