@@ -6,6 +6,7 @@ import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
+import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/home_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/enter_name_screen.dart';
@@ -22,12 +23,17 @@ class AuthMethods {
     await _auth.verifyPhoneNumber(
         phoneNumber: "+91" + phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
-          await _auth.signInWithCredential(credential).then((value) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (builder) => const HomeScreen()),
-                (route) => false);
-          });
+          // print("auto capture success");
+          await _auth.signInWithCredential(credential).then((value) =>
+              Provider.of<UserProvider>(context, listen: false)
+                  .setUserModel(userModelc: UserModel(uid: value.user!.uid)));
+          afterLoginPageRedirector(context);
+          Widget navWidget =
+              await AuthMethods().afterLoginPageRedirector(context);
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (builder) {
+            return navWidget;
+          }), (route) => false);
         },
         verificationFailed: (FirebaseAuthException exp) {
           Navigator.pop(context);
@@ -72,9 +78,12 @@ class AuthMethods {
         return EnterNameScreen();
       }
     } else {
-      UserModel user = UserModel(
-          uid:
-              Provider.of<UserProvider>(context, listen: false).userModel!.uid);
+      String _uid =
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid;
+      // UserModel user = await UserModel(
+      //     uid:
+      //         Provider.of<UserProvider>(context, listen: false).userModel!.uid);
+      UserModel user = UserModel(uid: _uid);
       await _firestoreMethods.addUserToFirestore(user);
       await _firestoreMethods.getUserDetail(context);
       return EnterNameScreen();

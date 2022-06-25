@@ -9,8 +9,6 @@ import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
-import 'package:ug_hub/screens/otp_screen.dart';
-// import 'package:ug_hub/screens/otp_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 
 //need to change sha256 on real build
