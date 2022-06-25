@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
+import 'package:ug_hub/model/branch_model.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/custom_input_field.dart';
 import 'package:ug_hub/widgets/heading_text_widget.dart';
@@ -10,6 +11,8 @@ import '../provider/auth_provider.dart';
 
 void addBranch(BuildContext context) {
   final TextEditingController _displayNameController = TextEditingController();
+  final TextEditingController _numberOfSemesterController =
+      TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _logoUrlNameController = TextEditingController();
   showModalBottomSheet(
@@ -54,19 +57,31 @@ void addBranch(BuildContext context) {
                     prefixText: '',
                     hintText: 'Enter Logo Image Url',
                     keybordType: TextInputType.text),
+                CustomInputField(
+                    maxLength: null,
+                    inputController: _numberOfSemesterController,
+                    textaboveBorder: "Number of semester",
+                    prefixText: '',
+                    hintText: 'Enter number of semester',
+                    keybordType:
+                        const TextInputType.numberWithOptions(decimal: false)),
 
                 ButtonFilled(
                     text: "Add",
                     onPressed: () async {
                       if (_logoUrlNameController.text.isNotEmpty &&
                           _displayNameController.text.isNotEmpty &&
-                          _nameController.text.isNotEmpty) {
+                          _nameController.text.isNotEmpty &&
+                          _numberOfSemesterController.text.isNotEmpty) {
                         Provider.of<AuthProvider>(context, listen: false)
                             .isLoadingFun(true);
                         await Firestoremethods().addBranchModel(
-                          _displayNameController.text,
-                          _nameController.text,
-                          _logoUrlNameController.text,
+                          BranchModel(
+                              displayName: _displayNameController.text,
+                              name: _nameController.text,
+                              logoUrl: _logoUrlNameController.text,
+                              numberOfSemester:
+                                  _numberOfSemesterController.text),
                           context,
                         );
                         Provider.of<AuthProvider>(context, listen: false)

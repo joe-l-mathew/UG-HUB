@@ -42,6 +42,8 @@ class EnterNameScreen extends StatelessWidget {
                       if (_nameController.text.isEmpty) {
                         showSnackbar(context, "Please enter a valid name");
                       } else {
+                        //close keyboard
+                        FocusManager.instance.primaryFocus?.unfocus();
                         Provider.of<AuthProvider>(context, listen: false)
                             .isLoadingFun(true);
                         await Firestoremethods()

@@ -113,7 +113,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             }
                           })
                       : ButtonFilled(
-                          text: 'text',
+                          text: '',
                           widget: LoadingAnimationWidget.waveDots(
                               color: Colors.white, size: 14),
                           onPressed: () {}));

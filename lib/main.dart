@@ -9,6 +9,7 @@ import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
+import 'package:ug_hub/screens/otp_screen.dart';
 // import 'package:ug_hub/screens/otp_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.active) {
                 if (snapshot.hasData) {
                   return const FlashScreen();
+                  // return OtpScreen(phoneNo: 'phoneNo');
                   // return CustomCarouselFB2();
                 } else if (snapshot.hasError) {
                   return Center(

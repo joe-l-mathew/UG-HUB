@@ -52,6 +52,7 @@ class AuthMethods {
           Provider.of<UserProvider>(context, listen: false).userModel!.uid,
           context)) {
         await _firestoreMethods.getUserDetail(context);
+        await _firestoreMethods.getBranchModel(context);
         return const HomeScreen();
       }
       if (await _firestoreMethods.doesUniversityExist(

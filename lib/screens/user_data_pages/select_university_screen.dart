@@ -105,7 +105,7 @@ class SelectUniversityScreen extends StatelessWidget {
                                         onPressed: () async {
                                           Provider.of<AuthProvider>(context,
                                                   listen: false)
-                                              .isLoadingFun(false);
+                                              .isLoadingFun(true);
                                           await Firestoremethods()
                                               .addUniversityToFirestore(
                                                   Provider.of<UniversityProvider>(

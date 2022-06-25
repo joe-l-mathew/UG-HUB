@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
+import 'package:ug_hub/model/branch_model.dart';
 import 'package:ug_hub/model/user_model.dart';
+import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/home_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
@@ -99,10 +101,12 @@ class Firestoremethods {
         .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
         .update({collectionUniversity: univId, 'branch': null});
     await getUserDetail(context);
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (builder) => const SelectBranchScreen()),
-        (route) => false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (builder) => const SelectBranchScreen(),
+      ),
+    );
   }
 
   //add branch name to database
@@ -113,6 +117,7 @@ class Firestoremethods {
         .doc(_auth.currentUser!.uid)
         .update({collectionUserBranch: branchId});
     getUserDetail(context);
+    // await getBranchModel(context);
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (builder) => const HomeScreen()),
@@ -128,8 +133,8 @@ class Firestoremethods {
   }
 
 //add branch model
-  Future<void> addBranchModel(String displayName, String fullName, String url,
-      BuildContext context) async {
+  Future<void> addBranchModel(
+      BranchModel branchModel, BuildContext context) async {
     await getUserDetail(context);
     await _firestore
         .collection(collectionUniversity)
@@ -137,6 +142,20 @@ class Firestoremethods {
             .userModel!
             .university)
         .collection(collectionBranch)
-        .add({'Display name': displayName, 'name': fullName, 'logo uri': url});
+        .add(branchModel.toJson());
+  }
+
+  Future<void> getBranchModel(BuildContext context) async {
+    var snap = await _firestore
+        .collection(collectionUniversity)
+        .doc(Provider.of<UserProvider>(context, listen: false)
+            .userModel!
+            .university)
+        .collection(collectionBranch)
+        .doc(
+            Provider.of<UserProvider>(context, listen: false).userModel!.branch)
+        .get();
+    Provider.of<BranchProvider>(context, listen: false)
+        .setBranchModel(BranchModel.fromSnap(snap));
   }
 }
