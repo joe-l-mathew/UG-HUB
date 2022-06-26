@@ -10,17 +10,20 @@ class UserModel {
   final String? universityName;
   final String? branchName;
   final String? profileUrl;
+  final String? semesterName;
 
-  UserModel(
-      {required this.uid,
-      this.name,
-      this.university,
-      this.branch,
-      this.semester,
-      this.college,
-      this.universityName,
-      this.branchName,
-      this.profileUrl});
+  UserModel({
+    required this.uid,
+    this.name,
+    this.university,
+    this.branch,
+    this.semester,
+    this.college,
+    this.universityName,
+    this.branchName,
+    this.profileUrl,
+    this.semesterName,
+  });
 
   Map<String, dynamic> toJson() => {
         "uid": uid,
@@ -31,22 +34,23 @@ class UserModel {
         "college": college,
         "universityName": universityName,
         "branchName": branchName,
-        "profileUrl": profileUrl
+        "profileUrl": profileUrl,
+        "semesterName": semesterName
       };
 
   static UserModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return UserModel(
-      uid: snapshot['uid'],
-      branch: snapshot['branch'],
-      college: snapshot['college'],
-      name: snapshot['name'],
-      semester: snapshot['semester'],
-      university: snapshot['university'],
-      universityName: snapshot['universityName'],
-      branchName: snapshot['branchName'],
-      profileUrl: snapshot['profileUrl'],
-    );
+        uid: snapshot['uid'],
+        branch: snapshot['branch'],
+        college: snapshot['college'],
+        name: snapshot['name'],
+        semester: snapshot['semester'],
+        university: snapshot['university'],
+        universityName: snapshot['universityName'],
+        branchName: snapshot['branchName'],
+        profileUrl: snapshot['profileUrl'],
+        semesterName: snapshot['semesterName']);
   }
 }

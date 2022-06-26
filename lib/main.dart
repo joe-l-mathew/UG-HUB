@@ -13,8 +13,9 @@ import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 
 //need to change sha256 on real build
-//go back to select university on select branch screen on restart
-//need to create new fields in user model such as university name, branch name etc
+//go back to select university on select branch screen on restart -done
+//need to create new fields in user model such as university name, branch name etc -done
+// addd network check always
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

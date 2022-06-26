@@ -1,73 +1,107 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/constants/admins.dart';
+import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/utils/color.dart';
-import '../../widgets/app_bar_widget.dart';
-import '../../widgets/select_semester.dart';
+import '../../admin/add_subject.dart';
+import '../../functions/show_select_semester_bottom_sheet.dart';
+import '../../widgets/please_select_semester.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    Firestoremethods().getSemesterList(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      return Provider.of<UserProvider>(context, listen: false)
+              .userModel!
+              .semester ??
+          showSemesterBottomSheet(context);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     UserModel? _userModel = Provider.of<UserProvider>(context).userModel;
     return Scaffold(
+      floatingActionButton: adminList.contains(_userModel!.uid)
+          ? FloatingActionButton(
+              onPressed: () {
+                addSubject(context);
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             backgroundColor: primaryColor,
             bottom: const PreferredSize(
                 child: SizedBox(), preferredSize: Size.fromHeight(100)),
-            title: Expanded(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Welcome back,",
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+                Text(_userModel.name!,
+                    style: const TextStyle(
+                        fontSize: 25, fontWeight: FontWeight.bold)),
+                // Text('ME ' + ' KTU',
+                //     style: TextStyle(color: Colors.grey, fontSize: 16)),
+                // Text("KTU")
+              ],
+            ),
+            flexibleSpace: Padding(
+              padding: const EdgeInsets.only(left: 16),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Welcome back,",
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  Expanded(child: Container()),
+                  Text(
+                    _userModel.branchName!,
+                    style: const TextStyle(color: Colors.grey, fontSize: 16),
                   ),
-                  Text(_userModel!.name!,
-                      style: const TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold)),
-                  // Text('ME ' + ' KTU',
-                  //     style: TextStyle(color: Colors.grey, fontSize: 16)),
-                  // Text("KTU")
-                ],
-              ),
-            ),
-            flexibleSpace: Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: Container()),
-                    Text(
-                      _userModel.branchName!,
-                      style: const TextStyle(color: Colors.grey, fontSize: 16),
-                    ),
-                    Text(
-                      _userModel.universityName!,
-                      style: const TextStyle(color: Colors.grey, fontSize: 16),
-                    ),
-                    Center(
+                  Text(
+                    _userModel.universityName!,
+                    style: const TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
+                  Center(
                       child: TextButton.icon(
-                          onPressed: () {},
-                          icon: Icon(
+                          onPressed: () {
+                            showSemesterBottomSheet(context);
+                          },
+                          icon: const Icon(
                             Icons.arrow_downward,
                             color: Colors.white,
                           ),
-                          label: Text(
-                            'Semester',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    )
-                  ],
-                ),
+                          label: Provider.of<UserProvider>(context)
+                                      .userModel!
+                                      .semester ==
+                                  null
+                              ? const Text(
+                                  'Select semester',
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              : Text(
+                                  Provider.of<UserProvider>(context,
+                                          listen: true)
+                                      .userModel!
+                                      .semesterName!,
+                                  style: const TextStyle(color: Colors.white),
+                                )))
+                ],
               ),
             ),
             actions: [
@@ -95,9 +129,9 @@ class HomeScreen extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     height: 20,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
-                      borderRadius: const BorderRadius.only(
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20.0),
                         topRight: Radius.circular(20.0),
                       ),
@@ -107,9 +141,14 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          SliverList(
-              delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) => Text(index.toString())))
+          Provider.of<UserProvider>(context).userModel!.semester == null
+              ? SliverFillRemaining(
+                  child: Center(child: PleaseSelectSemester()),
+                )
+              : SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) => Text(index.toString()),
+                ))
         ],
       ),
     );
