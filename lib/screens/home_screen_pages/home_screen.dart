@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/admins.dart';
+import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/utils/color.dart';
+import 'package:ug_hub/widgets/subject_banner.dart';
 import '../../admin/add_subject.dart';
 import '../../functions/show_select_semester_bottom_sheet.dart';
 import '../../widgets/please_select_semester.dart';
@@ -145,10 +149,32 @@ class _HomeScreenState extends State<HomeScreen> {
               ? SliverFillRemaining(
                   child: Center(child: PleaseSelectSemester()),
                 )
-              : SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) => Text(index.toString()),
-                ))
+              : SliverFillRemaining(
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection(collectionUniversity)
+                        .doc(_userModel.university)
+                        .collection(collectionBranch)
+                        .doc(_userModel.branch)
+                        .collection(collectionSemester)
+                        .doc(_userModel.semester)
+                        .collection(collectionSubject)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: LoadingAnimationWidget.fourRotatingDots(
+                              color: primaryColor, size: 50),
+                        );
+                      }
+                      return ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, indesx) => SubjectBanner());
+                    },
+                  ),
+                )
         ],
       ),
     );

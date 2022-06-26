@@ -17,6 +17,7 @@ import 'package:ug_hub/utils/color.dart';
 //need to create new fields in user model such as university name, branch name etc -done
 // addd network check always
 //add orderby (assending) to all screen
+//make selected true for list tile
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
