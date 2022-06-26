@@ -16,6 +16,7 @@ import 'package:ug_hub/utils/color.dart';
 //go back to select university on select branch screen on restart -done
 //need to create new fields in user model such as university name, branch name etc -done
 // addd network check always
+//add orderby (assending) to all screen
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

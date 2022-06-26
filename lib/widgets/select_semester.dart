@@ -4,7 +4,7 @@ class PageSelector extends StatefulWidget {
   final List<String> textArray;
   final Function(int) onChange;
 
-  PageSelector({required this.textArray, required this.onChange, Key? key})
+  const PageSelector({required this.textArray, required this.onChange, Key? key})
       : super(key: key);
 
   @override
@@ -22,7 +22,7 @@ class _PageSelectorState extends State<PageSelector> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircularArrow(
-              icon: Icon(
+              icon:const Icon(
                 Icons.keyboard_arrow_left,
                 color: Colors.white,
               ),
@@ -37,10 +37,10 @@ class _PageSelectorState extends State<PageSelector> {
               }),
           Text(
             widget.textArray[_currentIndex],
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           CircularArrow(
-              icon: Icon(
+              icon: const Icon(
                 Icons.keyboard_arrow_right,
                 color: Colors.white,
               ),

@@ -3,18 +3,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class SubjectModel {
   final String shortName;
   final String fullname;
-  final String numberOfSemester;
+  final String numberOfModule;
 
   SubjectModel(
       {required this.shortName,
       required this.fullname,
-      required this.numberOfSemester});
+      required this.numberOfModule});
 
   Map<String, dynamic> toJson() {
     return {
       'shortName': shortName,
       'fullname': fullname,
-      'numberOfSemester': numberOfSemester
+      'numberOfModule': numberOfModule
     };
   }
 
@@ -23,6 +23,6 @@ class SubjectModel {
     return SubjectModel(
         shortName: snapshot["shortName"],
         fullname: snapshot["fullname"],
-        numberOfSemester: snapshot["numberOfSemester"]);
+        numberOfModule: snapshot["numberOfModule"]);
   }
 }

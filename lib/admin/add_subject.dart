@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
-import 'package:ug_hub/model/branch_model.dart';
+import 'package:ug_hub/model/subject_model.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/custom_input_field.dart';
 import 'package:ug_hub/widgets/heading_text_widget.dart';
@@ -13,7 +13,7 @@ void addSubject(BuildContext context) {
   final TextEditingController _shortNameController = TextEditingController();
   final TextEditingController _numberOfModuleController =
       TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -38,12 +38,12 @@ void addSubject(BuildContext context) {
                     inputController: _shortNameController,
                     textaboveBorder: "Short name",
                     prefixText: '',
-                    hintText: 'Enter short branch name',
+                    hintText: 'Enter short subject name',
                     keybordType: TextInputType.text),
                 //full name
                 CustomInputField(
                     maxLength: null,
-                    inputController: _nameController,
+                    inputController: _fullNameController,
                     textaboveBorder: "Full name",
                     prefixText: '',
                     hintText: 'Enter full subject name',
@@ -69,10 +69,17 @@ void addSubject(BuildContext context) {
                     text: "Add",
                     onPressed: () async {
                       if (_shortNameController.text.isNotEmpty &&
-                          _nameController.text.isNotEmpty &&
+                          _fullNameController.text.isNotEmpty &&
                           _numberOfModuleController.text.isNotEmpty) {
                         Provider.of<AuthProvider>(context, listen: false)
                             .isLoadingFun(true);
+                        await Firestoremethods().addModule(
+                            context,
+                            SubjectModel(
+                                shortName: _shortNameController.text,
+                                fullname: _fullNameController.text,
+                                numberOfModule:
+                                    _numberOfModuleController.text));
                         // await Firestoremethods().addBranchModel(
                         //   BranchModel(
                         //       displayName: _displayNameController.text,

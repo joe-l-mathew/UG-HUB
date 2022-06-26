@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/model/branch_model.dart';
+import 'package:ug_hub/model/subject_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
@@ -200,5 +201,26 @@ class Firestoremethods {
         .doc(_user.uid)
         .update({"semester": semesterId, "semesterName": semesterName});
     getUserDetail(context);
+  }
+
+  Future<void> addModule(
+      BuildContext context, SubjectModel subjectModel) async {
+    UserModel _user =
+        Provider.of<UserProvider>(context, listen: false).userModel!;
+    var path = _firestore
+        .collection(collectionUniversity)
+        .doc(_user.university)
+        .collection(collectionBranch)
+        .doc(_user.branch)
+        .collection(collectionSemester)
+        .doc(_user.semester)
+        .collection(collectionSubject);
+    var res = await path.add(subjectModel.toJson());
+    for (int i = 0; i < int.parse(subjectModel.numberOfModule); i++) {
+      await path
+          .doc(res.id)
+          .collection(collectionModule)
+          .add({"name": "Module ${i + 1}"});
+    }
   }
 }
