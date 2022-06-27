@@ -58,9 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Welcome back,",
                   style: TextStyle(color: Colors.grey, fontSize: 16),
                 ),
-                Text(_userModel.name!,
-                    style: const TextStyle(
-                        fontSize: 25, fontWeight: FontWeight.bold)),
+                Text(
+                  _userModel.name!,
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.bold),
+                ),
                 // Text('ME ' + ' KTU',
                 //     style: TextStyle(color: Colors.grey, fontSize: 16)),
                 // Text("KTU")
@@ -170,8 +172,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }
                       return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, indesx) => SubjectBanner());
+                          itemBuilder: (context, index) => SubjectBanner(
+                            subId: snapshot.data!.docs[index].id,
+                                index: index,
+                                snapshot: snapshot,
+                              ));
                     },
                   ),
                 )

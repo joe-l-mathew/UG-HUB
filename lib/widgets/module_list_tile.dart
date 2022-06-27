@@ -11,7 +11,7 @@ class ModuleListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25.0, bottom: 15),
+      padding: const EdgeInsets.only(left: 10, right: 15, bottom: 15),
       child: Container(
         width: 200,
         height: 150,

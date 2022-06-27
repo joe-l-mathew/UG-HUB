@@ -18,6 +18,7 @@ import 'package:ug_hub/utils/color.dart';
 // addd network check always
 //add orderby (assending) to all screen
 //make selected true for list tile
+//tile image backup
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
