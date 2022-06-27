@@ -34,7 +34,7 @@ class ModuleListTile extends StatelessWidget {
             Spacer(),
             Text(text,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style:const  TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,

@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/screens/display_material_screen.dart';
 import 'package:ug_hub/widgets/module_list_tile.dart';
-
 import '../constants/firebase_fields.dart';
 import '../model/user_model.dart';
 import '../provider/user_provider.dart';
@@ -54,7 +54,7 @@ class SubjectBanner extends StatelessWidget {
                   .doc(_userModel.semester)
                   .collection(collectionSubject)
                   .doc(subId)
-                  .collection('Module')
+                  .collection(collectionModule)
                   .orderBy('name')
                   .snapshots(),
               builder: (BuildContext context,
@@ -71,9 +71,18 @@ class SubjectBanner extends StatelessWidget {
                       itemCount: snapshot.data!.docs.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
-                        return ModuleListTile(
-                            snapshot.data!.docs[index].data()['name'],
-                            "No of module : 5");
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) =>
+                                        DisplayMaterialsScreen()));
+                          },
+                          child: ModuleListTile(
+                              snapshot.data!.docs[index].data()['name'],
+                              "No of module : 5"),
+                        );
                         // return Text(Index.toString());
                       }),
                 );

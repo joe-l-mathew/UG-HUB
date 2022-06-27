@@ -21,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _controller = ScrollController();
   @override
   void initState() {
     Firestoremethods().getSemesterList(context);
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           : null,
       body: CustomScrollView(
+        controller: _controller,
         slivers: [
           SliverAppBar(
             backgroundColor: primaryColor,
@@ -172,10 +174,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }
                       return ListView.builder(
+                          controller: _controller,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.docs.length,
                           itemBuilder: (context, index) => SubjectBanner(
-                            subId: snapshot.data!.docs[index].id,
+                                subId: snapshot.data!.docs[index].id,
                                 index: index,
                                 snapshot: snapshot,
                               ));
