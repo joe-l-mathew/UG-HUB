@@ -21,7 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _controller = ScrollController();
   @override
   void initState() {
     Firestoremethods().getSemesterList(context);
@@ -38,155 +37,184 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     UserModel? _userModel = Provider.of<UserProvider>(context).userModel;
     return Scaffold(
-      floatingActionButton: adminList.contains(_userModel!.uid)
-          ? FloatingActionButton(
-              onPressed: () {
-                addSubject(context);
-              },
-              child: const Icon(Icons.add),
-            )
-          : null,
-      body: CustomScrollView(
-        controller: _controller,
-        slivers: [
-          SliverAppBar(
-            backgroundColor: primaryColor,
-            bottom: const PreferredSize(
-                child: SizedBox(), preferredSize: Size.fromHeight(100)),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Welcome back,",
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
-                ),
-                Text(
-                  _userModel.name!,
-                  style: const TextStyle(
-                      fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-                // Text('ME ' + ' KTU',
-                //     style: TextStyle(color: Colors.grey, fontSize: 16)),
-                // Text("KTU")
-              ],
-            ),
-            flexibleSpace: Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(child: Container()),
-                  Text(
-                    _userModel.branchName!,
-                    style: const TextStyle(color: Colors.grey, fontSize: 16),
-                  ),
-                  Text(
-                    _userModel.universityName!,
-                    style: const TextStyle(color: Colors.grey, fontSize: 16),
-                  ),
-                  Center(
-                      child: TextButton.icon(
-                          onPressed: () {
-                            showSemesterBottomSheet(context);
-                          },
-                          icon: const Icon(
-                            Icons.arrow_downward,
-                            color: Colors.white,
+        // backgroundColor: primaryColor,
+        floatingActionButton: adminList.contains(_userModel!.uid)
+            ? FloatingActionButton(
+                onPressed: () {
+                  addSubject(context);
+                },
+                child: const Icon(Icons.add),
+              )
+            : null,
+        body: Stack(
+          children: [
+            Provider.of<UserProvider>(context).userModel!.semester == null
+                ? Center(
+                    child: Center(child: PleaseSelectSemester()),
+                  )
+                : Stack(
+                    children: [
+                      Container(
+                        height: 180,
+                        color: primaryColor,
+                        child: SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Welcome back,",
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 16),
+                                        ),
+                                        Text(
+                                          _userModel.name!,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    //actons here
+                                    _userModel.profileUrl == null
+                                        ? const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: CircleAvatar(
+                                              child: Icon(Icons.person),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  _userModel.profileUrl!),
+                                            ),
+                                          )
+                                  ],
+                                ),
+                                // Text('ME ' + ' KTU',
+                                //     style: TextStyle(color: Colors.grey, fontSize: 16)),
+                                // Text("KTU")
+
+                                Text(
+                                  _userModel.branchName!,
+                                  style: const TextStyle(
+                                      color: Colors.grey, fontSize: 16),
+                                ),
+                                Text(
+                                  _userModel.universityName!,
+                                  style: const TextStyle(
+                                      color: Colors.grey, fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
-                          label: Provider.of<UserProvider>(context)
-                                      .userModel!
-                                      .semester ==
-                                  null
-                              ? const Text(
-                                  'Select semester',
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              : Text(
-                                  Provider.of<UserProvider>(context,
-                                          listen: true)
-                                      .userModel!
-                                      .semesterName!,
-                                  style: const TextStyle(color: Colors.white),
-                                )))
-                ],
-              ),
-            ),
-            actions: [
-              _userModel.profileUrl == null
-                  ? const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        child: Icon(Icons.person),
+                        ),
                       ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(_userModel.profileUrl!),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 170,
+                            ),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(10))),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: TextButton.icon(
+                                      onPressed: () {
+                                        // print("tapped");
+                                        showSemesterBottomSheet(context);
+                                      },
+                                      icon: const Icon(Icons.arrow_downward,
+                                          color: primaryColor),
+                                      label: Provider.of<UserProvider>(context)
+                                                  .userModel!
+                                                  .semester ==
+                                              null
+                                          ? const Text(
+                                              'Select semester',
+                                              style: TextStyle(
+                                                  color: primaryColor),
+                                            )
+                                          : Text(
+                                              Provider.of<UserProvider>(context,
+                                                      listen: true)
+                                                  .userModel!
+                                                  .semesterName!,
+                                              style: const TextStyle(
+                                                  color: primaryColor),
+                                            ),
+                                    ),
+                                  ),
+                                  StreamBuilder(
+                                    stream: FirebaseFirestore.instance
+                                        .collection(collectionUniversity)
+                                        .doc(_userModel.university)
+                                        .collection(collectionBranch)
+                                        .doc(_userModel.branch)
+                                        .collection(collectionSemester)
+                                        .doc(_userModel.semester)
+                                        .collection(collectionSubject)
+                                        .snapshots(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<
+                                                QuerySnapshot<
+                                                    Map<String, dynamic>>>
+                                            snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                          child: LoadingAnimationWidget
+                                              .fourRotatingDots(
+                                                  color: primaryColor,
+                                                  size: 50),
+                                        );
+                                      }
+                                      return ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const ClampingScrollPhysics(),
+
+                                          // physics: const NeverScrollableScrollPhysics(),
+                                          itemCount: snapshot.data!.docs.length,
+                                          itemBuilder: (context, index) =>
+                                              SubjectBanner(
+                                                subId: snapshot
+                                                    .data!.docs[index].id,
+                                                index: index,
+                                                snapshot: snapshot,
+                                              ));
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 10,
+                              color: Colors.white,
+                            )
+                          ],
+                        ),
                       ),
-                    )
-            ],
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              color: primaryColor,
-              height: 20,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                      ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ),
-          Provider.of<UserProvider>(context).userModel!.semester == null
-              ? SliverFillRemaining(
-                  child: Center(child: PleaseSelectSemester()),
-                )
-              : SliverFillRemaining(
-                  child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection(collectionUniversity)
-                        .doc(_userModel.university)
-                        .collection(collectionBranch)
-                        .doc(_userModel.branch)
-                        .collection(collectionSemester)
-                        .doc(_userModel.semester)
-                        .collection(collectionSubject)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                            snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: LoadingAnimationWidget.fourRotatingDots(
-                              color: primaryColor, size: 50),
-                        );
-                      }
-                      return ListView.builder(
-                          controller: _controller,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) => SubjectBanner(
-                                subId: snapshot.data!.docs[index].id,
-                                index: index,
-                                snapshot: snapshot,
-                              ));
-                    },
-                  ),
-                )
-        ],
-      ),
-    );
+          ],
+        ));
   }
 }

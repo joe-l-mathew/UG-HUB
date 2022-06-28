@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UniversityProvider())
       ],
       child: MaterialApp(
+        
           debugShowCheckedModeBanner: false,
           title: 'UG HUB',
           theme: ThemeData(primarySwatch: Colors.indigo)

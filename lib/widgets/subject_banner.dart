@@ -65,8 +65,11 @@ class SubjectBanner extends StatelessWidget {
                         color: primaryColor, size: 50),
                   );
                 }
-                return Expanded(
+                return Container(
+                  width: double.infinity,
+                  height: 138,
                   child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
                       shrinkWrap: true, // 1st add
                       itemCount: snapshot.data!.docs.length,
                       scrollDirection: Axis.horizontal,
