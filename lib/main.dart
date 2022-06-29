@@ -10,6 +10,7 @@ import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/upload_pdf_provider.dart';
+import 'package:ug_hub/provider/upload_status_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => UploadStatusProvider()),
         ChangeNotifierProvider(create: (context) => ModuleModelProvider()),
         ChangeNotifierProvider(create: (context) => UploadPdfProvider()),
         ChangeNotifierProvider(create: (context) => AddModuleToggleProvider()),

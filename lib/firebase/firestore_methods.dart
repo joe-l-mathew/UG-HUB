@@ -6,9 +6,11 @@ import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firebase_storage_methods.dart';
 import 'package:ug_hub/model/branch_model.dart';
 import 'package:ug_hub/model/module_model.dart';
+import 'package:ug_hub/model/other_link_model.dart';
 import 'package:ug_hub/model/subject_model.dart';
 import 'package:ug_hub/model/upload_pdf_model.dart';
 import 'package:ug_hub/model/user_model.dart';
+import 'package:ug_hub/model/youtube_model.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
@@ -17,6 +19,8 @@ import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/landing_page.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
 import 'package:ug_hub/screens/user_data_pages/select_university_screen.dart';
+
+import '../provider/upload_status_provider.dart';
 
 class Firestoremethods {
   final _auth = FirebaseAuth.instance;
@@ -257,5 +261,65 @@ class Firestoremethods {
     await path
         .collection(collectionPdf)
         .add(uploadPdfModel.toJson(uploadPdfModel));
+    Provider.of<UploadStatusProvider>(context, listen: false).setUploadStatus =
+        null;
+  }
+
+  Future<void> addYoutubeLink(
+      {required String channelName,
+      required String youtubeLink,
+      required BuildContext context}) async {
+    ModuleModel? _moduleModel =
+        Provider.of<ModuleModelProvider>(context, listen: false).getModuleModel;
+    UserModel _user =
+        Provider.of<UserProvider>(context, listen: false).userModel!;
+    YoutubeModel ytModel = YoutubeModel(
+        youtubeLink: youtubeLink,
+        youtubeChannelName: channelName,
+        like: [],
+        uid: _user.uid,
+        userName: _user.name!);
+    var path = _firestore
+        .collection(collectionUniversity)
+        .doc(_user.university)
+        .collection(collectionBranch)
+        .doc(_user.branch)
+        .collection(collectionSemester)
+        .doc(_user.semester)
+        .collection(collectionSubject)
+        .doc(_moduleModel!.subjectId)
+        .collection(collectionModule)
+        .doc(_moduleModel.moduleId);
+    await path.collection(collectionYoutube).add(ytModel.toJson(ytModel));
+  }
+
+  Future<void> addOtherLink(
+      {required String link,
+      required String linkName,
+      required BuildContext context}) async {
+    ModuleModel? _moduleModel =
+        Provider.of<ModuleModelProvider>(context, listen: false).getModuleModel;
+    UserModel _user =
+        Provider.of<UserProvider>(context, listen: false).userModel!;
+    OtherLinkModel otherLinkModel = OtherLinkModel(
+        uid: _user.uid,
+        userName: _user.name!,
+        link: link,
+        linkName: linkName,
+        likes: []);
+    var path = _firestore
+        .collection(collectionUniversity)
+        .doc(_user.university)
+        .collection(collectionBranch)
+        .doc(_user.branch)
+        .collection(collectionSemester)
+        .doc(_user.semester)
+        .collection(collectionSubject)
+        .doc(_moduleModel!.subjectId)
+        .collection(collectionModule)
+        .doc(_moduleModel.moduleId);
+    await path
+        .collection(collectionOtherLink)
+        .add(otherLinkModel.toJson(otherLinkModel));
   }
 }

@@ -7,14 +7,16 @@ import '../widgets/toogle_button_widget.dart';
 
 class AddMaterialsScreen extends StatelessWidget {
   AddMaterialsScreen({Key? key}) : super(key: key);
-  final List<Widget> listOfUploads = [
-    AddPdfPage(),
-    AddYoutubeUrlPage(),
-    AddOtherLinkPage()
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> listOfUploads = [
+      AddPdfPage(),
+      AddYoutubeUrlPage(context: context),
+      AddOtherLinkPage(
+        context: context,
+      )
+    ];
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

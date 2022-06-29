@@ -3,16 +3,24 @@ import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/provider/upload_pdf_provider.dart';
+import 'package:ug_hub/provider/upload_status_provider.dart';
 import 'package:ug_hub/utils/color.dart';
+import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/custom_input_field.dart';
 
 import '../functions/pick_pdf_file.dart';
+import '../provider/auth_provider.dart';
 
 final pdfNameController = TextEditingController();
 
-class AddPdfPage extends StatelessWidget {
+class AddPdfPage extends StatefulWidget {
   AddPdfPage({Key? key}) : super(key: key);
 
+  @override
+  State<AddPdfPage> createState() => _AddPdfPageState();
+}
+
+class _AddPdfPageState extends State<AddPdfPage> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -102,47 +110,67 @@ class DialogFb1 extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SimpleBtn1(
-                  text: "Select",
-                  onPressed: () {
-                    pickPdfFile(context);
-                  },
-                  invertedColors:
-                      Provider.of<UploadPdfProvider>(context).selectedPdfName !=
-                          null,
-                ),
-                Provider.of<UploadPdfProvider>(context).selectedPdfName != null
-                    ? SimpleBtn1(
-                        text: "Upload",
-                        onPressed: () async {
-                          if (pdfNameController.text.isNotEmpty) {
-                            Provider.of<UploadPdfProvider>(context,
-                                    listen: false)
-                                .setInputFileName = pdfNameController.text;
-                            await Firestoremethods().addPdftoDatabase(context);
-                            showSnackbar(context, "Uploaded Successfully");
-                            Navigator.pop(context);
-                          } else {
-                            showSnackbar(context, "Please fill File Name");
-                            // Provider.of<UploadPdfProvider>(context,
-                            //         listen: false)
-                            //     .setInputFileName = "pdf name";
-                            // Firestoremethods().addPdftoDatabase(context);
-                          }
-                        },
-                        invertedColors: false)
-                    : SimpleBtn1(
-                        text: "Upload",
+            Provider.of<UploadStatusProvider>(context).uploadStatus == null
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SimpleBtn1(
+                        text: "Select",
                         onPressed: () {
-                          showSnackbar(
-                              context, "Select a file before uploading");
+                          pickPdfFile(context);
                         },
-                        invertedColors: true),
-              ],
-            )
+                        invertedColors: Provider.of<UploadPdfProvider>(context)
+                                .selectedPdfName !=
+                            null,
+                      ),
+                      Provider.of<UploadPdfProvider>(context).selectedPdfName !=
+                              null
+                          ? SimpleBtn1(
+                              text: "Upload",
+                              onPressed: () async {
+                                if (pdfNameController.text.isNotEmpty) {
+                                  Provider.of<UploadPdfProvider>(context,
+                                              listen: false)
+                                          .setInputFileName =
+                                      pdfNameController.text;
+                                  await Firestoremethods()
+                                      .addPdftoDatabase(context);
+                                  showSnackbar(
+                                      context, "Uploaded Successfully");
+                                  Navigator.pop(context);
+                                } else {
+                                  showSnackbar(
+                                      context, "Please fill File Name");
+                                  // Provider.of<UploadPdfProvider>(context,
+                                  //         listen: false)
+                                  //     .setInputFileName = "pdf name";
+                                  // Firestoremethods().addPdftoDatabase(context);
+                                }
+                              },
+                              invertedColors: false)
+                          : SimpleBtn1(
+                              text: "Upload",
+                              onPressed: () {
+                                showSnackbar(
+                                    context, "Select a file before uploading");
+                              },
+                              invertedColors: true),
+                      //to be deleted
+                      Provider.of<UploadStatusProvider>(context).uploadStatus ==
+                              null
+                          ? Container()
+                          : Text(
+                              'Uploading ${(Provider.of<UploadStatusProvider>(context).uploadStatus! * 100).toStringAsFixed(2)} %')
+                    ],
+                  )
+                : SimpleBtn1(
+                    text:
+                        'Uploading ${(Provider.of<UploadStatusProvider>(context).uploadStatus! * 100).toStringAsFixed(2)} %',
+                    onPressed: () {
+                      // showSnackbar(
+                      //     context, "Select a file before uploading");
+                    },
+                    invertedColors: true),
           ],
         ),
       ),
@@ -188,22 +216,51 @@ class SimpleBtn1 extends StatelessWidget {
 }
 
 class AddYoutubeUrlPage extends StatelessWidget {
-  final pdfNameController = TextEditingController();
-  AddYoutubeUrlPage({Key? key}) : super(key: key);
+  final BuildContext context;
+  final youtubeLinkController = TextEditingController();
+  final channelController = TextEditingController();
+  AddYoutubeUrlPage({Key? key, required this.context}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
+      child: ListView(
+        shrinkWrap: true,
         children: [
           CustomInputField(
               maxLength: null,
-              inputController: pdfNameController,
+              inputController: youtubeLinkController,
               textaboveBorder: "Link",
               prefixText: '',
               hintText: 'Enter youtube Link',
-              keybordType: TextInputType.text)
+              keybordType: TextInputType.text),
+          CustomInputField(
+              maxLength: null,
+              inputController: channelController,
+              textaboveBorder: "Channel",
+              prefixText: '',
+              hintText: 'Enter channel name',
+              keybordType: TextInputType.text),
+          Padding(
+            padding: const EdgeInsets.only(top: 24.0, left: 40, right: 40),
+            child: ButtonFilled(
+                text: "Post",
+                onPressed: () async {
+                  if (channelController.text.isNotEmpty &&
+                      youtubeLinkController.text.isNotEmpty) {
+                    //add youtbe
+                    await Firestoremethods().addYoutubeLink(
+                        channelName: channelController.text,
+                        context: context,
+                        youtubeLink: youtubeLinkController.text);
+                    Navigator.pop(context);
+                    showSnackbar(context, "Posted succesfully");
+                  } else {
+                    showSnackbar(context, "Please fill all fields");
+                  }
+                }),
+          )
         ],
       ),
     );
@@ -211,8 +268,10 @@ class AddYoutubeUrlPage extends StatelessWidget {
 }
 
 class AddOtherLinkPage extends StatelessWidget {
-  final pdfNameController = TextEditingController();
-  AddOtherLinkPage({Key? key}) : super(key: key);
+  final BuildContext context;
+  final otherLinkController = TextEditingController();
+  final otherLinkNameController = TextEditingController();
+  AddOtherLinkPage({Key? key, required this.context}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -222,11 +281,36 @@ class AddOtherLinkPage extends StatelessWidget {
         children: [
           CustomInputField(
               maxLength: null,
-              inputController: pdfNameController,
+              inputController: otherLinkController,
               textaboveBorder: "Link",
               prefixText: '',
               hintText: 'Enter other links',
-              keybordType: TextInputType.text)
+              keybordType: TextInputType.text),
+          CustomInputField(
+              maxLength: null,
+              inputController: otherLinkNameController,
+              textaboveBorder: "Name",
+              prefixText: '',
+              hintText: 'Enter the site or app name',
+              keybordType: TextInputType.text),
+          ButtonFilled(
+              text: "Post",
+              onPressed: () async {
+                if (otherLinkController.text.isNotEmpty &&
+                    otherLinkNameController.text.isNotEmpty) {
+                  Provider.of<AuthProvider>(context, listen: false)
+                      .isLoadingFun(true);
+                  await Firestoremethods().addOtherLink(
+                      link: otherLinkController.text,
+                      linkName: otherLinkNameController.text,
+                      context: context);
+                  Provider.of<AuthProvider>(context, listen: false)
+                      .isLoadingFun(false);
+                  Navigator.pop(context);
+                  showSnackbar(context, "Posted Successfully");
+                }
+                //add link
+              })
         ],
       ),
     );

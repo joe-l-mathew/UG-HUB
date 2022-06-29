@@ -7,12 +7,24 @@ import 'package:provider/provider.dart';
 import 'package:ug_hub/provider/upload_pdf_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../provider/upload_status_provider.dart';
+
 class FirebaseStorageMethods {
   final _stroage = FirebaseStorage.instance;
   Future<String> addPdfToStorage(File pdfFile, BuildContext context) async {
-    TaskSnapshot snapshot = await _stroage.ref("PDF").child(Uuid().v1()).putFile(pdfFile);
+    UploadTask task = _stroage.ref("PDF").child(Uuid().v1()).putFile(pdfFile);
+    task.snapshotEvents.listen((event) {
+      double? progress =
+          event.bytesTransferred.toDouble() / event.totalBytes.toDouble();
+      Provider.of<UploadStatusProvider>(context, listen: false)
+          .setUploadStatus = progress;
+    });
+    // task.snapshotEvents.listen((event) {
+    //   Provider.of<UploadStatusProvider>(context, listen: false)
+    //       .setUploadStatus = event.bytesTransferred.toInt();
+    // });
+    TaskSnapshot snapshot = await task.whenComplete(() {});
     String downloadUrl = await snapshot.ref.getDownloadURL();
-    print("download Url:" + downloadUrl);
     return downloadUrl;
   }
 }

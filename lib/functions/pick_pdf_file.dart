@@ -21,8 +21,7 @@ Future<void> pickPdfFile(BuildContext context) async {
       String fileName = result.files.first.name;
       Provider.of<UploadPdfProvider>(context, listen: false).setFileName =
           fileName;
-      Provider.of<UploadPdfProvider>(context, listen: false).setFile =
-          file;
+      Provider.of<UploadPdfProvider>(context, listen: false).setFile = file;
     } else {
       showSnackbar(context, "Pick a file lessthan 5MB");
     }
