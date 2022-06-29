@@ -253,6 +253,8 @@ class Firestoremethods {
         Provider.of<UploadPdfProvider>(context, listen: false).file!, context);
 
     UploadPdfModel uploadPdfModel = UploadPdfModel(
+        userName:
+            Provider.of<UserProvider>(context, listen: false).userModel!.name!,
         fileName: Provider.of<UploadPdfProvider>(context, listen: false)
             .inputFileName!,
         uid: Provider.of<UserProvider>(context, listen: false).userModel!.uid,

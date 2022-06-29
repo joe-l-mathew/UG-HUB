@@ -6,7 +6,6 @@ import 'package:ug_hub/model/subject_model.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/custom_input_field.dart';
 import 'package:ug_hub/widgets/heading_text_widget.dart';
-
 import '../provider/auth_provider.dart';
 
 void addSubject(BuildContext context) {

@@ -9,3 +9,5 @@ const String collectionModule = "Module";
 const String collectionPdf = "Pdf";
 const String collectionYoutube = "Youtube";
 const String collectionOtherLink = "OtherLink";
+
+enum FileType { youtube, pdf, link }

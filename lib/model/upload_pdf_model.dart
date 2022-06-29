@@ -5,9 +5,11 @@ class UploadPdfModel {
   final String uid;
   final List likes;
   final String fileUrl;
+  final String userName;
 
   UploadPdfModel(
       {required this.fileName,
+      required this.userName,
       required this.uid,
       required this.fileUrl,
       required this.likes});
@@ -17,13 +19,15 @@ class UploadPdfModel {
       "fileName": fileName,
       "uid": uid,
       "likes": likes,
-      "fileUrl": fileUrl
+      "fileUrl": fileUrl,
+      "userName": userName
     };
   }
 
   static UploadPdfModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return UploadPdfModel(
+      userName: snapshot['userName'],
       likes: snapshot['likes'],
       fileName: snapshot['fileName'],
       uid: snapshot['uid'],
