@@ -3,10 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/provider/add_module_toggle_provider.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/bottom_navigation_bar_provider.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
+import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
+import 'package:ug_hub/provider/upload_pdf_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
@@ -19,6 +22,7 @@ import 'package:ug_hub/utils/color.dart';
 //add orderby (assending) to all screen
 //make selected true for list tile
 //tile image backup
+//https://github.com/miguelpruivo/flutter_file_picker/wiki file picker
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -33,6 +37,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => ModuleModelProvider()),
+        ChangeNotifierProvider(create: (context) => UploadPdfProvider()),
+        ChangeNotifierProvider(create: (context) => AddModuleToggleProvider()),
         ChangeNotifierProvider(
             create: (context) => BottomNavigationBarProvider()),
         ChangeNotifierProvider(create: (context) => BranchProvider()),
@@ -41,7 +48,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UniversityProvider())
       ],
       child: MaterialApp(
-        
           debugShowCheckedModeBanner: false,
           title: 'UG HUB',
           theme: ThemeData(primarySwatch: Colors.indigo)

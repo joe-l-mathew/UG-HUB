@@ -3,11 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
+import 'package:ug_hub/firebase/firebase_storage_methods.dart';
 import 'package:ug_hub/model/branch_model.dart';
+import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/model/subject_model.dart';
+import 'package:ug_hub/model/upload_pdf_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
+import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
+import 'package:ug_hub/provider/upload_pdf_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/landing_page.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
@@ -222,5 +227,35 @@ class Firestoremethods {
           .collection(collectionModule)
           .add({"name": "Module ${i + 1}"});
     }
+  }
+
+  Future<void> addPdftoDatabase(BuildContext context) async {
+    ModuleModel? _moduleModel =
+        Provider.of<ModuleModelProvider>(context, listen: false).getModuleModel;
+    UserModel _user =
+        Provider.of<UserProvider>(context, listen: false).userModel!;
+    var path = _firestore
+        .collection(collectionUniversity)
+        .doc(_user.university)
+        .collection(collectionBranch)
+        .doc(_user.branch)
+        .collection(collectionSemester)
+        .doc(_user.semester)
+        .collection(collectionSubject)
+        .doc(_moduleModel!.subjectId)
+        .collection(collectionModule)
+        .doc(_moduleModel.moduleId);
+    String downloadUrl = await FirebaseStorageMethods().addPdfToStorage(
+        Provider.of<UploadPdfProvider>(context, listen: false).file!, context);
+
+    UploadPdfModel uploadPdfModel = UploadPdfModel(
+        fileName: Provider.of<UploadPdfProvider>(context, listen: false)
+            .inputFileName!,
+        uid: Provider.of<UserProvider>(context, listen: false).userModel!.uid,
+        fileUrl: downloadUrl,
+        likes: []);
+    await path
+        .collection(collectionPdf)
+        .add(uploadPdfModel.toJson(uploadPdfModel));
   }
 }

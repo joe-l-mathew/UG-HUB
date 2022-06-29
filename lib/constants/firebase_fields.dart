@@ -7,3 +7,4 @@ const String collectionUserBranch = "branch";
 const String collectionSemester = 'Semester';
 const String collectionSubject = 'Subject';
 const String collectionModule = "Module";
+const String collectionPdf = "Pdf";

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../functions/show_select_semester_bottom_sheet.dart';
 
 class PleaseSelectSemester extends StatelessWidget {
-  PleaseSelectSemester({Key? key}) : super(key: key);
-  final primaryColor = Color(0xff4338CA);
+  const PleaseSelectSemester({Key? key}) : super(key: key);
+  final primaryColor = const Color(0xff4338CA);
   final accentColor = Colors.white10;
 
   @override
@@ -25,7 +25,7 @@ class PleaseSelectSemester extends StatelessWidget {
             CircleAvatar(
               backgroundColor: primaryColor,
               radius: 25,
-              child: Icon(Icons.error),
+              child: const Icon(Icons.error),
               // child: Image.network(
               //     "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/FlutterBricksLogo-Med.png?alt=media&token=7d03fedc-75b8-44d5-a4be-c1878de7ed52"),
             ),

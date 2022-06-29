@@ -116,7 +116,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
         elevation: 0,
-        selectedIconTheme: IconThemeData(color: primaryColor),
+        selectedIconTheme: const IconThemeData(color: primaryColor),
         enableFeedback: true,
         showUnselectedLabels: false,
         showSelectedLabels: false,

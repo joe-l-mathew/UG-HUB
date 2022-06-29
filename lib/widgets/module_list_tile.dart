@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -6,7 +5,7 @@ class ModuleListTile extends StatelessWidget {
   final String text;
   final String subtitle;
 
-  ModuleListTile(this.text, this.subtitle, {Key? key}) : super(key: key);
+  const ModuleListTile(this.text, this.subtitle, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +30,7 @@ class ModuleListTile extends StatelessWidget {
         child: Column(
           children: [
             // Image.network(imageUrl, height: 70, fit: BoxFit.cover),
-            Spacer(),
+            const Spacer(),
             Text(text,
                 textAlign: TextAlign.center,
                 style:const  TextStyle(
@@ -50,7 +49,7 @@ class ModuleListTile extends StatelessWidget {
             //       fontWeight: FontWeight.normal,
             //       fontSize: 12),
             // ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),

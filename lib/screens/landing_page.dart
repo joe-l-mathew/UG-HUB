@@ -22,7 +22,7 @@ class LandingPage extends StatelessWidget {
     return Scaffold(
       body: bottomNavigationPages[
           Provider.of<BottomNavigationBarProvider>(context).getPage],
-      bottomNavigationBar: CustomBottomNavigationBar(),
+      bottomNavigationBar: const CustomBottomNavigationBar(),
       // bottomNavigationBar: BottomNavBarFb2(),
     );
   }

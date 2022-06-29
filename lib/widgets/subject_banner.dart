@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore: unnecessary_import
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/model/module_model.dart';
+import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/display_material_screen.dart';
 import 'package:ug_hub/widgets/module_list_tile.dart';
 import '../constants/firebase_fields.dart';
@@ -14,12 +17,12 @@ class SubjectBanner extends StatelessWidget {
   const SubjectBanner(
       {Key? key,
       required this.snapshot,
-      required this.index,
+      required this.indexofSubject,
       required this.subId})
       : super(key: key);
   final String subId;
   final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
-  final int index;
+  final int indexofSubject;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +39,9 @@ class SubjectBanner extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                snapshot.data!.docs[index].data()['fullname'] +
+                snapshot.data!.docs[indexofSubject].data()['fullname'] +
                     " (" +
-                    snapshot.data!.docs[index].data()['shortName'] +
+                    snapshot.data!.docs[indexofSubject].data()['shortName'] +
                     ")",
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
@@ -58,24 +61,42 @@ class SubjectBanner extends StatelessWidget {
                   .orderBy('name')
                   .snapshots(),
               builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                      snapshotModule) {
+                if (snapshotModule.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: LoadingAnimationWidget.fourRotatingDots(
                         color: primaryColor, size: 50),
                   );
                 }
-                return Container(
+                return SizedBox(
                   width: double.infinity,
                   height: 138,
                   child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       shrinkWrap: true, // 1st add
-                      itemCount: snapshot.data!.docs.length,
+                      itemCount: snapshotModule.data!.docs.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
+                            Provider.of<ModuleModelProvider>(context,
+                                        listen: false)
+                                    .setModuleModel =
+                                ModuleModel(
+                                    moduleName: snapshotModule.data!.docs[index]
+                                        .data()['name'],
+                                    moduleId:
+                                        snapshotModule.data!.docs[index].id,
+                                    subjectName: snapshot
+                                        .data!.docs[indexofSubject]
+                                        .data()['fullname'],
+                                    subjectId:
+                                        snapshot.data!.docs[indexofSubject].id,
+                                    subjectShortName: snapshot
+                                        .data!.docs[indexofSubject]
+                                        .data()['shortName']);
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -83,7 +104,7 @@ class SubjectBanner extends StatelessWidget {
                                         DisplayMaterialsScreen()));
                           },
                           child: ModuleListTile(
-                              snapshot.data!.docs[index].data()['name'],
+                              snapshotModule.data!.docs[index].data()['name'],
                               "No of module : 5"),
                         );
                         // return Text(Index.toString());

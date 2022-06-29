@@ -14,10 +14,10 @@ class ProfileScreen extends StatelessWidget {
               await AuthMethods().signoutUser(context);
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (builder) => LoginScreen()),
+                  MaterialPageRoute(builder: (builder) => const LoginScreen()),
                   (route) => false);
             },
-            icon: Icon(Icons.logout)),
+            icon: const Icon(Icons.logout)),
       ),
     );
   }

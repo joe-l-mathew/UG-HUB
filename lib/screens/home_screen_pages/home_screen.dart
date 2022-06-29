@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Stack(
           children: [
             Provider.of<UserProvider>(context).userModel!.semester == null
-                ? Center(
+                ? const Center(
                     child: Center(child: PleaseSelectSemester()),
                   )
                 : Stack(
@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               SubjectBanner(
                                                 subId: snapshot
                                                     .data!.docs[index].id,
-                                                index: index,
+                                                indexofSubject: index,
                                                 snapshot: snapshot,
                                               ));
                                     },
