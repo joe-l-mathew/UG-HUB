@@ -11,9 +11,11 @@ class UserModel {
   final String? branchName;
   final String? profileUrl;
   final String? semesterName;
+  final bool? isAdmin;
 
   UserModel({
     required this.uid,
+    this.isAdmin,
     this.name,
     this.university,
     this.branch,
@@ -35,13 +37,15 @@ class UserModel {
         "universityName": universityName,
         "branchName": branchName,
         "profileUrl": profileUrl,
-        "semesterName": semesterName
+        "semesterName": semesterName,
+        "isAdmin": isAdmin
       };
 
   static UserModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return UserModel(
+        isAdmin: snapshot['isAdmin'],
         uid: snapshot['uid'],
         branch: snapshot['branch'],
         college: snapshot['college'],

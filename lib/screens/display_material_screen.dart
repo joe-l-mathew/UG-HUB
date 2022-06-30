@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/model/module_model.dart';
-import 'package:ug_hub/model/upload_pdf_model.dart';
+// import 'package:ug_hub/model/upload_pdf_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/add_materials.dart';
 import 'package:ug_hub/utils/color.dart';
-
 import '../constants/firebase_fields.dart';
 import '../provider/user_provider.dart';
 import '../widgets/display_file_tile.dart';
@@ -91,11 +89,24 @@ class DisplayMaterialsScreen extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
+                              bool isLiked = false;
+                              if (snapshot.data!.docs[index]['likes']
+                                  .contains(_user.uid)) {
+                                isLiked = true;
+                              } else {
+                                isLiked = false;
+                              }
                               return DisplayMaterialTile(
+                                likes: snapshot.data!.docs[index]['likes'],
+                                collectionName: collectionPdf,
+                                index: index,
+                                docId: snapshot.data!.docs[index].id,
                                 fileName: snapshot.data!.docs[index]
                                     ['fileName'],
                                 fileType: FileType.pdf,
-                                likeCount: "100",
+                                likeCount: snapshot
+                                    .data!.docs[index]['likes'].length
+                                    .toString(),
                                 // likeCount: snapshot.data!.docs[index]['likes'].length.,
                                 uploadedBy: snapshot.data!.docs[index]
                                     ['userName'],
@@ -146,11 +157,24 @@ class DisplayMaterialsScreen extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
+                              bool isLiked = false;
+                              if (snapshot.data!.docs[index]['likes']
+                                  .contains(_user.uid)) {
+                                isLiked = true;
+                              } else {
+                                isLiked = false;
+                              }
                               return DisplayMaterialTile(
+                                likes: snapshot.data!.docs[index]['likes'],
+                                collectionName: collectionYoutube,
+                                index: index,
+                                docId: snapshot.data!.docs[index].id,
                                 fileName: snapshot.data!.docs[index]
                                     ['youtubeChannelName'],
                                 fileType: FileType.youtube,
-                                likeCount: "100",
+                                likeCount: snapshot
+                                    .data!.docs[index]['like'].length
+                                    .toString(),
                                 // likeCount: snapshot.data!.docs[index]['likes'].length.,
                                 uploadedBy: snapshot.data!.docs[index]
                                     ['userName'],
@@ -162,7 +186,8 @@ class DisplayMaterialsScreen extends StatelessWidget {
                 ),
               ]),
               const Divider(),
-              //other links
+
+              //other links//
 
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const Padding(
@@ -201,11 +226,24 @@ class DisplayMaterialsScreen extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
+                              bool isLiked = false;
+                              if (snapshot.data!.docs[index]['likes']
+                                  .contains(_user.uid)) {
+                                isLiked = true;
+                              } else {
+                                isLiked = false;
+                              }
                               return DisplayMaterialTile(
+                                likes: snapshot.data!.docs[index]['likes'],
+                                index: index,
+                                collectionName: collectionOtherLink,
+                                docId: snapshot.data!.docs[index].id,
                                 fileName: snapshot.data!.docs[index]
                                     ['linkName'],
                                 fileType: FileType.link,
-                                likeCount: "100",
+                                likeCount: snapshot
+                                    .data!.docs[index]['likes'].length
+                                    .toString(),
                                 // likeCount: snapshot.data!.docs[index]['likes'].length.,
                                 uploadedBy: snapshot.data!.docs[index]
                                     ['userName'],

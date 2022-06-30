@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:ug_hub/constants/admins.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/model/user_model.dart';
@@ -38,14 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
     UserModel? _userModel = Provider.of<UserProvider>(context).userModel;
     return Scaffold(
         // backgroundColor: primaryColor,
-        floatingActionButton: adminList.contains(_userModel!.uid)
-            ? FloatingActionButton(
-                onPressed: () {
-                  addSubject(context);
-                },
-                child: const Icon(Icons.add),
-              )
-            : null,
+        floatingActionButton:
+            Provider.of<UserProvider>(context).userModel!.isAdmin != null
+                ? FloatingActionButton(
+                    onPressed: () {
+                      addSubject(context);
+                    },
+                    child: const Icon(Icons.add),
+                  )
+                : null,
         body: Stack(
           children: [
             Provider.of<UserProvider>(context).userModel!.semester == null
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               color: Colors.grey, fontSize: 16),
                                         ),
                                         Text(
-                                          _userModel.name!,
+                                          _userModel!.name!,
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 25,

@@ -43,6 +43,7 @@ dependencies:
   loading_animation_widget: ^1.2.0+2
   file_picker: ^4.6.1
   uuid: ^3.0.6
+  url_launcher: ^6.1.4
 
 dev_dependencies:
   flutter_test:

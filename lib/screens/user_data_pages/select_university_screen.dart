@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:ug_hub/constants/admins.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/provider/university_provider.dart';
@@ -23,13 +22,14 @@ class SelectUniversityScreen extends StatelessWidget {
     String uid = Provider.of<UserProvider>(context).userModel!.uid;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      floatingActionButton: adminList.contains(uid)
-          ? FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () {
-                addUniversity(context);
-              })
-          : null,
+      floatingActionButton:
+          Provider.of<UserProvider>(context).userModel!.isAdmin != null
+              ? FloatingActionButton(
+                  child: const Icon(Icons.add),
+                  onPressed: () {
+                    addUniversity(context);
+                  })
+              : null,
       appBar: AppBar(
         centerTitle: false,
         backgroundColor: Colors.white10,

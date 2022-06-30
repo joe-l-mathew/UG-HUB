@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/admin/add_branch.dart';
-import 'package:ug_hub/constants/admins.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
@@ -24,7 +23,7 @@ class SelectBranchScreen extends StatelessWidget {
     String uid = Provider.of<UserProvider>(context).userModel!.uid;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      floatingActionButton: adminList.contains(uid)
+      floatingActionButton: Provider.of<UserProvider>(context).userModel!.isAdmin!=null
           ? FloatingActionButton(
               child: const Icon(Icons.add),
               onPressed: () {

@@ -21,9 +21,10 @@ import 'package:ug_hub/utils/color.dart';
 //need to create new fields in user model such as university name, branch name etc -done
 // addd network check always
 //add orderby (assending) to all screen
-//make selected true for list tile
+//make selected true for list tilekk
 //tile image backup
 //https://github.com/miguelpruivo/flutter_file_picker/wiki file picker
+//fix color issue with dilouge(select branch)
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

@@ -278,7 +278,7 @@ class Firestoremethods {
     YoutubeModel ytModel = YoutubeModel(
         youtubeLink: youtubeLink,
         youtubeChannelName: channelName,
-        like: [],
+        likes: [],
         uid: _user.uid,
         userName: _user.name!);
     var path = _firestore
@@ -323,5 +323,46 @@ class Firestoremethods {
     await path
         .collection(collectionOtherLink)
         .add(otherLinkModel.toJson(otherLinkModel));
+  }
+
+  // Future<void> addALike(
+  //     {required DocumentReference<Map<String, dynamic>> path,
+  //     required BuildContext context,
+  //     required int index,
+  //     required String collectionName,
+  //     required String docId}) async {
+  //   UserModel _user =
+  //       Provider.of<UserProvider>(context, listen: false).userModel!;
+  //   await path.collection(collectionName).doc(docId).update({
+  //     'likes': FieldValue.arrayUnion([_user.uid])
+  //   });
+  // }
+
+  Future<String> likePost(
+      {required DocumentReference<Map<String, dynamic>> path,
+      required String docId,
+      required String uid,
+      required List likes,
+      required String collectionName}) async {
+    String res = "Some error occurred";
+    try {
+      if (likes.contains(uid)) {
+        // if the likes list contains the user uid, we need to remove it
+        await path.collection(collectionName).doc(docId).update({
+          'likes': FieldValue.arrayRemove([uid])
+        });
+        print("unliked");
+      } else {
+        // else we need to add uid to the likes array
+        await path.collection(collectionName).doc(docId).update({
+          'likes': FieldValue.arrayUnion([uid])
+        });
+        print("liked");
+      }
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
   }
 }

@@ -5,11 +5,11 @@ class YoutubeModel {
   final String youtubeChannelName;
   final String userName;
   final String uid;
-  final List like;
+  final List likes;
 
   YoutubeModel(
       {required this.userName,
-      required this.like, 
+      required this.likes, 
       required this.uid,
       required this.youtubeLink,
       required this.youtubeChannelName});
@@ -19,7 +19,7 @@ class YoutubeModel {
       "youtubeLink": youtubeLink,
       "youtubeChannelName": youtubeChannelName,
       "userName":userName,
-      "like":like,
+      "like":likes,
       "uid":uid
     };
   }
@@ -27,7 +27,7 @@ class YoutubeModel {
   static YoutubeModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return YoutubeModel(
-      like: snapshot["like"],
+      likes: snapshot["like"],
       uid: snapshot['uid'],
       userName: snapshot['userName'],
         youtubeLink: snapshot['youtubeLink'],
