@@ -108,10 +108,10 @@ class DisplayMaterialTile extends StatelessWidget {
                       collectionName: collectionName);
                 },
                 icon: Icon(
-                  int.parse(likeCount) == 0
-                      ? Icons.favorite_outline
-                      : Icons.favorite,
-                  color: int.parse(likeCount) == 0 ? Colors.black : Colors.red,
+                  likes.contains(_user.uid)
+                      ? Icons.favorite
+                      : Icons.favorite_outline,
+                  color: likes.contains(_user.uid) ? Colors.red : Colors.black,
                 ),
               ),
               Text(likeCount)
