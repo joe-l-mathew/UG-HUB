@@ -6,7 +6,7 @@ import '../widgets/add_material_types_widgets.dart';
 import '../widgets/toogle_button_widget.dart';
 
 class AddMaterialsScreen extends StatelessWidget {
-  AddMaterialsScreen({Key? key}) : super(key: key);
+  const AddMaterialsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

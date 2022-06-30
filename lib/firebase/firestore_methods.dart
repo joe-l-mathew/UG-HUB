@@ -351,13 +351,11 @@ class Firestoremethods {
         await path.collection(collectionName).doc(docId).update({
           'likes': FieldValue.arrayRemove([uid])
         });
-        print("unliked");
       } else {
         // else we need to add uid to the likes array
         await path.collection(collectionName).doc(docId).update({
           'likes': FieldValue.arrayUnion([uid])
         });
-        print("liked");
       }
       res = 'success';
     } catch (err) {

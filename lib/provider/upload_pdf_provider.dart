@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 
@@ -27,6 +26,5 @@ class UploadPdfProvider with ChangeNotifier {
   set setFileName(String? fileNameFromPackage) {
     selectedPdfName = fileNameFromPackage;
     notifyListeners();
-    print("file name got");
   }
 }

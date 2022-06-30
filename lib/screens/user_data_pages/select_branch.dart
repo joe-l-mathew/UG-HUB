@@ -20,7 +20,7 @@ class SelectBranchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String uid = Provider.of<UserProvider>(context).userModel!.uid;
+    // String uid = Provider.of<UserProvider>(context).userModel!.uid;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
       floatingActionButton: Provider.of<UserProvider>(context).userModel!.isAdmin!=null

@@ -19,7 +19,7 @@ class YoutubeModel {
       "youtubeLink": youtubeLink,
       "youtubeChannelName": youtubeChannelName,
       "userName":userName,
-      "like":likes,
+      "likes":likes,
       "uid":uid
     };
   }

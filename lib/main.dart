@@ -25,6 +25,8 @@ import 'package:ug_hub/utils/color.dart';
 //tile image backup
 //https://github.com/miguelpruivo/flutter_file_picker/wiki file picker
 //fix color issue with dilouge(select branch)
+//auto otp read
+//https://pub.dev/packages/url_launcher add to manifest
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
