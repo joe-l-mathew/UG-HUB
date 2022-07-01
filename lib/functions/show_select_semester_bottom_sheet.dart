@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 
 void showSemesterBottomSheet(BuildContext context) async {
-  var semesterList = await Firestoremethods().getSemesterList(context);
+  var semesterList = Firestoremethods().getSemesterList(context);
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -24,21 +25,34 @@ void showSemesterBottomSheet(BuildContext context) async {
       builder: (builder) {
         return SizedBox(
           height: 600,
-          child: ListView.separated(
-              itemBuilder: (BuildContext context1, int index) {
-                return ListTile(
-                  onTap: () async {
-                    await Firestoremethods().addSemesterToUser(context,
-                        semesterId: semesterList.docs[index].id,
-                        semesterName: semesterList.docs[index].data()['name']);
-                    Navigator.pop(context1);
-                  },
-                  title: Text(semesterList.docs[index].data()['name']),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-              itemCount: semesterList.docs.length),
+          child: StreamBuilder(
+              stream: semesterList,
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ListView.separated(
+                    itemBuilder: (BuildContext context1, int index) {
+                      return ListTile(
+                        onTap: () async {
+                          await Firestoremethods().addSemesterToUser(
+                            context,
+                            semesterId: snapshot.data!.docs[index].id,
+                            // semesterId: semesterList.docs[index].id,
+                            semesterName: snapshot.data!.docs[index]['name'],
+                          );
+                          Navigator.pop(context1);
+                        },
+                        title: Text(snapshot.data!.docs[index].data()['name']),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
+                    itemCount: snapshot.data!.docs.length);
+              }),
         );
       });
 }

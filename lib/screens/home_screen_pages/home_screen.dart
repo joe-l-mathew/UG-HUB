@@ -23,12 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     Firestoremethods().getSemesterList(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      return Provider.of<UserProvider>(context, listen: false)
-              .userModel!
-              .semester ??
-          showSemesterBottomSheet(context);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   return Provider.of<UserProvider>(context, listen: false)
+    //           .userModel!
+    //           .semester ??
+    //       showSemesterBottomSheet(context);
+    // });
     super.initState();
   }
 

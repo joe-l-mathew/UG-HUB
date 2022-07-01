@@ -112,6 +112,7 @@ class Firestoremethods {
         .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
         .update({
       collectionUniversity: univId,
+      'semester': null,
       'branch': null,
       "universityName": Provider.of<UniversityProvider>(context, listen: false)
           .selectedUniversityName
@@ -186,18 +187,18 @@ class Firestoremethods {
         .setBranchModel(BranchModel.fromSnap(snap));
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getSemesterList(
-      BuildContext context) async {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getSemesterList(
+      BuildContext context) {
     UserModel _user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
-    return await _firestore
+    return _firestore
         .collection(collectionUniversity)
         .doc(_user.university)
         .collection(collectionBranch)
         .doc(_user.branch)
         .collection('Semester')
         .orderBy('name')
-        .get();
+        .snapshots();
     // print(firestoreGet.docs[1].data()['name']);
   }
 
