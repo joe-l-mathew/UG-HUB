@@ -27,6 +27,9 @@ import 'package:ug_hub/utils/color.dart';
 //fix color issue with dilouge(select branch)
 //auto otp read
 //https://pub.dev/packages/url_launcher add to manifest
+//add time and is teacher to user
+//add view sylabus
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

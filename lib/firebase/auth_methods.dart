@@ -83,7 +83,8 @@ class AuthMethods {
       // UserModel user = await UserModel(
       //     uid:
       //         Provider.of<UserProvider>(context, listen: false).userModel!.uid);
-      UserModel user = UserModel(uid: _uid);
+      UserModel user = UserModel(
+          uid: _uid, expireTime: DateTime.now().add(const Duration(days: 2)));
       await _firestoreMethods.addUserToFirestore(user);
       await _firestoreMethods.getUserDetail(context);
       return EnterNameScreen();
