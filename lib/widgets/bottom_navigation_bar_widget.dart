@@ -129,8 +129,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favorit"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
         ]);
   }
 }

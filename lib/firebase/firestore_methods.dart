@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firebase_storage_methods.dart';
 import 'package:ug_hub/model/branch_model.dart';
+import 'package:ug_hub/model/chat_model.dart';
+import 'package:ug_hub/model/chat_replay_model.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/model/other_link_model.dart';
 import 'package:ug_hub/model/subject_model.dart';
@@ -363,5 +365,38 @@ class Firestoremethods {
       res = err.toString();
     }
     return res;
+  }
+
+  Future<void> addAChat(
+      {required BuildContext context, required ChatModel chatModel}) async {
+    UserModel _user =
+        Provider.of<UserProvider>(context, listen: false).userModel!;
+    await _firestore
+        .collection(collectionUniversity)
+        .doc(_user.university)
+        .collection(collectionBranch)
+        .doc(_user.branch)
+        .collection(collectionSemester)
+        .doc(_user.semester)
+        .collection(collectionChat)
+        .add(chatModel.toJson());
+  }
+
+  Future<void> addReplay(
+      {required BuildContext context,
+      required ChatReplayModel chatReplayModel}) async {
+    UserModel _user =
+        Provider.of<UserProvider>(context, listen: false).userModel!;
+    await _firestore
+        .collection(collectionUniversity)
+        .doc(_user.university)
+        .collection(collectionBranch)
+        .doc(_user.branch)
+        .collection(collectionSemester)
+        .doc(_user.semester)
+        .collection(collectionChat)
+        .doc(chatReplayModel.chatId)
+        .collection(collectionChatReplay)
+        .add(chatReplayModel.toJson());
   }
 }

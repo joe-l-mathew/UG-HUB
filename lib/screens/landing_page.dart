@@ -15,8 +15,6 @@ class LandingPage extends StatelessWidget {
     List<Widget> bottomNavigationPages = const [
       HomeScreen(),
       ChatScreen(),
-      FavoriteScreen(),
-      ProfileScreen()
     ];
 
     return Scaffold(

@@ -23,8 +23,9 @@ class AddPdfPage extends StatefulWidget {
 class _AddPdfPageState extends State<AddPdfPage> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Flexible(
       child: ListView(
+        shrinkWrap: true,
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -36,7 +37,7 @@ class _AddPdfPageState extends State<AddPdfPage> {
                 hintText: 'Enter a display name',
                 keybordType: TextInputType.text),
           ),
-          DialogFb1(),
+          const DialogFb1(),
           // Provider.of<UploadPdfProvider>(context).selectedPdfName != null
           //     ? Padding(
           //         padding: const EdgeInsets.only(left: 70, right: 70),
