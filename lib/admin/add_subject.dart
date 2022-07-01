@@ -13,6 +13,7 @@ void addSubject(BuildContext context) {
   final TextEditingController _numberOfModuleController =
       TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _syllabusLinkController = TextEditingController();
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -24,7 +25,7 @@ void addSubject(BuildContext context) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SafeArea(
-            child: Column(
+            child: ListView(
               children: [
                 const SizedBox(
                   height: 20,
@@ -63,18 +64,28 @@ void addSubject(BuildContext context) {
                     hintText: 'Enter number of module',
                     keybordType:
                         const TextInputType.numberWithOptions(decimal: false)),
+                //add link
+                CustomInputField(
+                    maxLength: null,
+                    inputController: _syllabusLinkController,
+                    textaboveBorder: "Sylabus",
+                    prefixText: '',
+                    hintText: 'Enter sylabus drive link(make visible on)',
+                    keybordType: TextInputType.text),
 
                 ButtonFilled(
                     text: "Add",
                     onPressed: () async {
                       if (_shortNameController.text.isNotEmpty &&
                           _fullNameController.text.isNotEmpty &&
-                          _numberOfModuleController.text.isNotEmpty) {
+                          _numberOfModuleController.text.isNotEmpty &&
+                          _syllabusLinkController.text.isNotEmpty) {
                         Provider.of<AuthProvider>(context, listen: false)
                             .isLoadingFun(true);
                         await Firestoremethods().addModule(
                             context,
                             SubjectModel(
+                                syllabusLink: _syllabusLinkController.text,
                                 shortName: _shortNameController.text,
                                 fullname: _fullNameController.text,
                                 numberOfModule:

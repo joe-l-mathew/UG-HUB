@@ -31,13 +31,13 @@ class CustomInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          textaboveBorder,
-          style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-              color: Colors.white.withOpacity(.9)),
-        ),
+        // Text(
+        //   textaboveBorder,
+        //   style: TextStyle(
+        //       fontSize: 14,
+        //       fontWeight: FontWeight.normal,
+        //       color: Colors.white.withOpacity(.9)),
+        // ),
         const SizedBox(
           height: 8,
         ),

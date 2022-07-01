@@ -8,6 +8,7 @@ import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/display_material_screen.dart';
 import 'package:ug_hub/widgets/module_list_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../constants/firebase_fields.dart';
 import '../model/user_model.dart';
 import '../provider/user_provider.dart';
@@ -37,13 +38,43 @@ class SubjectBanner extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                snapshot.data!.docs[indexofSubject].data()['fullname'] +
-                    " (" +
-                    snapshot.data!.docs[indexofSubject].data()['shortName'] +
-                    ")",
-                style: const TextStyle(fontWeight: FontWeight.bold),
+              padding: const EdgeInsets.only(
+                left: 10,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      snapshot.data!.docs[indexofSubject].data()['fullname'] +
+                          " (" +
+                          snapshot.data!.docs[indexofSubject]
+                              .data()['shortName'] +
+                          ")",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: () async {
+                              //view sylabus here
+                              await launchUrl(
+                                  Uri.parse(
+                                    snapshot.data!.docs[indexofSubject]
+                                        .data()['syllabusLink'],
+                                  ),
+                                  mode: LaunchMode.externalApplication);
+                            },
+                            child: const Text(
+                              'View Syllabus',
+                              style: TextStyle(color: primaryColor),
+                            ),
+                          )))
+                ],
               ),
             ),
           ),
