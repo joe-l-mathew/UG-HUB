@@ -171,6 +171,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .collection(collectionSemester)
                                         .doc(_userModel.semester)
                                         .collection(collectionSubject)
+                                        .orderBy('numberOfModule',
+                                            descending: true)
                                         .snapshots(),
                                     builder: (BuildContext context,
                                         AsyncSnapshot<
@@ -194,11 +196,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           // physics: const NeverScrollableScrollPhysics(),
                                           itemCount: snapshot.data!.docs.length,
                                           itemBuilder: (context, index) =>
-                                              SubjectBanner(
-                                                subId: snapshot
-                                                    .data!.docs[index].id,
-                                                indexofSubject: index,
-                                                snapshot: snapshot,
+                                              SizedBox(
+                                                height: 186,
+                                                child: SubjectBanner(
+                                                  subId: snapshot
+                                                      .data!.docs[index].id,
+                                                  indexofSubject: index,
+                                                  snapshot: snapshot,
+                                                ),
                                               ));
                                     },
                                   ),

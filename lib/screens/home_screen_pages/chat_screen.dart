@@ -24,6 +24,7 @@ class ChatScreen extends StatelessWidget {
         .collection(collectionSemester)
         .doc(_user.semester)
         .collection(collectionChat)
+        .orderBy('dateTime', descending: true)
         .snapshots();
 
     final _chatController = TextEditingController();

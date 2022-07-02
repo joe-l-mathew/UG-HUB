@@ -127,7 +127,7 @@ class ReplayChatScreen extends StatelessWidget {
                               context: context,
                               chatReplayModel: ChatReplayModel(
                                   chat: _replayController.text,
-                                  username: userName,
+                                  username: _user.name!,
                                   uid: _user.uid,
                                   dateTime: DateTime.now(),
                                   chatId: docId,
