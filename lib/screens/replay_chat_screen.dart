@@ -48,20 +48,6 @@ class ReplayChatScreen extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              // Card(
-              //   child: ListTile(
-              //     leading: profileUrl != null
-              //         ? CircleAvatar(child: Image.network(profileUrl!))
-              //         : const CircleAvatar(
-              //             radius: 15,
-              //             child: Icon(Icons.person),
-              //           ),
-              //     title: Text(userName),
-              //     subtitle: Text(chat),
-              //     isThreeLine: true,
-              //     tileColor: Color.fromARGB(179, 182, 186, 236),
-              //   ),
-              // ),
               StreamBuilder(
                   stream: snapshot,
                   builder: (context,
@@ -93,7 +79,8 @@ class ReplayChatScreen extends StatelessWidget {
                               subtitle:
                                   Text(snapshot.data!.docs[index]['chat']),
                               isThreeLine: true,
-                              tileColor: Color.fromARGB(179, 182, 186, 236),
+                              tileColor:
+                                  const Color.fromARGB(179, 182, 186, 236),
                             ),
                           );
                         },

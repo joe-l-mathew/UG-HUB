@@ -137,6 +137,7 @@ class Firestoremethods {
       collectionUserBranch: branchId,
       'branchName': Provider.of<BranchProvider>(context, listen: false)
           .selectedBranchName,
+      'semester': null,
     });
 
     getUserDetail(context);

@@ -6,6 +6,7 @@ import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
+import 'package:ug_hub/screens/home_screen_pages/profile_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/subject_banner.dart';
 import '../../admin/add_subject.dart';
@@ -86,20 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                     //actons here
-                                    _userModel.profileUrl == null
-                                        ? const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: CircleAvatar(
-                                              child: Icon(Icons.person),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  _userModel.profileUrl!),
-                                            ),
-                                          )
                                   ],
                                 ),
                                 // Text('ME ' + ' KTU',
@@ -124,7 +111,47 @@ class _HomeScreenState extends State<HomeScreen> {
                       SingleChildScrollView(
                         child: Column(
                           children: [
-                            const SizedBox(
+                            SizedBox(
+                              child: _userModel.profileUrl == null
+                                  ? Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8, right: 8, bottom: 35),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (builder) =>
+                                                        ProfileScreen()));
+                                          },
+                                          child: const CircleAvatar(
+                                            child: Icon(Icons.person),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8, right: 8, bottom: 35),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (builder) =>
+                                                        ProfileScreen()));
+                                          },
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                _userModel.profileUrl!),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                               height: 170,
                             ),
                             Container(
