@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
@@ -51,11 +52,15 @@ class DisplayMaterialTile extends StatelessWidget {
         .doc(_moduleModel.moduleId);
     Widget getSelectedIcon() {
       if (fileType == FileType.pdf) {
-        return const Icon(Icons.picture_as_pdf_outlined);
+        return const Icon(
+          Icons.picture_as_pdf_outlined,
+        );
       } else if (fileType == FileType.youtube) {
-        return const Icon(Icons.youtube_searched_for);
+        return const FaIcon(
+          FontAwesomeIcons.youtube,
+        );
       } else {
-        return const Icon(Icons.app_blocking);
+        return const FaIcon(FontAwesomeIcons.link);
       }
     }
 
@@ -119,14 +124,7 @@ class DisplayMaterialTile extends StatelessWidget {
           )
         ]),
         decoration: const BoxDecoration(
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: Colors.white54,
-          //     blurRadius: 2.0,
-          //     spreadRadius: 0.0,
-          //     offset: Offset(2.0, 2.0), // shadow direction: bottom right
-          //   )
-          // ],
+          
           color: Color.fromARGB(179, 182, 186, 236),
           borderRadius: BorderRadius.all(
             Radius.circular(10),

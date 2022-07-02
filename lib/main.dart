@@ -7,6 +7,7 @@ import 'package:ug_hub/provider/add_module_toggle_provider.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/bottom_navigation_bar_provider.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
+import 'package:ug_hub/provider/display_pdf_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/upload_pdf_provider.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => DisplayPdfProvider()),
         ChangeNotifierProvider(create: (context) => UploadStatusProvider()),
         ChangeNotifierProvider(create: (context) => ModuleModelProvider()),
         ChangeNotifierProvider(create: (context) => UploadPdfProvider()),

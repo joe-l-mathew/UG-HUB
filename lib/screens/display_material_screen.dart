@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:open_file/open_file.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/module_model.dart';
 // import 'package:ug_hub/model/upload_pdf_model.dart';
 import 'package:ug_hub/model/user_model.dart';
+import 'package:ug_hub/provider/display_pdf_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/add_materials.dart';
-import 'package:ug_hub/screens/view_pdf_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/firebase_fields.dart';
@@ -39,8 +44,10 @@ class DisplayMaterialsScreen extends StatelessWidget {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (builder) => const AddMaterialsScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) => const AddMaterialsScreen()));
           },
           child: const Icon(Icons.add),
         ),
@@ -68,7 +75,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                 ),
                 StreamBuilder(
                   stream: path.collection(collectionPdf).snapshots(),
-                  builder: (BuildContext context,
+                  builder: (BuildContext contexts,
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -77,7 +84,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                           child: LoadingAnimationWidget.waveDots(
                               color: Colors.white, size: 14));
                     } else if (snapshot.data!.docs.isEmpty) {
-                      return Container();
+                      return ShimmerWidget();
                     } else {
                       return SizedBox(
                         height: 170,
@@ -90,7 +97,8 @@ class DisplayMaterialsScreen extends StatelessWidget {
                             itemCount: snapshot.data!.docs.length,
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
+                            itemBuilder:
+                                (BuildContext contextbuilder, int index) {
                               // bool isLiked = false;
                               // if (snapshot.data!.docs[index]['likes']
                               //     .contains(_user.uid)) {
@@ -99,20 +107,39 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               //   isLiked = false;
                               // }
                               return GestureDetector(
-                                onTap: () {
-                                  ///open pdf here
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (builder) =>
-                                              //  PdfViewerScreen(
-                                              //     pdfUrl: snapshot.data!.docs[index]
-                                              //         ['fileUrl']),
-                                              ViewPdfFromUrl(
-                                                  url:
-                                                      snapshot.data!.docs[index]
-                                                          ['fileUrl'])));
-
+                                onTap: () async {
+                                  ProgressDialog pr = ProgressDialog(context);
+                                  pr = ProgressDialog(context,
+                                      type: ProgressDialogType.download,
+                                      isDismissible: false,
+                                      showLogs: true);
+                                  pr.style(
+                                      message: 'Downloading file...',
+                                      borderRadius: 10.0,
+                                      backgroundColor: Colors.white,
+                                      progressWidget: Center(
+                                        child: LoadingAnimationWidget.inkDrop(
+                                            color: primaryColor, size: 14),
+                                      ),
+                                      elevation: 10.0,
+                                      insetAnimCurve: Curves.easeInOut,
+                                      progress: 0.0,
+                                      textAlign: TextAlign.center,
+                                      maxProgress: 100.0,
+                                      progressTextStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 0,
+                                          fontWeight: FontWeight.w400),
+                                      messageTextStyle: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 19.0,
+                                          fontWeight: FontWeight.w600));
+                                  await pr.show();
+                                  var file = await DefaultCacheManager()
+                                      .getSingleFile(snapshot.data!.docs[index]
+                                          ['fileUrl']);
+                                  await pr.hide();
+                                  OpenFile.open(file.path);
                                 },
                                 child: DisplayMaterialTile(
                                   likes: snapshot.data!.docs[index]['likes'],
@@ -162,7 +189,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                             color: Colors.white, size: 14),
                       );
                     } else if (snapshot.data!.docs.isEmpty) {
-                      return Container();
+                      return const ShimmerWidget();
                     } else {
                       return SizedBox(
                         height: 170,
@@ -242,7 +269,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                           child: LoadingAnimationWidget.waveDots(
                               color: Colors.white, size: 14));
                     } else if (snapshot.data!.docs.isEmpty) {
-                      return Container();
+                      return const ShimmerWidget();
                     } else {
                       return SizedBox(
                         height: 170,
@@ -292,6 +319,51 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   },
                 ),
               ]),
+            ],
+          ),
+        ));
+  }
+}
+
+class ShimmerWidget extends StatelessWidget {
+  const ShimmerWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: SingleChildScrollView(
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Container(
+                height: 140,
+                width: 190,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Container(
+                height: 140,
+                width: 190,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+              )
             ],
           ),
         ));

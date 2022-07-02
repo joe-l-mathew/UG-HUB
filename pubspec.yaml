@@ -45,6 +45,11 @@ dependencies:
   uuid: ^3.0.6
   url_launcher: ^6.1.4
   syncfusion_flutter_pdfviewer: ^20.2.36-beta
+  open_file: ^3.2.1
+  flutter_cache_manager: ^3.3.0
+  progress_dialog_null_safe: ^1.0.7
+  font_awesome_flutter: ^10.1.0
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:

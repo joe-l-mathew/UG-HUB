@@ -6,3 +6,8 @@ void showSnackbar(BuildContext context, String content) {
     backgroundColor: Colors.indigo,
   ));
 }
+
+void showMaterialBanner(BuildContext context, String content) {
+  ScaffoldMessenger.of(context).showMaterialBanner(
+      const MaterialBanner(content: Text("Download started"), actions: []));
+}
