@@ -130,7 +130,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                           color: Colors.white,
                                           fontSize: 0,
                                           fontWeight: FontWeight.w400),
-                                      messageTextStyle: TextStyle(
+                                      messageTextStyle:const TextStyle(
                                           color: Colors.black,
                                           fontSize: 19.0,
                                           fontWeight: FontWeight.w600));

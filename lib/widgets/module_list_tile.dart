@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ModuleListTile extends StatelessWidget {
@@ -16,7 +15,9 @@ class ModuleListTile extends StatelessWidget {
         height: 150,
         padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [Colors.blue, Colors.blue.shade900]),
+          //change to change color
+          color: const Color.fromARGB(179, 160, 164, 216),
+          // gradient: LinearGradient(colors: [Colors.blue, Colors.blue.shade900]),
           // color: Colors.white70,
           borderRadius: BorderRadius.circular(12.5),
           boxShadow: [
@@ -33,8 +34,8 @@ class ModuleListTile extends StatelessWidget {
             const Spacer(),
             Text(text,
                 textAlign: TextAlign.center,
-                style:const  TextStyle(
-                  color: Colors.white,
+                style: const TextStyle(
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 )),

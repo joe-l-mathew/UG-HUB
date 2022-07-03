@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (builder) =>
-                                                        ProfileScreen()));
+                                                        const ProfileScreen()));
                                           },
                                           child: CircleAvatar(
                                             backgroundImage: NetworkImage(

@@ -29,7 +29,8 @@ import 'package:ug_hub/utils/color.dart';
 //auto otp read
 //https://pub.dev/packages/url_launcher add to manifest
 //add time and is teacher to user
-//add view sylabus
+//add view sylabus done
+//chech internet
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
