@@ -16,6 +16,7 @@ import 'package:ug_hub/screens/add_materials.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/firebase_fields.dart';
+import '../provider/add_module_toggle_provider.dart';
 import '../provider/user_provider.dart';
 import '../widgets/display_file_tile.dart';
 
@@ -44,6 +45,8 @@ class DisplayMaterialsScreen extends StatelessWidget {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            Provider.of<AddModuleToggleProvider>(context, listen: false)
+                .setSelectedField = 0;
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -130,7 +133,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                           color: Colors.white,
                                           fontSize: 0,
                                           fontWeight: FontWeight.w400),
-                                      messageTextStyle:const TextStyle(
+                                      messageTextStyle: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 19.0,
                                           fontWeight: FontWeight.w600));

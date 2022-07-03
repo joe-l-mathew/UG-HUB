@@ -269,6 +269,11 @@ class Firestoremethods {
         .add(uploadPdfModel.toJson(uploadPdfModel));
     Provider.of<UploadStatusProvider>(context, listen: false).setUploadStatus =
         null;
+    Provider.of<UploadPdfProvider>(context, listen: false).setFile = null;
+    Provider.of<UploadPdfProvider>(context, listen: false).setFileName = null;
+    Provider.of<UploadPdfProvider>(context, listen: false).setFileUrl = null;
+    Provider.of<UploadPdfProvider>(context, listen: false).setInputFileName =
+        null;
   }
 
   Future<void> addYoutubeLink(
