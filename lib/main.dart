@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/admob/admob_class.dart';
 import 'package:ug_hub/provider/add_module_toggle_provider.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/bottom_navigation_bar_provider.dart';
@@ -16,6 +18,8 @@ import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/utils/color.dart';
+
+import 'admob/admob_provider.dart';
 
 //need to change sha256 on real build
 //go back to select university on select branch screen on restart -done
@@ -34,18 +38,27 @@ import 'package:ug_hub/utils/color.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => AdmobProvider()),
         ChangeNotifierProvider(create: (context) => DisplayPdfProvider()),
         ChangeNotifierProvider(create: (context) => UploadStatusProvider()),
         ChangeNotifierProvider(create: (context) => ModuleModelProvider()),

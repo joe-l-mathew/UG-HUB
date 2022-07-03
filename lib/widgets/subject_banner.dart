@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/admob/admob_class.dart';
+import 'package:ug_hub/admob/admob_provider.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/display_material_screen.dart';
@@ -19,11 +21,13 @@ class SubjectBanner extends StatelessWidget {
       {Key? key,
       required this.snapshot,
       required this.indexofSubject,
-      required this.subId})
+      required this.subId,
+      required this.context3})
       : super(key: key);
   final String subId;
   final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
   final int indexofSubject;
+  final BuildContext context3;
 
   @override
   Widget build(BuildContext context) {
@@ -111,28 +115,70 @@ class SubjectBanner extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
-                            Provider.of<ModuleModelProvider>(context,
-                                        listen: false)
-                                    .setModuleModel =
-                                ModuleModel(
-                                    moduleName: snapshotModule.data!.docs[index]
-                                        .data()['name'],
-                                    moduleId:
-                                        snapshotModule.data!.docs[index].id,
-                                    subjectName: snapshot
-                                        .data!.docs[indexofSubject]
-                                        .data()['fullname'],
-                                    subjectId:
-                                        snapshot.data!.docs[indexofSubject].id,
-                                    subjectShortName: snapshot
-                                        .data!.docs[indexofSubject]
-                                        .data()['shortName']);
+                            if (Provider.of<UserProvider>(context,
+                                    listen: false)
+                                .userModel!
+                                .expireTime!
+                                .isBefore(DateTime.now())) {
+                              //check reward null
+                              if (Provider.of<AdmobProvider>(context,
+                                          listen: false)
+                                      .add ==
+                                  null) {
+                                //if add not loaded
+                                // print('add iss null');
+                                // AdManager().showRewardedAd(context3);
+                                Provider.of<ModuleModelProvider>(context,
+                                            listen: false)
+                                        .setModuleModel =
+                                    ModuleModel(
+                                        moduleName: snapshotModule
+                                            .data!.docs[index]
+                                            .data()['name'],
+                                        moduleId:
+                                            snapshotModule.data!.docs[index].id,
+                                        subjectName: snapshot
+                                            .data!.docs[indexofSubject]
+                                            .data()['fullname'],
+                                        subjectId: snapshot
+                                            .data!.docs[indexofSubject].id,
+                                        subjectShortName: snapshot
+                                            .data!.docs[indexofSubject]
+                                            .data()['shortName']);
 
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (builder) =>
-                                        DisplayMaterialsScreen()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) =>
+                                            const DisplayMaterialsScreen()));
+                              } else {
+                                AdManager().showRewardedAd(context);
+                              }
+                            } else {
+                              Provider.of<ModuleModelProvider>(context,
+                                          listen: false)
+                                      .setModuleModel =
+                                  ModuleModel(
+                                      moduleName: snapshotModule
+                                          .data!.docs[index]
+                                          .data()['name'],
+                                      moduleId:
+                                          snapshotModule.data!.docs[index].id,
+                                      subjectName: snapshot
+                                          .data!.docs[indexofSubject]
+                                          .data()['fullname'],
+                                      subjectId: snapshot
+                                          .data!.docs[indexofSubject].id,
+                                      subjectShortName: snapshot
+                                          .data!.docs[indexofSubject]
+                                          .data()['shortName']);
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) =>
+                                          const DisplayMaterialsScreen()));
+                            }
                           },
                           child: ModuleListTile(
                               snapshotModule.data!.docs[index].data()['name'],

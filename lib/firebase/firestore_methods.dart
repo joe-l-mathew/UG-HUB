@@ -405,4 +405,11 @@ class Firestoremethods {
         .collection(collectionChatReplay)
         .add(chatReplayModel.toJson());
   }
+
+  Future<void> addTime(BuildContext context) async {
+    await _firestore
+        .collection(collectionUser)
+        .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
+        .update({'expireTime': DateTime.now().add(Duration(hours: 12))});
+  }
 }

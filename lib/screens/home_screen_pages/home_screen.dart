@@ -10,6 +10,7 @@ import 'package:ug_hub/screens/home_screen_pages/profile_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/subject_banner.dart';
 import '../../admin/add_subject.dart';
+import '../../admob/admob_class.dart';
 import '../../functions/show_select_semester_bottom_sheet.dart';
 import '../../widgets/please_select_semester.dart';
 
@@ -24,12 +25,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     Firestoremethods().getSemesterList(context);
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   return Provider.of<UserProvider>(context, listen: false)
-    //           .userModel!
-    //           .semester ??
-    //       showSemesterBottomSheet(context);
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Provider.of<UserProvider>(context, listen: false)
+          .userModel!
+          .expireTime!
+          .isBefore(DateTime.now())) {
+        AdManager().loadRewardedAd(context);
+      }
+    });
     super.initState();
   }
 
@@ -226,6 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               SizedBox(
                                                 height: 186,
                                                 child: SubjectBanner(
+                                                  context3: context,
                                                   subId: snapshot
                                                       .data!.docs[index].id,
                                                   indexofSubject: index,

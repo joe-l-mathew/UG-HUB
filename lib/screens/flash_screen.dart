@@ -19,6 +19,7 @@ class _FlashScreenState extends State<FlashScreen> {
   @override
   void initState() {
     getRidirectPage();
+    
     super.initState();
   }
 

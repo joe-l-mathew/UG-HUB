@@ -87,7 +87,10 @@ class DisplayMaterialsScreen extends StatelessWidget {
                           child: LoadingAnimationWidget.waveDots(
                               color: Colors.white, size: 14));
                     } else if (snapshot.data!.docs.isEmpty) {
-                      return ShimmerWidget();
+                      return Container(
+                        width: double.infinity,
+                        child: SingleChildScrollView(child: ShimmerWidget()),
+                      );
                     } else {
                       return SizedBox(
                         height: 170,
@@ -344,26 +347,30 @@ class ShimmerWidget extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              Container(
-                height: 140,
-                width: 190,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+              Expanded(
+                child: Container(
+                  height: 140,
+                  width: 190,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(
                 width: 10,
               ),
-              Container(
-                height: 140,
-                width: 190,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+              Expanded(
+                child: Container(
+                  height: 140,
+                  width: 190,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
                   ),
                 ),
               )

@@ -93,38 +93,45 @@ class DisplayMaterialTile extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: Text(uploadedBy),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(uploadedBy),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(likeCount),
+                    IconButton(
+                      onPressed: () {
+                        // Firestoremethods().addALike(
+                        //     path: path,
+                        //     context: context,
+                        //     index: index,
+                        //     collectionName: collectionName,
+                        //     docId: docId);
+                        Firestoremethods().likePost(
+                            path: path,
+                            docId: docId,
+                            uid: _user.uid,
+                            likes: likes,
+                            collectionName: collectionName);
+                      },
+                      icon: Icon(
+                        likes.contains(_user.uid)
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
+                        color: likes.contains(_user.uid)
+                            ? Colors.red
+                            : Colors.black,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  // Firestoremethods().addALike(
-                  //     path: path,
-                  //     context: context,
-                  //     index: index,
-                  //     collectionName: collectionName,
-                  //     docId: docId);
-                  Firestoremethods().likePost(
-                      path: path,
-                      docId: docId,
-                      uid: _user.uid,
-                      likes: likes,
-                      collectionName: collectionName);
-                },
-                icon: Icon(
-                  likes.contains(_user.uid)
-                      ? Icons.favorite
-                      : Icons.favorite_outline,
-                  color: likes.contains(_user.uid) ? Colors.red : Colors.black,
-                ),
-              ),
-              Text(likeCount)
-            ],
-          )
         ]),
         decoration: const BoxDecoration(
-          
           color: Color.fromARGB(179, 182, 186, 236),
           borderRadius: BorderRadius.all(
             Radius.circular(10),
