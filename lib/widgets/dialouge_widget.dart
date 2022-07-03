@@ -7,7 +7,7 @@ class DialougeWidget extends StatelessWidget {
   final String noText;
   final Function() onYes;
   final Function() onNO;
-  final Icon icon;
+  final Widget icon;
 
   const DialougeWidget(
       {Key? key,
@@ -49,6 +49,7 @@ class DialougeWidget extends StatelessWidget {
               height: 15,
             ),
             Text(tittleText,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18,

@@ -67,7 +67,7 @@ class DialogFb1 extends StatelessWidget {
         width: MediaQuery.of(context).size.width / 1.4,
         height: MediaQuery.of(context).size.height / 4,
         decoration: BoxDecoration(
-            color: Colors.white10,
+            color: ThemeData().scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(15.0),
             boxShadow: [
               BoxShadow(

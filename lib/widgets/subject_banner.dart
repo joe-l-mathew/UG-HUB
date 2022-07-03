@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // ignore: unnecessary_import
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/admob/admob_class.dart';
@@ -9,6 +10,7 @@ import 'package:ug_hub/admob/admob_provider.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/display_material_screen.dart';
+import 'package:ug_hub/widgets/dialouge_widget.dart';
 import 'package:ug_hub/widgets/module_list_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/firebase_fields.dart';
@@ -152,7 +154,26 @@ class SubjectBanner extends StatelessWidget {
                                         builder: (builder) =>
                                             const DisplayMaterialsScreen()));
                               } else {
-                                AdManager().showRewardedAd(context);
+                                showDialog(
+                                    context: context,
+                                    builder: (dialougeBuilder) {
+                                      return DialougeWidget(
+                                          yesText: "Continue",
+                                          noText: "Cancel",
+                                          onYes: () {
+                                            AdManager().showRewardedAd(context);
+                                            Navigator.pop(dialougeBuilder);
+                                          },
+                                          onNO: () {
+                                            Navigator.pop(dialougeBuilder);
+                                          },
+                                          icon: const FaIcon(
+                                              FontAwesomeIcons.rectangleAd),
+                                          tittleText:
+                                              "You have to watch an Ad to continue",
+                                          subText:
+                                              "Get 12 hours unintrupetd use with an Ad");
+                                    });
                               }
                             } else {
                               Provider.of<ModuleModelProvider>(context,
