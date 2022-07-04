@@ -14,7 +14,7 @@ import '../provider/auth_provider.dart';
 final pdfNameController = TextEditingController();
 
 class AddPdfPage extends StatefulWidget {
-  AddPdfPage({Key? key}) : super(key: key);
+  const AddPdfPage({Key? key}) : super(key: key);
 
   @override
   State<AddPdfPage> createState() => _AddPdfPageState();

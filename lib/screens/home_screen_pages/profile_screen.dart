@@ -1,15 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:ug_hub/firebase/auth_methods.dart';
 import 'package:ug_hub/functions/sent_email.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
+import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
-
+import '../edit_profile_screen.dart';
 import '../user_data_pages/select_university_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -38,21 +39,35 @@ class ProfileScreen extends StatelessWidget {
                         Column(
                           children: [
                             ListTile(
+                              trailing: IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (builder) =>
+                                                const EditProfile()));
+                                  },
+                                  icon: const Icon(Icons.edit)),
                               leading: SizedBox(
-                                width: 50,
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(14)),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                "https://profilemagazine.com/wp-content/uploads/2020/04/Ajmere-Dale-Square-thumbnail.jpg"))),
-                                  ),
-                                ),
-                              ),
-                              title: Text(_user!.name!),
+                                  width: 50,
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: Hero(
+                                      tag: "Profile pic",
+                                      child: _user!.profileUrl == null
+                                          ? const CircleAvatar(
+                                              child: Icon(Icons.person),
+                                            )
+                                          : CircleAvatar(
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      179, 182, 186, 236),
+                                              backgroundImage: NetworkImage(
+                                                  _user.profileUrl!),
+                                            ),
+                                    ),
+                                  )),
+                              title: Text(_user.name!),
                               subtitle: Text(
                                   _auth.currentUser!.phoneNumber!.substring(3)),
                             ),
@@ -68,6 +83,14 @@ class ProfileScreen extends StatelessWidget {
                                   ? Text(_user.branchName!)
                                   : const Text('Not selected'),
                             ),
+                            _user.college == null
+                                ? const SizedBox()
+                                : ListTile(
+                                    title: const Text("College: "),
+                                    subtitle: _user.college != null
+                                        ? Text(_user.college!)
+                                        : const Text('Not selected'),
+                                  ),
                           ],
                         ),
                       ],
@@ -99,7 +122,8 @@ class ProfileScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (builder) => SelectBranchScreen()));
+                              builder: (builder) =>
+                                  const SelectBranchScreen()));
                     },
                     leading: const Icon(Icons.edit),
                     shape: const RoundedRectangleBorder(

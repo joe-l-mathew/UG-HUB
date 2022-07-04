@@ -10,6 +10,7 @@ class CustomInputField extends StatelessWidget {
   final String textaboveBorder;
   final String prefixText;
   final String hintText;
+  final bool isFocoused;
   CustomInputField(
       {Key? key,
       required this.maxLength,
@@ -17,7 +18,8 @@ class CustomInputField extends StatelessWidget {
       required this.textaboveBorder,
       required this.prefixText,
       required this.hintText,
-      required this.keybordType})
+      required this.keybordType,
+      this.isFocoused = true})
       : super(key: key);
 
   @override
@@ -51,7 +53,7 @@ class CustomInputField extends StatelessWidget {
                 color: Colors.grey.withOpacity(.1)),
           ]),
           child: TextFormField(
-            autofocus: true,
+            autofocus: isFocoused,
             maxLength: maxLength,
             controller: inputController,
             onChanged: (value) {

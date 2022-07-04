@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
@@ -13,6 +16,7 @@ import 'package:ug_hub/model/subject_model.dart';
 import 'package:ug_hub/model/upload_pdf_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/model/youtube_model.dart';
+import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
@@ -410,6 +414,40 @@ class Firestoremethods {
     await _firestore
         .collection(collectionUser)
         .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
-        .update({'expireTime': DateTime.now().add(Duration(hours: 12))});
+        .update({'expireTime': DateTime.now().add(const Duration(hours: 4))});
+  }
+
+  Future<void> updateProfile(File? profilepic, String name, String? collegeName,
+      BuildContext context) async {
+
+    UserModel? _user =
+        Provider.of<UserProvider>(context, listen: false).userModel;
+    var path = _firestore.collection(collectionUser).doc(_user!.uid);
+    if (profilepic != null) {
+      Provider.of<AuthProvider>(context, listen: false).isLoading = true;
+      await FirebaseStorage.instance
+          .ref('ProfilePic')
+          .child(_user.uid)
+          .putFile(profilepic);
+      String profLink = await FirebaseStorage.instance
+          .ref('ProfilePic')
+          .child(_user.uid)
+          .getDownloadURL();
+      collegeName ??= null;
+      await path.update(
+          {"profileUrl": profLink, "name": name, "college": collegeName});
+
+      await getUserDetail(context);
+
+      Navigator.pop(context);
+    } else {
+
+      collegeName ??= null;
+      await path.update({"name": name, "college": collegeName});
+      await getUserDetail(context);
+      Provider.of<AuthProvider>(context, listen: false).isLoading = false;
+
+      Navigator.pop(context);
+    }
   }
 }

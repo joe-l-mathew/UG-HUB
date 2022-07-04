@@ -9,23 +9,24 @@ import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/replay_chat_screen.dart';
 
+import '../../widgets/dialouge_widget.dart';
+
 class ChatScreen extends StatelessWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     UserModel? _user = Provider.of<UserProvider>(context).userModel;
-    Stream<QuerySnapshot<Map<String, dynamic>>> snapshot = FirebaseFirestore
-        .instance
+    var path = FirebaseFirestore.instance
         .collection(collectionUniversity)
         .doc(_user!.university!)
         .collection(collectionBranch)
         .doc(_user.branch!)
         .collection(collectionSemester)
         .doc(_user.semester)
-        .collection(collectionChat)
-        .orderBy('dateTime', descending: true)
-        .snapshots();
+        .collection(collectionChat);
+    Stream<QuerySnapshot<Map<String, dynamic>>> snapshot =
+        path.orderBy('dateTime', descending: true).snapshots();
 
     final _chatController = TextEditingController();
     return Scaffold(
@@ -39,7 +40,8 @@ class ChatScreen extends StatelessWidget {
               child: Row(
                 children: [
                   _user.profileUrl != null
-                      ? CircleAvatar(child: Image.network(_user.profileUrl!))
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(_user.profileUrl!))
                       : const CircleAvatar(
                           radius: 15,
                           child: Icon(Icons.person),
@@ -86,15 +88,49 @@ class ChatScreen extends StatelessWidget {
                   }
                   return Expanded(
                     child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Card(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
                             child: ListTile(
+                                onLongPress: () {
+                                  if (snapshot.data!.docs[index]['uid'] ==
+                                      _user.uid) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (dialougeBuilder) {
+                                          return DialougeWidget(
+                                              yesText: "Delete",
+                                              noText: "No",
+                                              onYes: () async {
+                                                Navigator.pop(dialougeBuilder);
+                                                await path
+                                                    .doc(snapshot
+                                                        .data!.docs[index].id)
+                                                    .delete();
+                                                // Navigator.pop(dialougeBuilder);
+                                              },
+                                              onNO: () {
+                                                Navigator.pop(dialougeBuilder);
+                                              },
+                                              icon: const Icon(Icons.delete),
+                                              tittleText:
+                                                  "Do you want to delete",
+                                              subText: "");
+                                        });
+                                  }
+                                },
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
                                 leading: snapshot.data!.docs[index]
                                             ['profileUrl'] !=
                                         null
                                     ? CircleAvatar(
-                                        child: Image.network(snapshot
+                                        backgroundImage: NetworkImage(snapshot
                                             .data!.docs[index]['profileUrl']))
                                     : const CircleAvatar(
                                         radius: 15,
@@ -105,7 +141,8 @@ class ChatScreen extends StatelessWidget {
                                 subtitle:
                                     Text(snapshot.data!.docs[index]['chat']),
                                 isThreeLine: true,
-                                tileColor: Color.fromARGB(179, 182, 186, 236),
+                                tileColor:
+                                    const Color.fromARGB(179, 182, 186, 236),
                                 trailing: IconButton(
                                     onPressed: () {
                                       Navigator.push(
@@ -125,7 +162,7 @@ class ChatScreen extends StatelessWidget {
                                                         .data!.docs[index].id,
                                                   )));
                                     },
-                                    icon: Icon(Icons.reply_rounded))));
+                                    icon: const Icon(Icons.reply_rounded))));
                       },
                     ),
                   );

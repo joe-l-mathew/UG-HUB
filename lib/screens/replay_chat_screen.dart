@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/model/chat_replay_model.dart';
+import 'package:ug_hub/widgets/dialouge_widget.dart';
 
 import '../constants/firebase_fields.dart';
 import '../firebase/firestore_methods.dart';
@@ -27,8 +28,7 @@ class ReplayChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserModel? _user = Provider.of<UserProvider>(context).userModel;
-    Stream<QuerySnapshot<Map<String, dynamic>>> snapshot = FirebaseFirestore
-        .instance
+    var path = FirebaseFirestore.instance
         .collection(collectionUniversity)
         .doc(_user!.university!)
         .collection(collectionBranch)
@@ -37,9 +37,9 @@ class ReplayChatScreen extends StatelessWidget {
         .doc(_user.semester)
         .collection(collectionChat)
         .doc(docId)
-        .collection(collectionChatReplay)
-        .orderBy('dateTime')
-        .snapshots();
+        .collection(collectionChatReplay);
+    Stream<QuerySnapshot<Map<String, dynamic>>> snapshot =
+        path.orderBy('dateTime').snapshots();
     return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
@@ -63,12 +63,44 @@ class ReplayChatScreen extends StatelessWidget {
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
                             child: ListTile(
+                              onLongPress: () {
+                                if (snapshot.data!.docs[index]['uid'] ==
+                                    _user.uid) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (dialougeBuilder) {
+                                        return DialougeWidget(
+                                            yesText: "Delete",
+                                            noText: "No",
+                                            onYes: () async {
+                                              Navigator.pop(dialougeBuilder);
+                                              await path
+                                                  .doc(snapshot
+                                                      .data!.docs[index].id)
+                                                  .delete();
+                                              // Navigator.pop(dialougeBuilder);
+                                            },
+                                            onNO: () {
+                                              Navigator.pop(dialougeBuilder);
+                                            },
+                                            icon: const Icon(Icons.delete),
+                                            tittleText: "Do you want to delete",
+                                            subText: "");
+                                      });
+                                }
+                              },
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
                               leading: snapshot.data!.docs[index]
                                           ['profileUrl'] !=
                                       null
                                   ? CircleAvatar(
-                                      child: Image.network(snapshot
+                                      backgroundImage: NetworkImage(snapshot
                                           .data!.docs[index]['profileUrl']))
                                   : const CircleAvatar(
                                       radius: 15,
@@ -92,7 +124,9 @@ class ReplayChatScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     _user.profileUrl != null
-                        ? CircleAvatar(child: Image.network(_user.profileUrl!))
+                        ? CircleAvatar(
+                            backgroundImage: NetworkImage(_user.profileUrl!),
+                          )
                         : const CircleAvatar(
                             radius: 15,
                             child: Icon(Icons.person),

@@ -148,9 +148,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     builder: (builder) =>
                                                         const ProfileScreen()));
                                           },
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                                _userModel.profileUrl!),
+                                          child: Hero(
+                                            tag: 'Profile pic',
+                                            child: _userModel.profileUrl != null
+                                                ? CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(_userModel
+                                                            .profileUrl!),
+                                                  )
+                                                : const CircleAvatar(
+                                                    backgroundColor:
+                                                        primaryColor,
+                                                    child: Icon(Icons.person),
+                                                  ),
                                           ),
                                         ),
                                       ),
