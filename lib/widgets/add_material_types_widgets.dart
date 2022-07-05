@@ -138,6 +138,7 @@ class DialogFb1 extends StatelessWidget {
                                       .addPdftoDatabase(context);
                                   showSnackbar(
                                       context, "Uploaded Successfully");
+                                  pdfNameController.clear();
                                   Navigator.pop(context);
                                 } else {
                                   showSnackbar(

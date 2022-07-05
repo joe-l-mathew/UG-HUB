@@ -419,7 +419,6 @@ class Firestoremethods {
 
   Future<void> updateProfile(File? profilepic, String name, String? collegeName,
       BuildContext context) async {
-
     UserModel? _user =
         Provider.of<UserProvider>(context, listen: false).userModel;
     var path = _firestore.collection(collectionUser).doc(_user!.uid);
@@ -441,7 +440,6 @@ class Firestoremethods {
 
       Navigator.pop(context);
     } else {
-
       collegeName ??= null;
       await path.update({"name": name, "college": collegeName});
       await getUserDetail(context);
@@ -449,5 +447,22 @@ class Firestoremethods {
 
       Navigator.pop(context);
     }
+  }
+
+  Future<void> deleteUploadFileFromFirestore(
+      {required DocumentReference<Map<String, dynamic>> path,
+      required String docid,
+      required FileType type}) async {
+    if (type == FileType.pdf) {
+      await path.collection(collectionPdf).doc(docid).delete();
+    } else if (type == FileType.youtube) {
+      await path.collection(collectionYoutube).doc(docid).delete();
+    } else if (type == FileType.link) {
+      await path.collection(collectionOtherLink).doc(docid).delete();
+    }
+  }
+
+  Future<void> deleteUploadFileFromStorage(String downloadLink) async {
+    await FirebaseStorage.instance.refFromURL(downloadLink).delete();
   }
 }

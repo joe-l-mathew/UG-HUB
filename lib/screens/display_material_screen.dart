@@ -6,14 +6,15 @@ import 'package:open_file/open_file.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/module_model.dart';
 // import 'package:ug_hub/model/upload_pdf_model.dart';
 import 'package:ug_hub/model/user_model.dart';
-import 'package:ug_hub/provider/display_pdf_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/add_materials.dart';
 import 'package:ug_hub/utils/color.dart';
+import 'package:ug_hub/widgets/dialouge_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/firebase_fields.dart';
 import '../provider/add_module_toggle_provider.dart';
@@ -87,7 +88,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                           child: LoadingAnimationWidget.waveDots(
                               color: Colors.white, size: 14));
                     } else if (snapshot.data!.docs.isEmpty) {
-                      return Container(
+                      return const SizedBox(
                         width: double.infinity,
                         child: SingleChildScrollView(child: ShimmerWidget()),
                       );
@@ -113,6 +114,44 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               //   isLiked = false;
                               // }
                               return GestureDetector(
+                                onLongPress: () {
+                                  if (_user.uid ==
+                                      snapshot.data!.docs[index]['uid']) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (pdfDeleteContext) {
+                                          return DialougeWidget(
+                                              yesText: "Delete",
+                                              noText: "Cancel",
+                                              onYes: () async {
+                                                Navigator.pop(pdfDeleteContext);
+                                                await Firestoremethods()
+                                                    .deleteUploadFileFromFirestore(
+                                                        type: FileType.pdf,
+                                                        path: path,
+                                                        docid: snapshot.data!
+                                                            .docs[index].id);
+                                                //delete form storage
+                                                await Firestoremethods()
+                                                    .deleteUploadFileFromStorage(
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['fileUrl']);
+                                              },
+                                              onNO: () {
+                                                Navigator.pop(pdfDeleteContext);
+                                              },
+                                              icon: const Icon(Icons.delete),
+                                              tittleText:
+                                                  "Do you want to delete this file",
+                                              subText:
+                                                  "File will be removed permenently");
+                                        });
+                                  }
+
+                                  //show dialouge to delete the doc with firestorage storage delete
+                                  //delete from firestore,
+                                },
                                 onTap: () async {
                                   ProgressDialog pr = ProgressDialog(context);
                                   pr = ProgressDialog(context,
@@ -145,7 +184,9 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                       .getSingleFile(snapshot.data!.docs[index]
                                           ['fileUrl']);
                                   await pr.hide();
-                                  OpenFile.open(file.path);
+                                  OpenFile.open(
+                                    file.path,
+                                  );
                                 },
                                 child: DisplayMaterialTile(
                                   likes: snapshot.data!.docs[index]['likes'],
@@ -217,6 +258,38 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               //   isLiked = false;
                               // }
                               return GestureDetector(
+                                onLongPress: () {
+                                  if (_user.uid ==
+                                      snapshot.data!.docs[index]['uid']) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (pdfDeleteContext) {
+                                          return DialougeWidget(
+                                              yesText: "Delete",
+                                              noText: "Cancel",
+                                              onYes: () async {
+                                                Navigator.pop(pdfDeleteContext);
+                                                await Firestoremethods()
+                                                    .deleteUploadFileFromFirestore(
+                                                        type: FileType.youtube,
+                                                        path: path,
+                                                        docid: snapshot.data!
+                                                            .docs[index].id);
+                                              },
+                                              onNO: () {
+                                                Navigator.pop(pdfDeleteContext);
+                                              },
+                                              icon: const Icon(Icons.delete),
+                                              tittleText:
+                                                  "Do you want to delete this file",
+                                              subText:
+                                                  "File will be removed permenently");
+                                        });
+                                  }
+
+                                  //show dialouge to delete the doc with firestorage storage delete
+                                  //delete from firestore,
+                                },
                                 onTap: () async {
                                   await launchUrl(
                                       Uri.parse(
@@ -297,6 +370,38 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               //   isLiked = false;
                               // }
                               return GestureDetector(
+                                onLongPress: () {
+                                  if (_user.uid ==
+                                      snapshot.data!.docs[index]['uid']) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (pdfDeleteContext) {
+                                          return DialougeWidget(
+                                              yesText: "Delete",
+                                              noText: "Cancel",
+                                              onYes: () async {
+                                                Navigator.pop(pdfDeleteContext);
+                                                await Firestoremethods()
+                                                    .deleteUploadFileFromFirestore(
+                                                        type: FileType.link,
+                                                        path: path,
+                                                        docid: snapshot.data!
+                                                            .docs[index].id);
+                                              },
+                                              onNO: () {
+                                                Navigator.pop(pdfDeleteContext);
+                                              },
+                                              icon: const Icon(Icons.delete),
+                                              tittleText:
+                                                  "Do you want to delete this file",
+                                              subText:
+                                                  "File will be removed permenently");
+                                        });
+                                  }
+
+                                  //show dialouge to delete the doc with firestorage storage delete
+                                  //delete from firestore,
+                                },
                                 onTap: () {
                                   launchUrl(
                                       Uri.parse(
