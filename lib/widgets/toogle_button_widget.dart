@@ -8,14 +8,15 @@ class ToggleTextButtonWidget extends StatefulWidget {
   final bool multipleSelectionsAllowed;
   final bool stateContained;
   final bool canUnToggle;
-  ToggleTextButtonWidget(
+   // ignore: use_key_in_widget_constructors
+   const ToggleTextButtonWidget(
       {required this.texts,
       required this.selected,
       this.selectedColor = primaryColor,
       this.stateContained = true,
       this.canUnToggle = false,
       this.multipleSelectionsAllowed = true,
-      Key? key});
+      });
 
   @override
   _ToggleTextButtonWidgetState createState() => _ToggleTextButtonWidgetState();
@@ -68,7 +69,7 @@ class _ToggleTextButtonWidgetState extends State<ToggleTextButtonWidget> {
             children: widget.texts
                 .map(
                   (e) => Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: e,
                   ),
                 )

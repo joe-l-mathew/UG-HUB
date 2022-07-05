@@ -19,7 +19,6 @@ class SelectUniversityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String uid = Provider.of<UserProvider>(context).userModel!.uid;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
       floatingActionButton:

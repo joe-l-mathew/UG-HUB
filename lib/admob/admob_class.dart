@@ -21,18 +21,16 @@ class AdManager {
   // }
 
   void loadRewardedAd(BuildContext context) async {
-    print("Call reached -------------------------------");
     await RewardedAd.load(
-        adUnitId: "ca-app-pub-3940256099942544/5224354917",
+        adUnitId: "ca-app-pub-8232424078858151/2941845534",
         // "ca-app-pub-8232424078858151/2941845534",
+        // ca-app-pub-8232424078858151/2941845534
         request: const AdRequest(),
         rewardedAdLoadCallback:
             RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
           _rewardedAd = ad;
-          print('Loaded----------------------');
           Provider.of<AdmobProvider>(context, listen: false).setAdd = ad;
         }, onAdFailedToLoad: (LoadAdError error) {
-          print(error.message + "---------------------------");
           _rewardedAd = null;
         }));
   }

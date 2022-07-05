@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/screens/home_screen_pages/chat_screen.dart';
-import 'package:ug_hub/screens/home_screen_pages/favorite_screen.dart';
 import 'package:ug_hub/screens/home_screen_pages/home_screen.dart';
-import 'package:ug_hub/screens/home_screen_pages/profile_screen.dart';
 import '../provider/bottom_navigation_bar_provider.dart';
 import '../widgets/bottom_navigation_bar_widget.dart';
 

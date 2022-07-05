@@ -11,7 +11,7 @@ class AddMaterialsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> listOfUploads = [
-      AddPdfPage(),
+      const AddPdfPage(),
       AddYoutubeUrlPage(context: context),
       AddOtherLinkPage(
         context: context,

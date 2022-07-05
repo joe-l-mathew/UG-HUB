@@ -30,8 +30,8 @@ void showSemesterBottomSheet(BuildContext context) async {
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
+                  return const Center(
+                    child:  CircularProgressIndicator(),
                   );
                 }
                 return ListView.separated(
