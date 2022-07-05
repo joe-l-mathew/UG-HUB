@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:ug_hub/admob/admob_class.dart';
 import 'package:ug_hub/provider/add_module_toggle_provider.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/bottom_navigation_bar_provider.dart';
@@ -22,8 +22,6 @@ import 'package:ug_hub/utils/color.dart';
 import 'admob/admob_provider.dart';
 
 //need to change sha256 on real build
-//go back to select university on select branch screen on restart -done
-//need to create new fields in user model such as university name, branch name etc -done
 // addd network check always
 //add orderby (assending) to all screen
 //make selected true for list tilekk
@@ -38,6 +36,8 @@ import 'admob/admob_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
   runApp(const MyApp());
