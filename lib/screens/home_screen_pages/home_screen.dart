@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
@@ -30,10 +33,27 @@ class _HomeScreenState extends State<HomeScreen> {
           .userModel!
           .expireTime!
           .isBefore(DateTime.now())) {
+        // print("Started loading----------------------------------");
         AdManager().loadRewardedAd(context);
       }
     });
+    checkInternet();
     super.initState();
+  }
+
+  Future<void> checkInternet() async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+    } else {
+      showSimpleNotification(
+          const Text(
+            'You are not connected to internet,you can still use our app but some features might not work',
+            textAlign: TextAlign.center,
+          ),
+          background: Colors.red,
+          slideDismissDirection: DismissDirection.up,
+          duration: const Duration(seconds: 5));
+    }
   }
 
   @override
@@ -127,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (builder) =>
-                                                        ProfileScreen()));
+                                                        const ProfileScreen()));
                                           },
                                           child: const CircleAvatar(
                                             child: Icon(Icons.person),
@@ -153,8 +173,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: _userModel.profileUrl != null
                                                 ? CircleAvatar(
                                                     backgroundImage:
-                                                        NetworkImage(_userModel
-                                                            .profileUrl!),
+                                                        CachedNetworkImageProvider(
+                                                      _userModel.profileUrl!,
+                                                    ),
                                                   )
                                                 : const CircleAvatar(
                                                     backgroundColor:
@@ -237,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           itemCount: snapshot.data!.docs.length,
                                           itemBuilder: (context, index) =>
                                               SizedBox(
-                                                height: 186,
+                                                height: 202,
                                                 child: SubjectBanner(
                                                   context3: context,
                                                   subId: snapshot

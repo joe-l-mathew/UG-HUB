@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/provider/add_module_toggle_provider.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
@@ -71,39 +75,41 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => UniversityProvider())
       ],
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'UG HUB',
-          theme: ThemeData(primarySwatch: Colors.indigo)
-              .copyWith(primaryColor: primaryColor),
-          home: StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.active) {
-                if (snapshot.hasData) {
-                  return const FlashScreen();
-                  // return OtpScreen(phoneNo: 'phoneNo');
-                  // return CustomCarouselFB2();
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('${snapshot.error}'),
+      child: OverlaySupport.global(
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'UG HUB',
+            theme: ThemeData(primarySwatch: Colors.indigo)
+                .copyWith(primaryColor: primaryColor),
+            home: StreamBuilder(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.active) {
+                  if (snapshot.hasData) {
+                    return const FlashScreen();
+                    // return OtpScreen(phoneNo: 'phoneNo');
+                    // return CustomCarouselFB2();
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('${snapshot.error}'),
+                    );
+                  }
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Scaffold(
+                    body: Center(
+                      child: LoadingAnimationWidget.fourRotatingDots(
+                          color: primaryColor, size: 50),
+                    ),
                   );
                 }
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Scaffold(
-                  body: Center(
-                    child: LoadingAnimationWidget.fourRotatingDots(
-                        color: primaryColor, size: 50),
-                  ),
-                );
-              }
-              return const LoginScreen();
-            },
-          )
-          // const LoginScreen(),
-          // home: OtpScreen(phoneNo: '9496283576'),
-          ),
+                return const LoginScreen();
+              },
+            )
+            // const LoginScreen(),
+            // home: OtpScreen(phoneNo: '9496283576'),
+            ),
+      ),
     );
   }
 }

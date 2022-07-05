@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/model/chat_replay_model.dart';
@@ -12,14 +13,14 @@ import '../provider/user_provider.dart';
 
 class ReplayChatScreen extends StatelessWidget {
   final _replayController = TextEditingController();
-  final String? profileUrl;
+  // final String? profileUrl;
   final String userName;
   final String chat;
   final String docId;
 
   ReplayChatScreen(
       {Key? key,
-      required this.profileUrl,
+      // required this.profileUrl,
       required this.userName,
       required this.chat,
       required this.docId})
@@ -152,7 +153,7 @@ class ReplayChatScreen extends StatelessWidget {
                                   uid: _user.uid,
                                   dateTime: DateTime.now(),
                                   chatId: docId,
-                                  profileUrl: profileUrl),
+                                  profileUrl: _user.profileUrl),
                             );
                             _replayController.clear();
                           } else {

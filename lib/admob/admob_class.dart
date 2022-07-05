@@ -20,33 +20,36 @@ class AdManager {
   //   _bannerAd?.load();
   // }
 
-  void loadRewardedAd(BuildContext context) {
-    RewardedAd.load(
+  void loadRewardedAd(BuildContext context) async {
+    print("Call reached -------------------------------");
+    await RewardedAd.load(
         adUnitId: "ca-app-pub-3940256099942544/5224354917",
+        // "ca-app-pub-8232424078858151/2941845534",
         request: const AdRequest(),
         rewardedAdLoadCallback:
             RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
           _rewardedAd = ad;
+          print('Loaded----------------------');
           Provider.of<AdmobProvider>(context, listen: false).setAdd = ad;
         }, onAdFailedToLoad: (LoadAdError error) {
+          print(error.message + "---------------------------");
           _rewardedAd = null;
         }));
   }
-
-  
 
   void showRewardedAd(BuildContext context) {
     RewardedAd? rewadd = Provider.of<AdmobProvider>(context, listen: false).add;
     if (rewadd != null) {
       rewadd.fullScreenContentCallback = FullScreenContentCallback(
-          onAdShowedFullScreenContent: (RewardedAd ad) {
-      }, onAdDismissedFullScreenContent: (RewardedAd ad) {
-        ad.dispose();
-        loadRewardedAd(context);
-      }, onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-        ad.dispose();
-        loadRewardedAd(context);
-      });
+          onAdShowedFullScreenContent: (RewardedAd ad) {},
+          onAdDismissedFullScreenContent: (RewardedAd ad) {
+            ad.dispose();
+            loadRewardedAd(context);
+          },
+          onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+            ad.dispose();
+            loadRewardedAd(context);
+          });
 
       rewadd.setImmersiveMode(true);
       rewadd.show(

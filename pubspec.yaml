@@ -50,6 +50,9 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   shimmer: ^2.0.0
   google_mobile_ads: ^1.3.0
+  internet_connection_checker: ^0.0.1+4
+  overlay_support: ^2.0.1
+  cached_network_image: ^3.2.1
 
 dev_dependencies:
   flutter_test:

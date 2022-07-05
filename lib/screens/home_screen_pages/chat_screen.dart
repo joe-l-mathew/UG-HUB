@@ -155,9 +155,9 @@ class ChatScreen extends StatelessWidget {
                                                         ['username'],
                                                     chat: snapshot.data!
                                                         .docs[index]['chat'],
-                                                    profileUrl: snapshot
-                                                            .data!.docs[index]
-                                                        ['profileUrl'],
+                                                    // profileUrl: snapshot
+                                                    //         .data!.docs[index]
+                                                    //     ['profileUrl'],
                                                     docId: snapshot
                                                         .data!.docs[index].id,
                                                   )));

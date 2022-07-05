@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -62,8 +63,9 @@ class ProfileScreen extends StatelessWidget {
                                               backgroundColor:
                                                   const Color.fromARGB(
                                                       179, 182, 186, 236),
-                                              backgroundImage: NetworkImage(
-                                                  _user.profileUrl!),
+                                              backgroundImage:
+                                                  CachedNetworkImageProvider(
+                                                      _user.profileUrl!),
                                             ),
                                     ),
                                   )),
