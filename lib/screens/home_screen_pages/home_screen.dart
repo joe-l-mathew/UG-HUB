@@ -15,6 +15,7 @@ import 'package:ug_hub/widgets/subject_banner.dart';
 import '../../admin/add_subject.dart';
 import '../../admob/admob_class.dart';
 import '../../functions/show_select_semester_bottom_sheet.dart';
+import '../../functions/show_terms_and_condition.dart';
 import '../../widgets/please_select_semester.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,6 +36,18 @@ class _HomeScreenState extends State<HomeScreen> {
           .isBefore(DateTime.now())) {
         // print("Started loading----------------------------------");
         AdManager().loadRewardedAd(context);
+      }
+      if (Provider.of<UserProvider>(context, listen: false)
+                  .userModel!
+                  .isTermsAccepted ==
+              null ||
+          Provider.of<UserProvider>(context, listen: false)
+                  .userModel!
+                  .isTermsAccepted ==
+              false) {
+        //Show Terms Here
+        showTermsAndCondition(context);
+        print("Show terms");
       }
     });
     checkInternet();
@@ -65,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Provider.of<UserProvider>(context).userModel!.isAdmin != null
                 ? FloatingActionButton(
                     onPressed: () {
+                      // showTermsAndCondition(context);
                       addSubject(context);
                     },
                     child: const Icon(Icons.add),

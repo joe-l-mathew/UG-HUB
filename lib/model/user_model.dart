@@ -14,22 +14,23 @@ class UserModel {
   final bool? isAdmin;
   final DateTime? expireTime;
   final bool? isTeacher;
+  final bool? isTermsAccepted;
 
-  UserModel({
-    required this.uid,
-    this.isTeacher,
-    this.isAdmin,
-    this.expireTime,
-    this.name,
-    this.university,
-    this.branch,
-    this.semester,
-    this.college,
-    this.universityName,
-    this.branchName,
-    this.profileUrl,
-    this.semesterName,
-  });
+  UserModel(
+      {required this.uid,
+      this.isTeacher,
+      this.isAdmin,
+      this.expireTime,
+      this.name,
+      this.university,
+      this.branch,
+      this.semester,
+      this.college,
+      this.universityName,
+      this.branchName,
+      this.profileUrl,
+      this.semesterName,
+      this.isTermsAccepted});
 
   Map<String, dynamic> toJson() => {
         "isTeacher": isTeacher,
@@ -44,7 +45,8 @@ class UserModel {
         "profileUrl": profileUrl,
         "semesterName": semesterName,
         "isAdmin": isAdmin,
-        "expireTime": expireTime
+        "expireTime": expireTime,
+        "isTermsAccepted": isTermsAccepted
       };
 
   static UserModel fromSnap(DocumentSnapshot snap) {
@@ -63,6 +65,7 @@ class UserModel {
         branchName: snapshot['branchName'],
         profileUrl: snapshot['profileUrl'],
         expireTime: snapshot['expireTime'].toDate(),
-        semesterName: snapshot['semesterName']);
+        semesterName: snapshot['semesterName'],
+        isTermsAccepted: snapshot['isTermsAccepted']);
   }
 }

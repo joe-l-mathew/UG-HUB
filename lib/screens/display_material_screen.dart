@@ -7,6 +7,7 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
+import 'package:ug_hub/functions/show_terms_and_condition.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
@@ -44,12 +45,23 @@ class DisplayMaterialsScreen extends StatelessWidget {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Provider.of<AddModuleToggleProvider>(context, listen: false)
-                .setSelectedField = 0;
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (builder) => const AddMaterialsScreen()));
+            if (Provider.of<UserProvider>(context, listen: false)
+                        .userModel!
+                        .isTermsAccepted ==
+                    null ||
+                Provider.of<UserProvider>(context, listen: false)
+                        .userModel!
+                        .isTermsAccepted ==
+                    false) {
+              showTermsAndCondition(context);
+            } else {
+              Provider.of<AddModuleToggleProvider>(context, listen: false)
+                  .setSelectedField = 0;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (builder) => const AddMaterialsScreen()));
+            }
           },
           child: const Icon(Icons.add),
         ),

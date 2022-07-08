@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/functions/show_select_semester_bottom_sheet.dart';
+import 'package:ug_hub/functions/show_terms_and_condition.dart';
+import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/utils/color.dart';
 
 import '../provider/bottom_navigation_bar_provider.dart';
@@ -123,9 +126,29 @@ class CustomBottomNavigationBar extends StatelessWidget {
         currentIndex: Provider.of<BottomNavigationBarProvider>(context).getPage,
         unselectedItemColor: Colors.grey.withOpacity(.75),
         selectedItemColor: primaryColor,
-        onTap: ((value) =>
+        onTap: ((value) {
+          if (value == 1) {
+            if (Provider.of<UserProvider>(context, listen: false)
+                    .userModel!
+                    .isTermsAccepted !=
+                null) {
+              if (Provider.of<UserProvider>(context, listen: false)
+                      .userModel!
+                      .semester !=
+                  null) {
+                Provider.of<BottomNavigationBarProvider>(context, listen: false)
+                    .setPage = value;
+              } else {
+                showSemesterBottomSheet(context);
+              }
+            } else {
+              showTermsAndCondition(context, isSlow: false);
+            }
+          } else {
             Provider.of<BottomNavigationBarProvider>(context, listen: false)
-                .setPage = value),
+                .setPage = value;
+          }
+        }),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),

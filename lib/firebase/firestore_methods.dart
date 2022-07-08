@@ -463,4 +463,16 @@ class Firestoremethods {
   Future<void> deleteUploadFileFromStorage(String downloadLink) async {
     await FirebaseStorage.instance.refFromURL(downloadLink).delete();
   }
+
+  Future<void> termsAndConditions(BuildContext context) async {
+    Provider.of<AuthProvider>(context, listen: false).isLoadingFun(true);
+    UserModel? _user =
+        Provider.of<UserProvider>(context, listen: false).userModel;
+    await _firestore
+        .collection(collectionUser)
+        .doc(_user!.uid)
+        .update({"isTermsAccepted": true});
+    await getUserDetail(context);
+    Provider.of<AuthProvider>(context, listen: false).isLoadingFun(false);
+  }
 }
