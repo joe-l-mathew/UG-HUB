@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
@@ -86,16 +87,26 @@ class _MyAppState extends State<MyApp> {
                     // return OtpScreen(phoneNo: 'phoneNo');
                     // return CustomCarouselFB2();
                   } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('${snapshot.error}'),
+                    return const Center(
+                      child: Text('Some error occured'),
                     );
                   }
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Scaffold(
+                    backgroundColor: HexColor('#4438ca'),
                     body: Center(
-                      child: LoadingAnimationWidget.fourRotatingDots(
-                          color: primaryColor, size: 50),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/icon.png',
+                            scale: 0.9,
+                          ),
+                          LoadingAnimationWidget.fourRotatingDots(
+                              color: Colors.white, size: 30),
+                        ],
+                      ),
                     ),
                   );
                 }

@@ -11,7 +11,7 @@ Future<void> pickPdfFile(BuildContext context) async {
 
   if (result != null) {
     PlatformFile file1 = result.files.first;
-    if (file1.size < 5242880) {
+    if (file1.size < 10485760) {
       final path = result.files.single.path;
       var file = File(path.toString());
       String fileName = result.files.first.name;
@@ -19,7 +19,7 @@ Future<void> pickPdfFile(BuildContext context) async {
           fileName;
       Provider.of<UploadPdfProvider>(context, listen: false).setFile = file;
     } else {
-      showSnackbar(context, "Pick a file lessthan 5MB");
+      showSnackbar(context, "Pick a file lessthan 10MB");
     }
   }
 }

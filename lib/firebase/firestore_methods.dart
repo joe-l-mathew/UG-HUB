@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -25,7 +24,6 @@ import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/landing_page.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
 import 'package:ug_hub/screens/user_data_pages/select_university_screen.dart';
-
 import '../provider/upload_status_provider.dart';
 
 class Firestoremethods {

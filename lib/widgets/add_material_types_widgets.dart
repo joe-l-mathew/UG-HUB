@@ -103,7 +103,7 @@ class DialogFb1 extends StatelessWidget {
             const SizedBox(
               height: 3.5,
             ),
-            const Text("Upload a file lessthan 5MB",
+            const Text("Upload a file lessthan 10MB",
                 style: TextStyle(
                     color: Colors.grey,
                     fontSize: 12,

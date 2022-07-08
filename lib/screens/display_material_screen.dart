@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/model/module_model.dart';
-// import 'package:ug_hub/model/upload_pdf_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/add_materials.dart';
@@ -77,7 +76,10 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   ),
                 ),
                 StreamBuilder(
-                  stream: path.collection(collectionPdf).snapshots(),
+                  stream: path
+                      .collection(collectionPdf)
+                      .orderBy('userName')
+                      .snapshots(),
                   builder: (BuildContext contexts,
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
