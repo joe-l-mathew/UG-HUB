@@ -14,6 +14,7 @@ import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/add_materials.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
+import 'package:ug_hub/widgets/report_material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/firebase_fields.dart';
 import '../provider/add_module_toggle_provider.dart';
@@ -129,7 +130,10 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               return GestureDetector(
                                 onLongPress: () {
                                   if (_user.uid ==
-                                      snapshot.data!.docs[index]['uid']) {
+                                          snapshot.data!.docs[index]['uid']
+                                      //     ||
+                                      // _user.isAdmin!
+                                      ) {
                                     showDialog(
                                         context: context,
                                         builder: (pdfDeleteContext) {
@@ -202,6 +206,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                   );
                                 },
                                 child: DisplayMaterialTile(
+                                  snap: snapshot.data!.docs[index],
                                   likes: snapshot.data!.docs[index]['likes'],
                                   collectionName: collectionPdf,
                                   index: index,
@@ -312,6 +317,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                       mode: LaunchMode.externalApplication);
                                 },
                                 child: DisplayMaterialTile(
+                                  snap: snapshot.data!.docs[index],
                                   //might change
                                   likes: snapshot.data!.docs[index]['likes'],
                                   collectionName: collectionYoutube,
@@ -383,38 +389,6 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               //   isLiked = false;
                               // }
                               return GestureDetector(
-                                onLongPress: () {
-                                  if (_user.uid ==
-                                      snapshot.data!.docs[index]['uid']) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (pdfDeleteContext) {
-                                          return DialougeWidget(
-                                              yesText: "Delete",
-                                              noText: "Cancel",
-                                              onYes: () async {
-                                                Navigator.pop(pdfDeleteContext);
-                                                await Firestoremethods()
-                                                    .deleteUploadFileFromFirestore(
-                                                        type: FileType.link,
-                                                        path: path,
-                                                        docid: snapshot.data!
-                                                            .docs[index].id);
-                                              },
-                                              onNO: () {
-                                                Navigator.pop(pdfDeleteContext);
-                                              },
-                                              icon: const Icon(Icons.delete),
-                                              tittleText:
-                                                  "Do you want to delete this file",
-                                              subText:
-                                                  "File will be removed permenently");
-                                        });
-                                  }
-
-                                  //show dialouge to delete the doc with firestorage storage delete
-                                  //delete from firestore,
-                                },
                                 onTap: () {
                                   launchUrl(
                                       Uri.parse(
@@ -422,6 +396,9 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                       mode: LaunchMode.externalApplication);
                                 },
                                 child: DisplayMaterialTile(
+                                  downloadUrl: snapshot.data!.docs[index]
+                                      ['link'],
+                                  snap: snapshot.data!.docs[index],
                                   likes: snapshot.data!.docs[index]['likes'],
                                   index: index,
                                   collectionName: collectionOtherLink,

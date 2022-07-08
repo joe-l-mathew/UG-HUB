@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/utils/color.dart';
+import 'package:ug_hub/widgets/dialouge_widget.dart';
+import 'package:ug_hub/widgets/report_material.dart';
 
 import '../model/module_model.dart';
 import '../model/user_model.dart';
@@ -12,14 +14,17 @@ import '../provider/module_model_provider.dart';
 import '../provider/user_provider.dart';
 
 class DisplayMaterialTile extends StatelessWidget {
+  final String? downloadUrl;
   final String docId;
   final String fileName;
   final String uploadedBy;
   final String likeCount;
-  final Enum fileType;
+  final FileType fileType;
   final int index;
   final String collectionName;
   final List likes;
+
+  final QueryDocumentSnapshot<Map<String, dynamic>> snap;
 
   const DisplayMaterialTile(
       {Key? key,
@@ -30,7 +35,9 @@ class DisplayMaterialTile extends StatelessWidget {
       required this.docId,
       required this.index,
       required this.collectionName,
-      required this.likes})
+      required this.likes,
+      this.downloadUrl,
+      required this.snap})
       : super(key: key);
 
   @override
@@ -66,79 +73,157 @@ class DisplayMaterialTile extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: CircleAvatar(
-                child: getSelectedIcon(),
-                backgroundColor: primaryColor,
-                radius: 23,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, top: 10),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                fileName,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(uploadedBy),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(likeCount),
-                    IconButton(
-                      onPressed: () {
-                        // Firestoremethods().addALike(
-                        //     path: path,
-                        //     context: context,
-                        //     index: index,
-                        //     collectionName: collectionName,
-                        //     docId: docId);
-                        Firestoremethods().likePost(
-                            path: path,
-                            docId: docId,
-                            uid: _user.uid,
-                            likes: likes,
-                            collectionName: collectionName);
+      child: GestureDetector(
+        //long press
+        onLongPress: () {
+          //for uploader show delete button
+          if (_user.uid == snap['uid']
+              // ||
+              //     _user.isAdmin!
+              ) {
+            showDialog(
+                context: context,
+                builder: (pdfDeleteContext) {
+                  return DialougeWidget(
+                      yesText: "Delete",
+                      noText: "Cancel",
+                      onYes: () async {
+                        Navigator.pop(pdfDeleteContext);
+                        await Firestoremethods().deleteUploadFileFromFirestore(
+                            type: fileType, path: path, docid: snap.id);
                       },
-                      icon: Icon(
-                        likes.contains(_user.uid)
-                            ? Icons.favorite
-                            : Icons.favorite_outline,
-                        color: likes.contains(_user.uid)
-                            ? Colors.red
-                            : Colors.black,
+                      onNO: () {
+                        Navigator.pop(pdfDeleteContext);
+                      },
+                      icon: const Icon(Icons.delete),
+                      tittleText: "Do you want to delete this file",
+                      subText: "File will be removed permenently");
+                });
+            //for other users show report button
+          } else {
+            showDialog(
+                context: context,
+                builder: (contextDialouge) {
+                  return DialougeWidget(
+                      yesText: "Report",
+                      noText: "Cancel",
+                      onYes: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ReportScreen()));
+                        Navigator.pop(contextDialouge);
+                      },
+                      onNO: () {
+                        Navigator.pop(contextDialouge);
+                      },
+                      icon: const Icon(Icons.report),
+                      tittleText: 'Report this material',
+                      subText: "Do you want to report");
+                });
+          }
+
+          //show dialouge to delete the doc with firestorage storage delete
+          //delete from firestore,
+        },
+        // onLongPress: () {
+        //   if (_user.uid != snapshot.data!.docs[index]['uid'])
+        //     showDialog(
+        //         context: context,
+        //         builder: (contextDialouge) {
+        //           return DialougeWidget(
+        //               yesText: "Report",
+        //               noText: "Cancel",
+        //               onYes: () async {
+        //                 await Navigator.push(
+        //                     context,
+        //                     MaterialPageRoute(
+        //                         builder: (context) => const ReportScreen()));
+        //                 Navigator.pop(contextDialouge);
+        //               },
+        //               onNO: () {
+        //                 Navigator.pop(contextDialouge);
+        //               },
+        //               icon: Icon(Icons.report),
+        //               tittleText: 'Report this material',
+        //               subText: "Do you want to report");
+        //         });
+        // },
+        child: Container(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: CircleAvatar(
+                  child: getSelectedIcon(),
+                  backgroundColor: primaryColor,
+                  radius: 23,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, top: 10),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  fileName,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(uploadedBy),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(likeCount),
+                      IconButton(
+                        onPressed: () {
+                          // Firestoremethods().addALike(
+                          //     path: path,
+                          //     context: context,
+                          //     index: index,
+                          //     collectionName: collectionName,
+                          //     docId: docId);
+                          Firestoremethods().likePost(
+                              path: path,
+                              docId: docId,
+                              uid: _user.uid,
+                              likes: likes,
+                              collectionName: collectionName);
+                        },
+                        icon: Icon(
+                          likes.contains(_user.uid)
+                              ? Icons.favorite
+                              : Icons.favorite_outline,
+                          color: likes.contains(_user.uid)
+                              ? Colors.red
+                              : Colors.black,
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ]),
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(179, 182, 186, 236),
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
             ),
           ),
-        ]),
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(179, 182, 186, 236),
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
+          height: 200,
+          width: 200,
         ),
-        height: 200,
-        width: 200,
       ),
     );
   }
