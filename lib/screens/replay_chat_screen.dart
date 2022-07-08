@@ -7,8 +7,10 @@ import 'package:ug_hub/widgets/dialouge_widget.dart';
 import '../constants/firebase_fields.dart';
 import '../firebase/firestore_methods.dart';
 import '../functions/snackbar_model.dart';
+import '../model/report_model.dart';
 import '../model/user_model.dart';
 import '../provider/user_provider.dart';
+import '../widgets/report_material.dart';
 
 class ReplayChatScreen extends StatelessWidget {
   final _replayController = TextEditingController();
@@ -69,7 +71,10 @@ class ReplayChatScreen extends StatelessWidget {
                             child: ListTile(
                               onLongPress: () {
                                 if (snapshot.data!.docs[index]['uid'] ==
-                                    _user.uid) {
+                                        _user.uid
+                                    //      ||
+                                    // _user.isAdmin == true
+                                    ) {
                                   showDialog(
                                       context: context,
                                       builder: (dialougeBuilder) {
@@ -90,6 +95,43 @@ class ReplayChatScreen extends StatelessWidget {
                                             icon: const Icon(Icons.delete),
                                             tittleText: "Do you want to delete",
                                             subText: "");
+                                      });
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (contextDialouge) {
+                                        return DialougeWidget(
+                                            yesText: "Report",
+                                            noText: "Cancel",
+                                            onYes: () async {
+                                              await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ReportScreen(
+                                                            reportModel: ReportModel(
+                                                                null,
+                                                                null,
+                                                                false,
+                                                                docPath: snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                    .reference
+                                                                    .path,
+                                                                fileType:
+                                                                    FileType
+                                                                        .chat,
+                                                                reporterId:
+                                                                    _user.uid),
+                                                          )));
+                                              Navigator.pop(contextDialouge);
+                                            },
+                                            onNO: () {
+                                              Navigator.pop(contextDialouge);
+                                            },
+                                            icon: const Icon(Icons.report),
+                                            tittleText: 'Report this chat',
+                                            subText: "Do you want to report");
                                       });
                                 }
                               },

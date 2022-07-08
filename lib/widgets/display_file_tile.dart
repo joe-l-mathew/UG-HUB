@@ -79,8 +79,7 @@ class DisplayMaterialTile extends StatelessWidget {
         onLongPress: () {
           //for uploader show delete button
           if (_user.uid == snap['uid']
-              // ||
-              //     _user.isAdmin!
+              // || _user.isAdmin == true
               ) {
             showDialog(
                 context: context,
