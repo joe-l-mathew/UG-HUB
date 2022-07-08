@@ -11,6 +11,7 @@ import 'package:ug_hub/model/chat_model.dart';
 import 'package:ug_hub/model/chat_replay_model.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/model/other_link_model.dart';
+import 'package:ug_hub/model/report_model.dart';
 import 'package:ug_hub/model/subject_model.dart';
 import 'package:ug_hub/model/upload_pdf_model.dart';
 import 'package:ug_hub/model/user_model.dart';
@@ -474,5 +475,9 @@ class Firestoremethods {
         .update({"isTermsAccepted": true});
     await getUserDetail(context);
     Provider.of<AuthProvider>(context, listen: false).isLoadingFun(false);
+  }
+
+  Future<void> addReport(ReportModel reportModel) async {
+    await _firestore.collection(collectionReports).add(reportModel.toJson());
   }
 }

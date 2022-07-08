@@ -277,33 +277,33 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               // }
                               return GestureDetector(
                                 onLongPress: () {
-                                  if (_user.uid ==
-                                      snapshot.data!.docs[index]['uid']) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (pdfDeleteContext) {
-                                          return DialougeWidget(
-                                              yesText: "Delete",
-                                              noText: "Cancel",
-                                              onYes: () async {
-                                                Navigator.pop(pdfDeleteContext);
-                                                await Firestoremethods()
-                                                    .deleteUploadFileFromFirestore(
-                                                        type: FileType.youtube,
-                                                        path: path,
-                                                        docid: snapshot.data!
-                                                            .docs[index].id);
-                                              },
-                                              onNO: () {
-                                                Navigator.pop(pdfDeleteContext);
-                                              },
-                                              icon: const Icon(Icons.delete),
-                                              tittleText:
-                                                  "Do you want to delete this file",
-                                              subText:
-                                                  "File will be removed permenently");
-                                        });
-                                  }
+                                  // if (_user.uid ==
+                                  //     snapshot.data!.docs[index]['uid']) {
+                                  //   showDialog(
+                                  //       context: context,
+                                  //       builder: (pdfDeleteContext) {
+                                  //         return DialougeWidget(
+                                  //             yesText: "Delete",
+                                  //             noText: "Cancel",
+                                  //             onYes: () async {
+                                  //               Navigator.pop(pdfDeleteContext);
+                                  //               await Firestoremethods()
+                                  //                   .deleteUploadFileFromFirestore(
+                                  //                       type: FileType.youtube,
+                                  //                       path: path,
+                                  //                       docid: snapshot.data!
+                                  //                           .docs[index].id);
+                                  //             },
+                                  //             onNO: () {
+                                  //               Navigator.pop(pdfDeleteContext);
+                                  //             },
+                                  //             icon: const Icon(Icons.delete),
+                                  //             tittleText:
+                                  //                 "Do you want to delete this file",
+                                  //             subText:
+                                  //                 "File will be removed permenently");
+                                  //       });
+                                  // }
 
                                   //show dialouge to delete the doc with firestorage storage delete
                                   //delete from firestore,
@@ -390,6 +390,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               // }
                               return GestureDetector(
                                 onTap: () {
+                                  //check url before launch
                                   launchUrl(
                                       Uri.parse(
                                           snapshot.data!.docs[index]['link']),

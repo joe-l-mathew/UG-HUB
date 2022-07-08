@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
+import 'package:ug_hub/model/report_model.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
 import 'package:ug_hub/widgets/report_material.dart';
@@ -108,11 +109,52 @@ class DisplayMaterialTile extends StatelessWidget {
                       yesText: "Report",
                       noText: "Cancel",
                       onYes: () async {
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ReportScreen()));
-                        Navigator.pop(contextDialouge);
+                        if (fileType == FileType.pdf) {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReportScreen(
+                                        reportModel: ReportModel(
+                                          snap['fileUrl'],
+                                          null,
+                                          false,
+                                          docPath: snap.reference.path,
+                                          fileType: fileType,
+                                          reporterId: _user.uid,
+                                        ),
+                                      )));
+                          Navigator.pop(contextDialouge);
+                        } else if (fileType == FileType.youtube) {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReportScreen(
+                                        reportModel: ReportModel(
+                                          snap['youtubeLink'],
+                                          null,
+                                          false,
+                                          docPath: snap.reference.path,
+                                          fileType: fileType,
+                                          reporterId: _user.uid,
+                                        ),
+                                      )));
+                          Navigator.pop(contextDialouge);
+                        } else if (fileType == FileType.link) {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReportScreen(
+                                        reportModel: ReportModel(
+                                          snap['link'],
+                                          null,
+                                          false,
+                                          docPath: snap.reference.path,
+                                          fileType: fileType,
+                                          reporterId: _user.uid,
+                                        ),
+                                      )));
+                          Navigator.pop(contextDialouge);
+                        }
                       },
                       onNO: () {
                         Navigator.pop(contextDialouge);
