@@ -1,4 +1,4 @@
-package com.example.ug_hub
+package com.education.ughub
 
 import io.flutter.embedding.android.FlutterActivity
 

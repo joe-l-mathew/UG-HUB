@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:347301669630:android:c8c8c4d14736a1831dd3af",
         "android_client_info": {
-          "package_name": "com.example.ug_hub"
+          "package_name": "com.education.ughub"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "347301669630-llm4i6atti663gbabl8ti1dk96c3679t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.ug_hub",
+            "package_name": "com.education.ughub",
             "certificate_hash": "b2f12cc5b34b67b894baada380af906876733401"
           }
         },
