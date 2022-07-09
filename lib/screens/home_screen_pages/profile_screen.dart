@@ -8,6 +8,7 @@ import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
+import 'package:ug_hub/screens/view_reports.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
 import '../edit_profile_screen.dart';
 import '../user_data_pages/select_university_screen.dart';
@@ -131,6 +132,27 @@ class ProfileScreen extends StatelessWidget {
                     tileColor: const Color.fromARGB(179, 182, 186, 236),
                     title: const Text('Edit Branch'),
                   ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  _user.isAdmin == true
+                      ? ListTile(
+                          onTap: () {
+                            //view reports
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) =>
+                                        const ViewReportScreen()));
+                          },
+                          leading: const Icon(Icons.report),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          tileColor: const Color.fromARGB(179, 182, 186, 236),
+                          title: const Text('View reports'),
+                        )
+                      : const SizedBox(),
                   const SizedBox(
                     height: 3,
                   ),

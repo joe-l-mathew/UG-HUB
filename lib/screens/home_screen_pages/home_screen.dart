@@ -47,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
               false) {
         //Show Terms Here
         showTermsAndCondition(context);
-        print("Show terms");
       }
     });
     checkInternet();

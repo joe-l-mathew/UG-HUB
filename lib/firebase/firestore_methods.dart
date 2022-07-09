@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firebase_storage_methods.dart';
+import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/branch_model.dart';
 import 'package:ug_hub/model/chat_model.dart';
 import 'package:ug_hub/model/chat_replay_model.dart';
@@ -479,5 +480,23 @@ class Firestoremethods {
 
   Future<void> addReport(ReportModel reportModel) async {
     await _firestore.collection(collectionReports).add(reportModel.toJson());
+  }
+
+  Future<void> reportDeletePdffromDatabase(
+      {required String path,
+      required String downloadUrl,
+      required BuildContext context}) async {
+    //delete document from database
+    await _firestore.doc(path).delete();
+    //delete file frm storage
+    try {
+      await FirebaseStorage.instance.refFromURL(downloadUrl).delete();
+    } catch (e) {
+      showSnackbar(context, e.toString());
+    }
+  }
+
+  Future<void> reportDeleteDocs({required String path}) async {
+    await _firestore.doc(path).delete();
   }
 }

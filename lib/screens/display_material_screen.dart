@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:open_file/open_file.dart';
-import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
+import 'package:ug_hub/functions/open_pdf.dart';
 import 'package:ug_hub/functions/show_terms_and_condition.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/model/user_model.dart';
@@ -14,7 +13,6 @@ import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/add_materials.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
-import 'package:ug_hub/widgets/report_material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/firebase_fields.dart';
 import '../provider/add_module_toggle_provider.dart';
@@ -170,40 +168,11 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                   //delete from firestore,
                                 },
                                 onTap: () async {
-                                  ProgressDialog pr = ProgressDialog(context);
-                                  pr = ProgressDialog(context,
-                                      type: ProgressDialogType.download,
-                                      isDismissible: false,
-                                      showLogs: true);
-                                  pr.style(
-                                      message: 'Downloading file...',
-                                      borderRadius: 10.0,
-                                      backgroundColor: Colors.white,
-                                      progressWidget: Center(
-                                        child: LoadingAnimationWidget.inkDrop(
-                                            color: primaryColor, size: 14),
-                                      ),
-                                      elevation: 10.0,
-                                      insetAnimCurve: Curves.easeInOut,
-                                      progress: 0.0,
-                                      textAlign: TextAlign.center,
-                                      maxProgress: 100.0,
-                                      progressTextStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 0,
-                                          fontWeight: FontWeight.w400),
-                                      messageTextStyle: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 19.0,
-                                          fontWeight: FontWeight.w600));
-                                  await pr.show();
-                                  var file = await DefaultCacheManager()
-                                      .getSingleFile(snapshot.data!.docs[index]
-                                          ['fileUrl']);
-                                  await pr.hide();
-                                  OpenFile.open(
-                                    file.path,
-                                  );
+                                  openPdf(
+                                    
+                                      context: context,
+                                      snapshot: snapshot,
+                                      index: index);
                                 },
                                 child: DisplayMaterialTile(
                                   snap: snapshot.data!.docs[index],
@@ -276,38 +245,38 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               //   isLiked = false;
                               // }
                               return GestureDetector(
-                                onLongPress: () {
-                                  // if (_user.uid ==
-                                  //     snapshot.data!.docs[index]['uid']) {
-                                  //   showDialog(
-                                  //       context: context,
-                                  //       builder: (pdfDeleteContext) {
-                                  //         return DialougeWidget(
-                                  //             yesText: "Delete",
-                                  //             noText: "Cancel",
-                                  //             onYes: () async {
-                                  //               Navigator.pop(pdfDeleteContext);
-                                  //               await Firestoremethods()
-                                  //                   .deleteUploadFileFromFirestore(
-                                  //                       type: FileType.youtube,
-                                  //                       path: path,
-                                  //                       docid: snapshot.data!
-                                  //                           .docs[index].id);
-                                  //             },
-                                  //             onNO: () {
-                                  //               Navigator.pop(pdfDeleteContext);
-                                  //             },
-                                  //             icon: const Icon(Icons.delete),
-                                  //             tittleText:
-                                  //                 "Do you want to delete this file",
-                                  //             subText:
-                                  //                 "File will be removed permenently");
-                                  //       });
-                                  // }
+                                // onLongPress: () {
+                                // if (_user.uid ==
+                                //     snapshot.data!.docs[index]['uid']) {
+                                //   showDialog(
+                                //       context: context,
+                                //       builder: (pdfDeleteContext) {
+                                //         return DialougeWidget(
+                                //             yesText: "Delete",
+                                //             noText: "Cancel",
+                                //             onYes: () async {
+                                //               Navigator.pop(pdfDeleteContext);
+                                //               await Firestoremethods()
+                                //                   .deleteUploadFileFromFirestore(
+                                //                       type: FileType.youtube,
+                                //                       path: path,
+                                //                       docid: snapshot.data!
+                                //                           .docs[index].id);
+                                //             },
+                                //             onNO: () {
+                                //               Navigator.pop(pdfDeleteContext);
+                                //             },
+                                //             icon: const Icon(Icons.delete),
+                                //             tittleText:
+                                //                 "Do you want to delete this file",
+                                //             subText:
+                                //                 "File will be removed permenently");
+                                //       });
+                                // }
 
-                                  //show dialouge to delete the doc with firestorage storage delete
-                                  //delete from firestore,
-                                },
+                                //show dialouge to delete the doc with firestorage storage delete
+                                //delete from firestore,
+                                // },
                                 onTap: () async {
                                   await launchUrl(
                                       Uri.parse(

@@ -58,6 +58,7 @@ class DialougeWidget extends StatelessWidget {
               height: 3.5,
             ),
             Text(subText,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 12,

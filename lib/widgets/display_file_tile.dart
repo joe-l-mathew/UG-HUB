@@ -117,6 +117,7 @@ class DisplayMaterialTile extends StatelessWidget {
                                           snap['fileUrl'],
                                           null,
                                           false,
+                                          null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,
                                           reporterId: _user.uid,
@@ -132,6 +133,7 @@ class DisplayMaterialTile extends StatelessWidget {
                                           snap['youtubeLink'],
                                           null,
                                           false,
+                                          null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,
                                           reporterId: _user.uid,
@@ -139,6 +141,7 @@ class DisplayMaterialTile extends StatelessWidget {
                                       )));
                           Navigator.pop(contextDialouge);
                         } else if (fileType == FileType.link) {
+                          Navigator.pop(contextDialouge);
                           await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -147,6 +150,7 @@ class DisplayMaterialTile extends StatelessWidget {
                                           snap['link'],
                                           null,
                                           false,
+                                          null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,
                                           reporterId: _user.uid,

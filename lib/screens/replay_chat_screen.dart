@@ -113,6 +113,10 @@ class ReplayChatScreen extends StatelessWidget {
                                                                 null,
                                                                 null,
                                                                 false,
+                                                                snapshot.data!
+                                                                            .docs[
+                                                                        index]
+                                                                    ['chat'],
                                                                 docPath: snapshot
                                                                     .data!
                                                                     .docs[index]
