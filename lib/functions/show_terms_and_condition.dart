@@ -53,7 +53,13 @@ void showTermsAndCondition(BuildContext context, {bool isSlow = true}) async {
                 ),
               ),
               const Text(
-                "5. Any sexually explicit or abusive user-generated content in chats or materials will lead to the permanent termination of the account.",
+                "5. Don't upload any copyrighted PDF",
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              const Text(
+                "6. Any sexually explicit or abusive user-generated content in chats or materials will lead to the permanent termination of the account.",
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
                 ),
