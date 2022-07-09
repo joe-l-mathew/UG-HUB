@@ -19,8 +19,6 @@ void showTermsAndCondition(BuildContext context, {bool isSlow = true}) async {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Center(
                 child: Text(
@@ -28,46 +26,62 @@ void showTermsAndCondition(BuildContext context, {bool isSlow = true}) async {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-              const Text(
-                "1. Users are instructed to use the application only for educational purposes.",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
+              SizedBox(
+                height: 15,
               ),
-              const Text(
-                "2. Uploaded files could be viewed and downloaded by other users.",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              const Text(
-                "3. Uploading or attachment of any other files or links may lead to the permanent termination of the account.",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              const Text(
-                "4. Users should report(long tap on content) inappropriate chats and study materials.",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              const Text(
-                "5. Don't upload any copyrighted PDF",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              const Text(
-                "6. Any sexually explicit or abusive user-generated content in chats or materials will lead to the permanent termination of the account.",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              const Text(
-                "User should accept all of the above terms and conditions to use the chat and add material",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
+              Expanded(
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: const [
+                    Text(
+                      "1. Users are instructed to use the application only for educational purposes.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "2. Uploaded files could be viewed and downloaded by other users.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "3. Uploading or attachment of any other files or links may lead to the permanent termination of the account.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "4. Users should report(long tap on content) inappropriate chats and study materials.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "5. Don't upload any copyrighted PDF",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "6. Any sexually explicit or abusive user-generated content in chats or materials will lead to the permanent termination of the account.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      "User should accept all of the above terms and conditions to use the chat and add material",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Center(
