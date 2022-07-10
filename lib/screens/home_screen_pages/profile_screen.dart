@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/auth_methods.dart';
+import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/functions/sent_email.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
@@ -165,6 +166,43 @@ class ProfileScreen extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     tileColor: const Color.fromARGB(179, 182, 186, 236),
                     title: const Text('Contact us'),
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  ListTile(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (builderContext) {
+                            return DialougeWidget(
+                                yesText: "Delete",
+                                noText: "Cancel",
+                                onYes: () async {
+                                  await Firestoremethods().deleteUser(context);
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (builder) =>
+                                              const LoginScreen()),
+                                      (route) => false);
+                                },
+                                onNO: () {
+                                  Navigator.pop(builderContext);
+                                },
+                                icon: const Icon(Icons.logout),
+                                tittleText: "Do you want to Delete",
+                                subText: 'all your uploads and chats remains');
+                          });
+                    },
+                    leading: const Icon(
+                      (Icons.delete),
+                      // color: Colors.,
+                    ),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    tileColor: const Color.fromARGB(179, 182, 186, 236),
+                    title: const Text('Delete my account'),
                   ),
                   const SizedBox(
                     height: 3,

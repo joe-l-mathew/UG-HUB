@@ -129,4 +129,9 @@ class AuthMethods {
         ),
         (route) => false);
   }
+
+  Future<void> deleteCurrentUser() async {
+    User? user = _auth.currentUser;
+    await user!.delete();
+  }
 }

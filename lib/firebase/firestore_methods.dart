@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
+import 'package:ug_hub/firebase/auth_methods.dart';
 import 'package:ug_hub/firebase/firebase_storage_methods.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/branch_model.dart';
@@ -498,5 +499,13 @@ class Firestoremethods {
 
   Future<void> reportDeleteDocs({required String path}) async {
     await _firestore.doc(path).delete();
+  }
+
+  Future<void> deleteUser(BuildContext context) async {
+    UserModel? _user =
+        Provider.of<UserProvider>(context, listen: false).userModel;
+    await _firestore.collection(collectionUser).doc(_user!.uid).delete();
+    await FirebaseStorageMethods().deleteProfiePic(context);
+    await AuthMethods().deleteCurrentUser();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void showTermsAndCondition(BuildContext context, {bool isSlow = true}) async {
   if (isSlow) {
@@ -26,12 +27,12 @@ void showTermsAndCondition(BuildContext context, {bool isSlow = true}) async {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Expanded(
                 child: ListView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   children: const [
                     Text(
                       "1. Users are instructed to use the application only for educational purposes.",
@@ -84,6 +85,13 @@ void showTermsAndCondition(BuildContext context, {bool isSlow = true}) async {
                   ],
                 ),
               ),
+              TextButton(
+                
+                  onPressed: () async {
+                    await launchUrl(Uri.parse(
+                        'https://pages.flycricket.io/ug-hub/terms.html'));
+                  },
+                  child: const Text("Terms & Conditions")),
               Center(
                 child: ButtonFilled(
                     text: "Accept",
