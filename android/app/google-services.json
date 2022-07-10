@@ -14,48 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "347301669630-9so7d51bpfqbsfqu9e79583m9ppn9ksu.apps.googleusercontent.com",
+          "client_id": "347301669630-16bor2inauk7n47rb7825shg811plm7p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.education.ughub",
-            "certificate_hash": "8acdd04ed7d922b18d5f8c4e9a842e8bd0a6cd10"
+            "certificate_hash": "b087ea903407dd97ca131ed2f3f642fae5fa2e9f"
           }
         },
         {
-          "client_id": "347301669630-456fso851sl2r42b2tqliususkef64lc.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCaWmbjTpGlgDRm_QD4FfxVA-PSMfLrgdU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "347301669630-456fso851sl2r42b2tqliususkef64lc.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:347301669630:android:c8c8c4d14736a1831dd3af",
-        "android_client_info": {
-          "package_name": "com.example.ug_hub"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "347301669630-pervv3rr0ptpqj08c61s1l90ft3skblg.apps.googleusercontent.com",
+          "client_id": "347301669630-u6ffgd8vc7l3bj6k9rm0ps9bgjgfc3dp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.ug_hub",
-            "certificate_hash": "8acdd04ed7d922b18d5f8c4e9a842e8bd0a6cd10"
+            "package_name": "com.education.ughub",
+            "certificate_hash": "e8c9c68d7151ab41d69d723b296b7a005b4ba50e"
           }
         },
         {
