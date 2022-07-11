@@ -88,7 +88,8 @@ class _MyAppState extends State<MyApp> {
                     // return CustomCarouselFB2();
                   } else if (snapshot.hasError) {
                     return const Center(
-                      child: Text('Some error occured'),
+                      child: Text(
+                          'Please check your internet connection and try again'),
                     );
                   }
                 }

@@ -37,7 +37,11 @@ class AuthMethods {
         },
         verificationFailed: (FirebaseAuthException exp) {
           Navigator.pop(context);
-          showSnackbar(context, exp.toString());
+          if (exp.code == 'invalid-phone-number') {
+            showSnackbar(context, "Enter a valid phone number");
+          } else {
+            showSnackbar(context, exp.message!);
+          }
         },
         codeSent: (String verificationCode, int? resentToken) {
           Provider.of<AuthProvider>(context, listen: false)
