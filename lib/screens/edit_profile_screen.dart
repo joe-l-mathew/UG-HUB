@@ -130,7 +130,6 @@ class _EditProfileState extends State<EditProfile> {
                   if (_nameController.text.isNotEmpty) {
                     Provider.of<AuthProvider>(context, listen: false)
                         .isLoadingFun(true);
-
                     await Firestoremethods().updateProfile(imageFile,
                         _nameController.text, _collegeController.text, context);
                     Provider.of<AuthProvider>(context, listen: false)

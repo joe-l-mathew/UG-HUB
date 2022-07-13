@@ -63,11 +63,16 @@ class LoginScreen extends StatelessWidget {
                       if (_phoneNumberController.text.length != 10) {
                         showSnackbar(context, "Enter a valid phone number");
                       } else {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (builder) => OtpScreen(
-                                    phoneNo: _phoneNumberController.text)));
+                        try {
+                          int.parse(_phoneNumberController.text);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (builder) => OtpScreen(
+                                      phoneNo: _phoneNumberController.text)));
+                        } catch (e) {
+                          showSnackbar(context, "Enter a valid phone number");
+                        }
                       }
                     }),
               ),
