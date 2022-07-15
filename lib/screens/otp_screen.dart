@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/auth_methods.dart';
+import 'package:ug_hub/functions/check_internet.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/utils/color.dart';
@@ -67,6 +69,8 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
             //Add otp field here
             Pinput(
+              androidSmsAutofillMethod:
+                  AndroidSmsAutofillMethod.smsRetrieverApi,
               focusNode: _pinPutFocusNode,
               // errorText: "fff",
               defaultPinTheme: defaultPinTheme,
@@ -74,9 +78,15 @@ class _OtpScreenState extends State<OtpScreen> {
               controller: otpController,
               autofocus: true,
               length: 6,
+              onCompleted: (pin) async {
+                await tryOtp(context, otpController);
+              },
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                showSnackbar(
+                    context, "Another OTP will be sent after two minutes");
+              },
               child: const Text("Resent OTP"),
             ),
             Expanded(child: Container()),
@@ -91,25 +101,8 @@ class _OtpScreenState extends State<OtpScreen> {
                             if (finalTxt.length != 6) {
                               showSnackbar(context, "Please fill all fields!");
                             } else {
-                              if (Provider.of<AuthProvider>(context,
-                                          listen: false)
-                                      .verificationCode !=
-                                  null) {
-                                Provider.of<AuthProvider>(context,
-                                        listen: false)
-                                    .isLoadingFun(true);
-                                await AuthMethods().loginWithOtp(
-                                    context: context,
-                                    verificationCode: Provider.of<AuthProvider>(
-                                            context,
-                                            listen: false)
-                                        .verificationCode!,
-                                    smsCode: otpController.text);
-
-                                Provider.of<AuthProvider>(context,
-                                        listen: false)
-                                    .isLoadingFun(false);
-                              } //get otp here
+                              tryOtp(context, otpController);
+                              //get otp here
                             }
                           })
                       : ButtonFilled(
@@ -125,5 +118,33 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
       ),
     );
+  }
+}
+
+Future<void> tryOtp(
+    BuildContext context, TextEditingController otpController) async {
+  if (Provider.of<AuthProvider>(context, listen: false).verificationCode !=
+      null) {
+    Provider.of<AuthProvider>(context, listen: false).isLoadingFun(true);
+    bool isConnected = await checkInternet();
+    if (isConnected) {
+      await AuthMethods().loginWithOtp(
+          context: context,
+          verificationCode: Provider.of<AuthProvider>(context, listen: false)
+              .verificationCode!,
+          smsCode: otpController.text);
+    } else {
+      showSimpleNotification(
+          const Text(
+            'You are offline please try after connecting to internet ',
+            textAlign: TextAlign.center,
+          ),
+          background: Colors.red,
+          slideDismissDirection: DismissDirection.up,
+          duration: const Duration(seconds: 5));
+      Navigator.pop(context);
+    }
+
+    Provider.of<AuthProvider>(context, listen: false).isLoadingFun(false);
   }
 }

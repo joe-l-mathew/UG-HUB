@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:overlay_support/overlay_support.dart';
+import 'package:provider/provider.dart';
+import 'package:ug_hub/functions/check_internet.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
+import 'package:ug_hub/provider/auth_provider.dart';
+import 'package:ug_hub/provider/internet_provider.dart';
 import 'package:ug_hub/screens/otp_screen.dart';
 
 import 'package:ug_hub/widgets/button_filled.dart';
@@ -63,13 +67,29 @@ class LoginScreen extends StatelessWidget {
                       if (_phoneNumberController.text.length != 10) {
                         showSnackbar(context, "Enter a valid phone number");
                       } else {
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .isLoadingFun(true);
+                        bool isConnected = await checkInternet();
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .isLoadingFun(false);
                         try {
-                          int.parse(_phoneNumberController.text);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (builder) => OtpScreen(
-                                      phoneNo: _phoneNumberController.text)));
+                          if (isConnected) {
+                            int.parse(_phoneNumberController.text);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => OtpScreen(
+                                        phoneNo: _phoneNumberController.text)));
+                          } else {
+                            showSimpleNotification(
+                                const Text(
+                                  'You are offline please try after connecting to internet ',
+                                  textAlign: TextAlign.center,
+                                ),
+                                background: Colors.red,
+                                slideDismissDirection: DismissDirection.up,
+                                duration: const Duration(seconds: 5));
+                          }
                         } catch (e) {
                           showSnackbar(context, "Enter a valid phone number");
                         }

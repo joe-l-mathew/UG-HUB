@@ -14,6 +14,7 @@ import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/subject_banner.dart';
 import '../../admin/add_subject.dart';
 import '../../admob/admob_class.dart';
+import '../../functions/check_internet.dart';
 import '../../functions/show_select_semester_bottom_sheet.dart';
 import '../../functions/show_terms_and_condition.dart';
 import '../../widgets/please_select_semester.dart';
@@ -48,24 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
         //Show Terms Here
         showTermsAndCondition(context);
       }
+      checkInternet( isHome: true);
     });
-    checkInternet();
+    // checkInternet(context, isHome: true);
     super.initState();
-  }
-
-  Future<void> checkInternet() async {
-    bool result = await InternetConnectionChecker().hasConnection;
-    if (result == true) {
-    } else {
-      showSimpleNotification(
-          const Text(
-            'You are not connected to internet,you can still use our app but some features might not work',
-            textAlign: TextAlign.center,
-          ),
-          background: Colors.red,
-          slideDismissDirection: DismissDirection.up,
-          duration: const Duration(seconds: 5));
-    }
   }
 
   @override
