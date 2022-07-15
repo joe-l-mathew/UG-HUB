@@ -146,5 +146,7 @@ Future<void> tryOtp(
     }
 
     Provider.of<AuthProvider>(context, listen: false).isLoadingFun(false);
+  } else {
+    showSnackbar(context, "Please wait for the OTP");
   }
 }
