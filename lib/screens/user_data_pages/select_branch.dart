@@ -6,6 +6,7 @@ import 'package:ug_hub/admin/add_branch.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
+import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/user_data_pages/select_university_screen.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
@@ -23,19 +24,29 @@ class SelectBranchScreen extends StatelessWidget {
     // String uid = Provider.of<UserProvider>(context).userModel!.uid;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      floatingActionButton: Provider.of<UserProvider>(context).userModel!.isAdmin!=null
-          ? FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () {
-                addBranch(context);
-              })
-          : null,
+      floatingActionButton:
+          Provider.of<UserProvider>(context).userModel!.isAdmin != null
+              ? FloatingActionButton(
+                  child: const Icon(Icons.add),
+                  onPressed: () {
+                    addBranch(context);
+                  })
+              : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
               color: primaryColor,
               onPressed: () {
+                Provider.of<BranchProvider>(context, listen: false)
+                    .setBranchId(null);
+                Provider.of<BranchProvider>(context, listen: false)
+                    .setBranchModel(null);
+                Provider.of<BranchProvider>(context, listen: false)
+                    .setBranchName(null);
+
+                Provider.of<UniversityProvider>(context, listen: false)
+                    .setSelectedIndex(null);
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
@@ -82,10 +93,14 @@ class SelectBranchScreen extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: CardFb1(
+                              consIndex: index,
                               text: snap['Display name'],
                               imageUrl: snap['logo uri'],
                               subtitle: "",
                               onPressed: () {
+                                Provider.of<UniversityProvider>(context,
+                                        listen: false)
+                                    .setSelectedIndex(index);
                                 Provider.of<BranchProvider>(context,
                                         listen: false)
                                     .setBranchName(snap['name']);
@@ -130,6 +145,20 @@ class SelectBranchScreen extends StatelessWidget {
                                                           listen: false)
                                                       .selectedBranchDocId!,
                                                   context: context);
+                                          Provider.of<BranchProvider>(context,
+                                                  listen: false)
+                                              .setBranchId(null);
+                                          Provider.of<BranchProvider>(context,
+                                                  listen: false)
+                                              .setBranchModel(null);
+                                          Provider.of<BranchProvider>(context,
+                                                  listen: false)
+                                              .setBranchName(null);
+
+                                          Provider.of<UniversityProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .setSelectedIndex(null);
                                           Provider.of<AuthProvider>(context,
                                                   listen: false)
                                               .isLoadingFun(false);

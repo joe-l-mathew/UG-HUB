@@ -66,6 +66,7 @@ class SelectUniversityScreen extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: CardFb1(
+                              consIndex: index,
                               text: snap['Display name'],
                               imageUrl: snap['logo uri'],
                               subtitle: "+30 books",
@@ -73,6 +74,9 @@ class SelectUniversityScreen extends StatelessWidget {
                                 Provider.of<UniversityProvider>(context,
                                         listen: false)
                                     .setUnivName(snap['name']);
+                                Provider.of<UniversityProvider>(context,
+                                        listen: false)
+                                    .setSelectedIndex(index);
                                 Provider.of<UniversityProvider>(context,
                                         listen: false)
                                     .setUnivId(snapshot.data!.docs[index].id);
@@ -112,6 +116,18 @@ class SelectUniversityScreen extends StatelessWidget {
                                                           listen: false)
                                                       .selectedUniversityDocId!,
                                                   context);
+                                          Provider.of<UniversityProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .setUnivName(null);
+                                          Provider.of<UniversityProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .setSelectedIndex(null);
+                                          Provider.of<UniversityProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .setUnivId(null);
                                           Provider.of<AuthProvider>(context,
                                                   listen: false)
                                               .isLoadingFun(false);

@@ -172,7 +172,7 @@ class SubjectBanner extends StatelessWidget {
                                           tittleText:
                                               "You have to watch an Ad to continue",
                                           subText:
-                                              "Get 4 hours uninterrupted use with an Ad");
+                                              "Get 4 hours uninterrupted use with an Ad",);
                                     });
                               }
                             } else {

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/utils/color.dart';
 
 class CardFb1 extends StatelessWidget {
+  final int? consIndex;
   final String text;
   final String imageUrl;
   final String subtitle;
@@ -13,7 +16,8 @@ class CardFb1 extends StatelessWidget {
       required this.imageUrl,
       required this.subtitle,
       required this.onPressed,
-      Key? key})
+      Key? key,
+      this.consIndex})
       : super(key: key);
 
   @override
@@ -25,7 +29,11 @@ class CardFb1 extends StatelessWidget {
         height: 230,
         padding: const EdgeInsets.all(30.0),
         decoration: BoxDecoration(
-          border: Border.all(color: primaryColor),
+          border: Border.all(
+              color: Provider.of<UniversityProvider>(context).selectedIndex ==
+                      consIndex
+                  ? primaryColor
+                  : Colors.grey.withOpacity(.05)),
           color: Colors.white,
           borderRadius: BorderRadius.circular(12.5),
           boxShadow: [
