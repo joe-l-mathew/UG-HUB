@@ -116,7 +116,6 @@ class DisplayMaterialTile extends StatelessWidget {
                                         reportModel: ReportModel(
                                           snap['fileUrl'],
                                           null,
-                                          false,
                                           null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,
@@ -132,7 +131,6 @@ class DisplayMaterialTile extends StatelessWidget {
                                         reportModel: ReportModel(
                                           snap['youtubeLink'],
                                           null,
-                                          false,
                                           null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,
@@ -149,7 +147,7 @@ class DisplayMaterialTile extends StatelessWidget {
                                         reportModel: ReportModel(
                                           snap['link'],
                                           null,
-                                          false,
+                                       
                                           null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,

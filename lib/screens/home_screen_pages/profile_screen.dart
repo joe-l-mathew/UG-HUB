@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/auth_methods.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
+import 'package:ug_hub/functions/check_internet.dart';
 import 'package:ug_hub/functions/sent_email.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
@@ -41,12 +43,17 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             ListTile(
                               trailing: IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (builder) =>
-                                                const EditProfile()));
+                                  onPressed: () async {
+                                    bool connection =
+                                        await isNetworkAvailable(context);
+
+                                    if (connection) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  const EditProfile()));
+                                    }
                                   },
                                   icon: const Icon(Icons.edit)),
                               leading: SizedBox(
@@ -85,7 +92,7 @@ class ProfileScreen extends StatelessWidget {
                                   ? Text(_user.branchName!)
                                   : const Text('Not selected'),
                             ),
-                            _user.college == null
+                            _user.college == null||_user.college!.isEmpty
                                 ? const SizedBox()
                                 : ListTile(
                                     title: const Text("College: "),
@@ -102,13 +109,17 @@ class ProfileScreen extends StatelessWidget {
                     height: 3,
                   ),
                   ListTile(
-                    onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) =>
-                                  const SelectUniversityScreen()),
-                          (route) => false);
+                    onTap: () async {
+                      bool connection = await isNetworkAvailable(context);
+
+                      if (connection) {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) =>
+                                    const SelectUniversityScreen()),
+                            (route) => false);
+                      }
                     },
                     leading: const Icon(Icons.edit),
                     shape: const RoundedRectangleBorder(
@@ -120,12 +131,16 @@ class ProfileScreen extends StatelessWidget {
                     height: 3,
                   ),
                   ListTile(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) =>
-                                  const SelectBranchScreen()));
+                    onTap: () async {
+                      bool connection = await isNetworkAvailable(context);
+
+                      if (connection) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) =>
+                                    const SelectBranchScreen()));
+                      }
                     },
                     leading: const Icon(Icons.edit),
                     shape: const RoundedRectangleBorder(
@@ -138,13 +153,17 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   _user.isAdmin == true
                       ? ListTile(
-                          onTap: () {
-                            //view reports
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (builder) =>
-                                        const ViewReportScreen()));
+                          onTap: () async {
+                            bool connection = await isNetworkAvailable(context);
+
+                            if (connection) {
+                              //view reports
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) =>
+                                          const ViewReportScreen()));
+                            }
                           },
                           leading: const Icon(Icons.report),
                           shape: const RoundedRectangleBorder(
@@ -171,29 +190,36 @@ class ProfileScreen extends StatelessWidget {
                     height: 3,
                   ),
                   ListTile(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (builderContext) {
-                            return DialougeWidget(
-                                yesText: "Delete",
-                                noText: "Cancel",
-                                onYes: () async {
-                                  await Firestoremethods().deleteUser(context);
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (builder) =>
-                                              const LoginScreen()),
-                                      (route) => false);
-                                },
-                                onNO: () {
-                                  Navigator.pop(builderContext);
-                                },
-                                icon: const Icon(Icons.logout),
-                                tittleText: "Do you want to Delete",
-                                subText: 'all your uploads and chats remains');
-                          });
+                    onTap: () async {
+                      bool connection = await isNetworkAvailable(context);
+
+                      if (connection) {
+                        //view reports
+                        showDialog(
+                            context: context,
+                            builder: (builderContext) {
+                              return DialougeWidget(
+                                  yesText: "Delete",
+                                  noText: "Cancel",
+                                  onYes: () async {
+                                    await Firestoremethods()
+                                        .deleteUser(context);
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (builder) =>
+                                                const LoginScreen()),
+                                        (route) => false);
+                                  },
+                                  onNO: () {
+                                    Navigator.pop(builderContext);
+                                  },
+                                  icon: const Icon(Icons.logout),
+                                  tittleText: "Do you want to Delete",
+                                  subText:
+                                      'all your uploads and chats remains');
+                            });
+                      }
                     },
                     leading: const Icon(
                       (Icons.delete),
@@ -249,4 +275,20 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<bool> isNetworkAvailable(BuildContext context) async {
+  bool isconnected = await checkInternet();
+
+  if (!isconnected) {
+    showSimpleNotification(
+        const Text(
+          'You are not connected to internet!',
+          textAlign: TextAlign.center,
+        ),
+        background: Colors.red,
+        slideDismissDirection: DismissDirection.up,
+        duration: const Duration(seconds: 5));
+  }
+  return isconnected;
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -112,7 +113,6 @@ class ReplayChatScreen extends StatelessWidget {
                                                             reportModel: ReportModel(
                                                                 null,
                                                                 null,
-                                                                false,
                                                                 snapshot.data!
                                                                             .docs[
                                                                         index]
@@ -146,8 +146,9 @@ class ReplayChatScreen extends StatelessWidget {
                                           ['profileUrl'] !=
                                       null
                                   ? CircleAvatar(
-                                      backgroundImage: NetworkImage(snapshot
-                                          .data!.docs[index]['profileUrl']))
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(snapshot
+                                              .data!.docs[index]['profileUrl']))
                                   : const CircleAvatar(
                                       radius: 15,
                                       child: Icon(Icons.person),
@@ -171,7 +172,8 @@ class ReplayChatScreen extends StatelessWidget {
                   children: [
                     _user.profileUrl != null
                         ? CircleAvatar(
-                            backgroundImage: NetworkImage(_user.profileUrl!),
+                            backgroundImage:
+                                CachedNetworkImageProvider(_user.profileUrl!),
                           )
                         : const CircleAvatar(
                             radius: 15,

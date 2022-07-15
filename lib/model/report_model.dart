@@ -6,10 +6,10 @@ class ReportModel {
   final String? fileUrl;
   String? comment;
   final String reporterId;
-  final bool isSolved;
+
   final String? chat;
 
-  ReportModel(this.fileUrl, this.comment, this.isSolved, this.chat,
+  ReportModel(this.fileUrl, this.comment, this.chat,
       {required this.docPath,
       required this.fileType,
       required this.reporterId});
@@ -22,7 +22,6 @@ class ReportModel {
       "comment": comment,
       "reporterId": reporterId,
       "chat": chat,
-      "isSolved": false
     };
   }
 }

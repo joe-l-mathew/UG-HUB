@@ -7,7 +7,7 @@ import 'package:ug_hub/provider/upload_status_provider.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/custom_input_field.dart';
-
+import '../functions/check_internet.dart';
 import '../functions/pick_pdf_file.dart';
 import '../provider/auth_provider.dart';
 
@@ -130,16 +130,36 @@ class DialogFb1 extends StatelessWidget {
                               text: "Upload",
                               onPressed: () async {
                                 if (pdfNameController.text.isNotEmpty) {
-                                  Provider.of<UploadPdfProvider>(context,
-                                              listen: false)
-                                          .setInputFileName =
-                                      pdfNameController.text;
-                                  await Firestoremethods()
-                                      .addPdftoDatabase(context);
-                                  showSnackbar(
-                                      context, "Uploaded Successfully");
-                                  pdfNameController.clear();
-                                  Navigator.pop(context);
+                                  bool isConnected = await checkInternet();
+                                  if (isConnected) {
+                                    Provider.of<UploadPdfProvider>(context,
+                                                listen: false)
+                                            .setInputFileName =
+                                        pdfNameController.text;
+                                    await Firestoremethods()
+                                        .addPdftoDatabase(context);
+                                    showSnackbar(
+                                        context, "Uploaded Successfully");
+                                    pdfNameController.clear();
+                                    Navigator.pop(context);
+                                  } else {
+                                    showSnackbar(
+                                        context, "No internet connection");
+                                    Provider.of<UploadPdfProvider>(context,
+                                            listen: false)
+                                        .setFile = null;
+                                    Provider.of<UploadPdfProvider>(context,
+                                            listen: false)
+                                        .setFileName = null;
+                                    Provider.of<UploadPdfProvider>(context,
+                                            listen: false)
+                                        .setFileUrl = null;
+                                    Provider.of<UploadPdfProvider>(context,
+                                            listen: false)
+                                        .setInputFileName = null;
+                                    pdfNameController.clear();
+                                    Navigator.pop(context);
+                                  }
                                 } else {
                                   showSnackbar(
                                       context, "Please fill File Name");
@@ -240,24 +260,42 @@ class AddYoutubeUrlPage extends StatelessWidget {
           CustomInputField(
               maxLength: null,
               inputController: channelController,
-              textaboveBorder: "Channel",
+              textaboveBorder: "Caption",
               prefixText: '',
-              hintText: 'Enter channel name',
+              hintText: 'Enter display name',
               keybordType: TextInputType.text),
           Padding(
             padding: const EdgeInsets.only(top: 24.0, left: 40, right: 40),
             child: ButtonFilled(
                 text: "Post",
                 onPressed: () async {
+                  bool isConnected = await checkInternet();
+
                   if (channelController.text.isNotEmpty &&
                       youtubeLinkController.text.isNotEmpty) {
+                    if (youtubeLinkController.text.contains('you') &&
+                        youtubeLinkController.text.contains('http')) {
+                      if (isConnected) {
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .isLoadingFun(true);
+                        await Firestoremethods().addYoutubeLink(
+                            channelName: channelController.text,
+                            context: context,
+                            youtubeLink: youtubeLinkController.text);
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .isLoadingFun(false);
+                        Navigator.pop(context);
+                        showSnackbar(context, "Posted succesfully");
+                      } else {
+                        showSnackbar(context, "No internet");
+                        Navigator.pop(context);
+                      }
+                    } else {
+                      showSnackbar(context, "Enter a valid url");
+                    }
+
                     //add youtbe
-                    await Firestoremethods().addYoutubeLink(
-                        channelName: channelController.text,
-                        context: context,
-                        youtubeLink: youtubeLinkController.text);
-                    Navigator.pop(context);
-                    showSnackbar(context, "Posted succesfully");
+
                   } else {
                     showSnackbar(context, "Please fill all fields");
                   }
@@ -298,18 +336,24 @@ class AddOtherLinkPage extends StatelessWidget {
           ButtonFilled(
               text: "Post",
               onPressed: () async {
+                bool isConnected = await checkInternet();
                 if (otherLinkController.text.isNotEmpty &&
                     otherLinkNameController.text.isNotEmpty) {
-                  Provider.of<AuthProvider>(context, listen: false)
-                      .isLoadingFun(true);
-                  await Firestoremethods().addOtherLink(
-                      link: otherLinkController.text,
-                      linkName: otherLinkNameController.text,
-                      context: context);
-                  Provider.of<AuthProvider>(context, listen: false)
-                      .isLoadingFun(false);
-                  Navigator.pop(context);
-                  showSnackbar(context, "Posted Successfully");
+                  if (isConnected) {
+                    Provider.of<AuthProvider>(context, listen: false)
+                        .isLoadingFun(true);
+                    await Firestoremethods().addOtherLink(
+                        link: otherLinkController.text,
+                        linkName: otherLinkNameController.text,
+                        context: context);
+                    Provider.of<AuthProvider>(context, listen: false)
+                        .isLoadingFun(false);
+                    Navigator.pop(context);
+                    showSnackbar(context, "Posted Successfully");
+                  } else {
+                    showSnackbar(context, "No internet");
+                    Navigator.pop(context);
+                  }
                 }
                 //add link
               })

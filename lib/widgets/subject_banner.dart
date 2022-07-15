@@ -3,10 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/admob/admob_class.dart';
 import 'package:ug_hub/admob/admob_provider.dart';
+import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/display_material_screen.dart';
@@ -68,12 +68,16 @@ class SubjectBanner extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () async {
                               //view sylabus here
-                              await launchUrl(
-                                  Uri.parse(
-                                    snapshot.data!.docs[indexofSubject]
-                                        .data()['syllabusLink'],
-                                  ),
-                                  mode: LaunchMode.externalApplication);
+                              try {
+                                await launchUrl(
+                                    Uri.parse(
+                                      snapshot.data!.docs[indexofSubject]
+                                          .data()['syllabusLink'],
+                                    ),
+                                    mode: LaunchMode.externalApplication);
+                              } on Exception  {
+                                showSnackbar(context, "Some error occured");
+                              }
                             },
                             child: const Text(
                               'View Syllabus',
@@ -101,9 +105,11 @@ class SubjectBanner extends StatelessWidget {
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                       snapshotModule) {
                 if (snapshotModule.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: LoadingAnimationWidget.fourRotatingDots(
-                        color: primaryColor, size: 50),
+                  return const SizedBox(
+                    width: double.infinity,
+                    child: SingleChildScrollView(child: ShimmerWidget()),
+                    // child: LoadingAnimationWidget.fourRotatingDots(
+                    //     color: primaryColor, size: 50),
                   );
                 }
                 return SizedBox(
@@ -158,21 +164,22 @@ class SubjectBanner extends StatelessWidget {
                                     context: context,
                                     builder: (dialougeBuilder) {
                                       return DialougeWidget(
-                                          yesText: "Continue",
-                                          noText: "Cancel",
-                                          onYes: () {
-                                            AdManager().showRewardedAd(context);
-                                            Navigator.pop(dialougeBuilder);
-                                          },
-                                          onNO: () {
-                                            Navigator.pop(dialougeBuilder);
-                                          },
-                                          icon: const FaIcon(
-                                              FontAwesomeIcons.rectangleAd),
-                                          tittleText:
-                                              "You have to watch an Ad to continue",
-                                          subText:
-                                              "Get 4 hours uninterrupted use with an Ad",);
+                                        yesText: "Continue",
+                                        noText: "Cancel",
+                                        onYes: () {
+                                          AdManager().showRewardedAd(context);
+                                          Navigator.pop(dialougeBuilder);
+                                        },
+                                        onNO: () {
+                                          Navigator.pop(dialougeBuilder);
+                                        },
+                                        icon: const FaIcon(
+                                            FontAwesomeIcons.rectangleAd),
+                                        tittleText:
+                                            "You have to watch an Ad to continue",
+                                        subText:
+                                            "Get 4 hours uninterrupted use with an Ad",
+                                      );
                                     });
                               }
                             } else {

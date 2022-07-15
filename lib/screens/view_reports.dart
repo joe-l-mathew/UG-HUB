@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/functions/open_pdf.dart';
+import 'package:ug_hub/functions/snackbar_model.dart';
+import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -54,11 +56,16 @@ class ViewReportScreen extends StatelessWidget {
                                   index: index);
                             } else if (path['fileType'] == 'chat') {
                             } else {
-                              await launchUrl(
-                                  Uri.parse(
-                                    snapshot.data!.docs[index]['fileUrl'],
-                                  ),
-                                  mode: LaunchMode.externalApplication);
+                              try {
+                                await launchUrl(
+                                    Uri.parse(
+                                      snapshot.data!.docs[index]['fileUrl'],
+                                    ),
+                                    mode: LaunchMode.externalApplication);
+                              } on Exception {
+                                showSnackbar(
+                                    context, "File can't be opened Delete");
+                              }
                             }
                           },
                           onLongPress: () async {
@@ -103,14 +110,21 @@ class ViewReportScreen extends StatelessWidget {
                           },
                           isThreeLine: true,
                           trailing: CircleAvatar(
-                            child: getIcon(path['fileType']),
-                            backgroundColor:
-                                path['isSolved'] ? Colors.green : Colors.red,
-                          ),
+                              child: getIcon(path['fileType']),
+                              backgroundColor: primaryColor),
                           leading: Text("Comment: " + path['comment']),
                           subtitle: path['fileType'] == 'chat'
-                              ? Text(path['chat'])
-                              : const Text(""),
+                              ? Column(
+                                  children: [
+                                    Text(
+                                      "Chat:" + path['chat'],
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
+                                    const Divider(),
+                                    Text("from:" + path['reporterId'])
+                                  ],
+                                )
+                              : Text(path['reporterId']),
                         ),
                       );
                     },

@@ -11,7 +11,7 @@ Future<bool> checkInternet({bool isHome = false}) async {
     if (isHome) {
       showSimpleNotification(
           const Text(
-            'You are not connected to internet,you can still use our app but some features might not work',
+            'You are not connected to internet, you can still use our app but some features might not work',
             textAlign: TextAlign.center,
           ),
           background: Colors.red,

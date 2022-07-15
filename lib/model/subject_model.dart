@@ -21,7 +21,7 @@ class SubjectModel {
     };
   }
 
-  SubjectModel fromSnap(DocumentSnapshot snap) {
+ static SubjectModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return SubjectModel(
         syllabusLink: snapshot['syllabusLink'],

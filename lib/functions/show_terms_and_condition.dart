@@ -20,6 +20,7 @@ void showTermsAndCondition(BuildContext context, {bool isSlow = true}) async {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const Center(
                 child: Text(
@@ -27,12 +28,15 @@ void showTermsAndCondition(BuildContext context, {bool isSlow = true}) async {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              Expanded(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
+              // const SizedBox(
+              //   height: 15,
+              // ),
+              SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // physics: const BouncingScrollPhysics(),
                   children: const [
                     Text(
                       "1. Users are instructed to use the application only for educational purposes.",
@@ -86,7 +90,6 @@ void showTermsAndCondition(BuildContext context, {bool isSlow = true}) async {
                 ),
               ),
               TextButton(
-                
                   onPressed: () async {
                     await launchUrl(Uri.parse(
                         'https://pages.flycricket.io/ug-hub/terms.html'));

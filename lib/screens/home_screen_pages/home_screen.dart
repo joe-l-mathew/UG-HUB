@@ -18,6 +18,7 @@ import '../../functions/check_internet.dart';
 import '../../functions/show_select_semester_bottom_sheet.dart';
 import '../../functions/show_terms_and_condition.dart';
 import '../../widgets/please_select_semester.dart';
+import '../display_material_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //Show Terms Here
         showTermsAndCondition(context);
       }
-      checkInternet( isHome: true);
+      checkInternet(isHome: true);
     });
     // checkInternet(context, isHome: true);
     super.initState();
@@ -198,9 +199,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Center(
                                     child: TextButton.icon(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        bool isConnected =
+                                            await checkInternet();
+                                        if (isConnected) {
+                                          showSemesterBottomSheet(context);
+                                        } else {
+                                          showSimpleNotification(
+                                              const Text(
+                                                'Please connect to internet to change semester ',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              background: Colors.red,
+                                              slideDismissDirection:
+                                                  DismissDirection.up,
+                                              duration:
+                                                  const Duration(seconds: 5));
+                                        }
                                         // print("tapped");
-                                        showSemesterBottomSheet(context);
                                       },
                                       icon: const Icon(Icons.arrow_downward,
                                           color: primaryColor),
@@ -242,11 +258,54 @@ class _HomeScreenState extends State<HomeScreen> {
                                             snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
-                                        return Center(
-                                          child: LoadingAnimationWidget
-                                              .fourRotatingDots(
-                                                  color: primaryColor,
-                                                  size: 50),
+                                        return SingleChildScrollView(
+                                          child: Column(
+                                            children: const [
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: SingleChildScrollView(
+                                                    child: ShimmerWidget()),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: SingleChildScrollView(
+                                                    child: ShimmerWidget()),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: SingleChildScrollView(
+                                                    child: ShimmerWidget()),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: SingleChildScrollView(
+                                                    child: ShimmerWidget()),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: SingleChildScrollView(
+                                                    child: ShimmerWidget()),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                            ],
+                                          ),
                                         );
                                       }
                                       return ListView.builder(

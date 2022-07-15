@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/provider/user_provider.dart';
+import 'package:ug_hub/utils/color.dart';
 
 void showSemesterBottomSheet(BuildContext context) async {
   var semesterList = Firestoremethods().getSemesterList(context);
@@ -30,10 +32,12 @@ void showSemesterBottomSheet(BuildContext context) async {
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child:  CircularProgressIndicator(),
+                  return Center(
+                    child: LoadingAnimationWidget.halfTriangleDot(
+                        color: primaryColor, size: 30),
                   );
                 }
+
                 return ListView.separated(
                     itemBuilder: (BuildContext context1, int index) {
                       return ListTile(

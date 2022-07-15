@@ -1,13 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+//////////////////////////////////////////////
+/////////////////////////////////////////
+///////////////////////////////////////
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
+import 'package:ug_hub/functions/check_internet.dart';
 import 'package:ug_hub/functions/open_pdf.dart';
 import 'package:ug_hub/functions/show_terms_and_condition.dart';
+import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/module_model.dart';
+import 'package:ug_hub/model/report_model.dart';
+import 'package:ug_hub/model/subject_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/add_materials.dart';
@@ -40,10 +47,19 @@ class DisplayMaterialsScreen extends StatelessWidget {
         .doc(_moduleModel!.subjectId)
         .collection(collectionModule)
         .doc(_moduleModel.moduleId);
+    var path2 = FirebaseFirestore.instance
+        .collection(collectionUniversity)
+        .doc(_user.university)
+        .collection(collectionBranch)
+        .doc(_user.branch)
+        .collection(collectionSemester)
+        .doc(_user.semester)
+        .collection(collectionSubject)
+        .doc(_moduleModel.subjectId);
 
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
             if (Provider.of<UserProvider>(context, listen: false)
                         .userModel!
                         .isTermsAccepted ==
@@ -56,15 +72,35 @@ class DisplayMaterialsScreen extends StatelessWidget {
             } else {
               Provider.of<AddModuleToggleProvider>(context, listen: false)
                   .setSelectedField = 0;
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (builder) => const AddMaterialsScreen()));
+              bool isConnected = await checkInternet();
+              if (isConnected) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => const AddMaterialsScreen()));
+              } else {
+                showSnackbar(context, "Please connect to internet");
+              }
             }
           },
           child: const Icon(Icons.add),
         ),
         appBar: AppBar(
+            actions: [
+              IconButton(
+                  tooltip: "Sylabus",
+                  onPressed: () async {
+                    SubjectModel model =
+                        SubjectModel.fromSnap(await path2.get());
+                    try {
+                      await launchUrl(Uri.parse(model.syllabusLink),
+                          mode: LaunchMode.externalApplication);
+                    } on Exception {
+                      showSnackbar(context, "Some error occured");
+                    }
+                  },
+                  icon: const FaIcon(FontAwesomeIcons.fileLines))
+            ],
             backgroundColor: primaryColor,
             title: Text(_moduleModel.moduleName +
                 " (" +
@@ -89,16 +125,16 @@ class DisplayMaterialsScreen extends StatelessWidget {
                 StreamBuilder(
                   stream: path
                       .collection(collectionPdf)
-                      .orderBy('userName')
+                      .orderBy('fileName')
                       .snapshots(),
                   builder: (BuildContext contexts,
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       //need to change progress indicator
-                      return Center(
-                          child: LoadingAnimationWidget.waveDots(
-                              color: Colors.white, size: 14));
+                      return const SizedBox(
+                          width: double.infinity,
+                          child: SingleChildScrollView(child: ShimmerWidget()));
                     } else if (snapshot.data!.docs.isEmpty) {
                       return const SizedBox(
                         width: double.infinity,
@@ -169,7 +205,6 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                 },
                                 onTap: () async {
                                   openPdf(
-                                    
                                       context: context,
                                       snapshot: snapshot,
                                       index: index);
@@ -212,15 +247,18 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   ),
                 ),
                 StreamBuilder(
-                  stream: path.collection(collectionYoutube).snapshots(),
+                  stream: path
+                      .collection(collectionYoutube)
+                      .orderBy('youtubeChannelName')
+                      .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       //need to change progress indicator
-                      return Center(
-                        child: LoadingAnimationWidget.waveDots(
-                            color: Colors.white, size: 14),
+                      return const SizedBox(
+                        width: double.infinity,
+                        child: SingleChildScrollView(child: ShimmerWidget()),
                       );
                     } else if (snapshot.data!.docs.isEmpty) {
                       return const ShimmerWidget();
@@ -278,12 +316,27 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                 //delete from firestore,
                                 // },
                                 onTap: () async {
-                                  await launchUrl(
-                                      Uri.parse(
-                                        snapshot.data!.docs[index]
-                                            ['youtubeLink'],
-                                      ),
-                                      mode: LaunchMode.externalApplication);
+                                  try {
+                                    await launchUrl(
+                                        Uri.parse(
+                                          snapshot.data!.docs[index]
+                                              ['youtubeLink'],
+                                        ),
+                                        mode: LaunchMode.externalApplication);
+                                  } on Exception {
+                                    showSnackbar(
+                                        context, "Youtube link unavailable");
+                                    await Firestoremethods().addReport(
+                                        ReportModel(
+                                            snapshot.data!.docs[index]
+                                                ['youtubeLink'],
+                                            "Admin:Video not Launched",
+                                            null,
+                                            docPath: snapshot.data!.docs[index]
+                                                .reference.path,
+                                            fileType: FileType.youtube,
+                                            reporterId: _user.uid));
+                                  }
                                 },
                                 child: DisplayMaterialTile(
                                   snap: snapshot.data!.docs[index],
@@ -332,9 +385,10 @@ class DisplayMaterialsScreen extends StatelessWidget {
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       //need to change progress indicator
-                      return Center(
-                          child: LoadingAnimationWidget.waveDots(
-                              color: Colors.white, size: 14));
+                      return const SizedBox(
+                        width: double.infinity,
+                        child: SingleChildScrollView(child: ShimmerWidget()),
+                      );
                     } else if (snapshot.data!.docs.isEmpty) {
                       return const ShimmerWidget();
                     } else {
@@ -358,12 +412,26 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               //   isLiked = false;
                               // }
                               return GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   //check url before launch
-                                  launchUrl(
-                                      Uri.parse(
-                                          snapshot.data!.docs[index]['link']),
-                                      mode: LaunchMode.externalApplication);
+                                  try {
+                                    await launchUrl(
+                                        Uri.parse(
+                                            snapshot.data!.docs[index]['link']),
+                                        mode: LaunchMode.externalApplication);
+                                  } on Exception {
+                                    showSnackbar(context,
+                                        "The given link is unavailable");
+                                    await Firestoremethods().addReport(
+                                        ReportModel(
+                                            snapshot.data!.docs[index]['link'],
+                                            "Admin:Link not Launched",
+                                            null,
+                                            docPath: snapshot.data!.docs[index]
+                                                .reference.path,
+                                            fileType: FileType.link,
+                                            reporterId: _user.uid));
+                                  }
                                 },
                                 child: DisplayMaterialTile(
                                   downloadUrl: snapshot.data!.docs[index]

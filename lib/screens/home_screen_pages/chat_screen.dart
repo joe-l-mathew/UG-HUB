@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,12 +42,14 @@ class ChatScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  _user.profileUrl != null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(_user.profileUrl!))
-                      : const CircleAvatar(
+                  _user.profileUrl == null
+                      ? const CircleAvatar(
                           radius: 15,
                           child: Icon(Icons.person),
+                        )
+                      : CircleAvatar(
+                          backgroundImage:
+                              CachedNetworkImageProvider(_user.profileUrl!),
                         ),
                   const SizedBox(
                     width: 4,
@@ -88,6 +91,7 @@ class ChatScreen extends StatelessWidget {
                       child: LinearProgressIndicator(),
                     );
                   }
+
                   return Expanded(
                     child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
@@ -142,7 +146,6 @@ class ChatScreen extends StatelessWidget {
                                                               reportModel: ReportModel(
                                                                   null,
                                                                   null,
-                                                                  false,
                                                                   snapshot.data!
                                                                               .docs[
                                                                           index]
@@ -178,8 +181,10 @@ class ChatScreen extends StatelessWidget {
                                             ['profileUrl'] !=
                                         null
                                     ? CircleAvatar(
-                                        backgroundImage: NetworkImage(snapshot
-                                            .data!.docs[index]['profileUrl']))
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(snapshot
+                                                .data!
+                                                .docs[index]['profileUrl']))
                                     : const CircleAvatar(
                                         radius: 15,
                                         child: Icon(Icons.person),
