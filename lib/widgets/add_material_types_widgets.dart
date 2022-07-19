@@ -65,17 +65,18 @@ class DialogFb1 extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
         width: MediaQuery.of(context).size.width / 1.4,
-        height: MediaQuery.of(context).size.height / 4,
+        height: MediaQuery.of(context).size.height / 3.5,
         decoration: BoxDecoration(
-            color: ThemeData().scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(15.0),
-            boxShadow: [
-              BoxShadow(
-                  offset: const Offset(12, 26),
-                  blurRadius: 50,
-                  spreadRadius: 0,
-                  color: Colors.grey.withOpacity(.1)),
-            ]),
+          color: ThemeData().scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(15.0),
+          boxShadow: [
+            BoxShadow(
+                offset: const Offset(12, 26),
+                blurRadius: 50,
+                spreadRadius: 0,
+                color: Colors.grey.withOpacity(.1)),
+          ],
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

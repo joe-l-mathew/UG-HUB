@@ -29,7 +29,7 @@ class ChatScreen extends StatelessWidget {
         .doc(_user.semester)
         .collection(collectionChat);
     Stream<QuerySnapshot<Map<String, dynamic>>> snapshot =
-        path.orderBy('dateTime', descending: true).snapshots();
+        path.orderBy('dateTime', descending: true).limit(15).snapshots();
 
     final _chatController = TextEditingController();
     return Scaffold(

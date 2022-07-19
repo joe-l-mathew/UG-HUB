@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/model/chat_replay_model.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
-
 import '../constants/firebase_fields.dart';
 import '../firebase/firestore_methods.dart';
 import '../functions/snackbar_model.dart';
@@ -42,7 +41,8 @@ class ReplayChatScreen extends StatelessWidget {
         .doc(docId)
         .collection(collectionChatReplay);
     Stream<QuerySnapshot<Map<String, dynamic>>> snapshot =
-        path.orderBy('dateTime').snapshots();
+        path.orderBy('dateTime', descending: true).limit(15).snapshots();
+
     return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
@@ -63,6 +63,8 @@ class ReplayChatScreen extends StatelessWidget {
                     }
                     return Expanded(
                       child: ListView.builder(
+                        reverse: true,
+                        physics: const BouncingScrollPhysics(),
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(

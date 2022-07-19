@@ -436,7 +436,6 @@ class Firestoremethods {
       collegeName ??= null;
       await path.update(
           {"profileUrl": profLink, "name": name, "college": collegeName});
-
       await getUserDetail(context);
 
       Navigator.pop(context);
@@ -445,7 +444,6 @@ class Firestoremethods {
       await path.update({"name": name, "college": collegeName});
       await getUserDetail(context);
       Provider.of<AuthProvider>(context, listen: false).isLoading = false;
-
       Navigator.pop(context);
     }
   }

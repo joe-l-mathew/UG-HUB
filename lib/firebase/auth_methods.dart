@@ -24,16 +24,16 @@ class AuthMethods {
         phoneNumber: "+91" + phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
           // print("auto capture success");
-          await _auth.signInWithCredential(credential).then((value) =>
-              Provider.of<UserProvider>(context, listen: false)
-                  .setUserModel(userModelc: UserModel(uid: value.user!.uid)));
-          afterLoginPageRedirector(context);
-          Widget navWidget =
-              await AuthMethods().afterLoginPageRedirector(context);
-          Navigator.pushAndRemoveUntil(context,
-              MaterialPageRoute(builder: (builder) {
-            return navWidget;
-          }), (route) => false);
+          // await _auth.signInWithCredential(credential).then((value) =>
+          //     Provider.of<UserProvider>(context, listen: false)
+          //         .setUserModel(userModelc: UserModel(uid: value.user!.uid)));
+          // afterLoginPageRedirector(context);
+          // Widget navWidget =
+          //     await AuthMethods().afterLoginPageRedirector(context);
+          // Navigator.pushAndRemoveUntil(context,
+          //     MaterialPageRoute(builder: (builder) {
+          //   return navWidget;
+          // }), (route) => false);
         },
         verificationFailed: (FirebaseAuthException exp) {
           Navigator.pop(context);

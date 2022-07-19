@@ -4,11 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:ug_hub/functions/check_internet.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
-import 'package:ug_hub/provider/internet_provider.dart';
 import 'package:ug_hub/screens/otp_screen.dart';
-
 import 'package:ug_hub/widgets/button_filled.dart';
-
 import '../widgets/heading_text_widget.dart';
 import '../widgets/custom_input_field.dart';
 
@@ -19,6 +16,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController _phoneNumberController = TextEditingController();
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.indigo),
         elevation: 0,
@@ -56,53 +54,48 @@ class LoginScreen extends StatelessWidget {
                   hintText: "Mobile number",
                   prefixText: "+91 ",
                   textaboveBorder: 'Phone'),
-              Expanded(
-                child: Container(),
-              ),
-              Center(
-                child: ButtonFilled(
-                    text: "Continue",
-                    onPressed: () async {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      if (_phoneNumberController.text.length != 10) {
-                        showSnackbar(context, "Enter a valid phone number");
-                      } else {
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .isLoadingFun(true);
-                        bool isConnected = await checkInternet();
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .isLoadingFun(false);
-                        try {
-                          if (isConnected) {
-                            int.parse(_phoneNumberController.text);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (builder) => OtpScreen(
-                                        phoneNo: _phoneNumberController.text)));
-                          } else {
-                            showSimpleNotification(
-                                const Text(
-                                  'You are offline please try after connecting to internet ',
-                                  textAlign: TextAlign.center,
-                                ),
-                                background: Colors.red,
-                                slideDismissDirection: DismissDirection.up,
-                                duration: const Duration(seconds: 5));
-                          }
-                        } catch (e) {
-                          showSnackbar(context, "Enter a valid phone number");
-                        }
-                      }
-                    }),
-              ),
-              const SizedBox(
-                height: 40,
-              )
+              // Expanded(
+              //   child: Container(),
+              // ),
             ],
           ),
         ),
       ),
+      floatingActionButton: ButtonFilled(
+          text: "Continue",
+          onPressed: () async {
+            FocusManager.instance.primaryFocus?.unfocus();
+            if (_phoneNumberController.text.length != 10) {
+              showSnackbar(context, "Enter a valid phone number");
+            } else {
+              Provider.of<AuthProvider>(context, listen: false)
+                  .isLoadingFun(true);
+              bool isConnected = await checkInternet();
+              Provider.of<AuthProvider>(context, listen: false)
+                  .isLoadingFun(false);
+              try {
+                if (isConnected) {
+                  int.parse(_phoneNumberController.text);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) =>
+                              OtpScreen(phoneNo: _phoneNumberController.text)));
+                } else {
+                  showSimpleNotification(
+                      const Text(
+                        'You are offline please try after connecting to internet ',
+                        textAlign: TextAlign.center,
+                      ),
+                      background: Colors.red,
+                      slideDismissDirection: DismissDirection.up,
+                      duration: const Duration(seconds: 5));
+                }
+              } catch (e) {
+                showSnackbar(context, "Enter a valid phone number");
+              }
+            }
+          }),
     );
   }
 }
