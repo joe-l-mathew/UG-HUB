@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:ug_hub/admob/admob_provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 
+import '../constants/hive.dart';
+import '../main.dart';
+
 class AdManager {
   BannerAd? _bannerAd;
   InterstitialAd? _interstitialAd;
@@ -19,20 +22,27 @@ class AdManager {
 
   //   _bannerAd?.load();
   // }
+//fun for loading add
+  void loadRewardedAd(BuildContext context, {bool isrecall = false}) async {
+    String? adid = await Firestoremethods().getAdId();
+    if (adid != null) {
+      if (Provider.of<AdmobProvider>(context, listen: false).add == null ||
+          isrecall) {
+        await RewardedAd.load(
+          //add id here
 
-  void loadRewardedAd(BuildContext context) async {
-    await RewardedAd.load(
-        adUnitId: "ca-app-pub-8232424078858151/2941845534",
-        // "ca-app-pub-8232424078858151/2941845534",
-        // ca-app-pub-8232424078858151/2941845534
-        request: const AdRequest(),
-        rewardedAdLoadCallback:
-            RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
-          _rewardedAd = ad;
-          Provider.of<AdmobProvider>(context, listen: false).setAdd = ad;
-        }, onAdFailedToLoad: (LoadAdError error) {
-          _rewardedAd = null;
-        }));
+          adUnitId: adid,
+          request: const AdRequest(),
+          rewardedAdLoadCallback:
+              RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
+            _rewardedAd = ad;
+            Provider.of<AdmobProvider>(context, listen: false).setAdd = ad;
+          }, onAdFailedToLoad: (LoadAdError error) {
+            _rewardedAd = null;
+          }),
+        );
+      }
+    }
   }
 
   void showRewardedAd(BuildContext context) {
@@ -42,17 +52,22 @@ class AdManager {
           onAdShowedFullScreenContent: (RewardedAd ad) {},
           onAdDismissedFullScreenContent: (RewardedAd ad) {
             ad.dispose();
-            loadRewardedAd(context);
+            // hivebox.put(hiveAddNumberKey, 2);
+            // Provider.of<AdmobProvider>(context, listen: false).setAdd = null;
+            loadRewardedAd(context, isrecall: true);
           },
           onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
             ad.dispose();
-            loadRewardedAd(context);
+            // hivebox.put(hiveAddNumberKey, 2);
+            // Provider.of<AdmobProvider>(context, listen: false).setAdd = null;
+            loadRewardedAd(context, isrecall: true);
           });
 
       rewadd.setImmersiveMode(true);
       rewadd.show(
           onUserEarnedReward: (AdWithoutView ad, RewardItem reward) async {
         Provider.of<AdmobProvider>(context, listen: false).setAdd = null;
+        hivebox.put(hiveAddNumberKey, 0);
         await Firestoremethods().addTime(context);
         await Firestoremethods().getUserDetail(context);
       });

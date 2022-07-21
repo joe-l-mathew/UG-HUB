@@ -506,4 +506,18 @@ class Firestoremethods {
     await FirebaseStorageMethods().deleteProfiePic(context);
     await AuthMethods().deleteCurrentUser();
   }
+
+  Future<String?> getAdId() async {
+    String? returnVal;
+    await _firestore
+        .collection('admob')
+        .doc('rewardedAdId')
+        .get()
+        .then((value) {
+      if (value.data() != null) {
+        returnVal = value.data()!['id'];
+      }
+    });
+    return returnVal;
+  }
 }

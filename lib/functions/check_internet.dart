@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:provider/provider.dart';
-import 'package:ug_hub/provider/internet_provider.dart';
+// import 'package:provider/provider.dart';
+// import 'package:ug_hub/provider/internet_provider.dart';
 
 Future<bool> checkInternet({bool isHome = false}) async {
   bool result = await InternetConnectionChecker().hasConnection;

@@ -60,7 +60,7 @@ class DialougeWidget extends StatelessWidget {
             Text(subText,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                    color: Colors.grey,
+                    color: Colors.black,
                     fontSize: 12,
                     fontWeight: FontWeight.w300)),
             const SizedBox(

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
+import 'package:ug_hub/constants/hive.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
+import 'package:ug_hub/main.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/home_screen_pages/profile_screen.dart';
@@ -31,9 +33,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Firestoremethods().getSemesterList(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (Provider.of<UserProvider>(context, listen: false)
-          .userModel!
-          .expireTime!
-          .isBefore(DateTime.now())) {
+              .userModel!
+              .expireTime!
+              .isBefore(DateTime.now()) ||
+          hivebox.get(hiveAddNumberKey) >= 2) {
+        
         // print("Started loading----------------------------------");
         AdManager().loadRewardedAd(context);
       }

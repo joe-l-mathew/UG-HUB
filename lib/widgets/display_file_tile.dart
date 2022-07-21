@@ -147,7 +147,6 @@ class DisplayMaterialTile extends StatelessWidget {
                                         reportModel: ReportModel(
                                           snap['link'],
                                           null,
-                                       
                                           null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,
@@ -211,6 +210,7 @@ class DisplayMaterialTile extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Text(
                   fileName,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -223,7 +223,12 @@ class DisplayMaterialTile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(uploadedBy),
+                  Flexible(
+                    child: Text(
+                      uploadedBy,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

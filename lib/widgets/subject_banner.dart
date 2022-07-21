@@ -14,6 +14,8 @@ import 'package:ug_hub/widgets/dialouge_widget.dart';
 import 'package:ug_hub/widgets/module_list_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/firebase_fields.dart';
+// import '../constants/hive.dart';
+// import '../main.dart';
 import '../model/user_model.dart';
 import '../provider/user_provider.dart';
 import '../utils/color.dart';
@@ -75,7 +77,7 @@ class SubjectBanner extends StatelessWidget {
                                           .data()['syllabusLink'],
                                     ),
                                     mode: LaunchMode.externalApplication);
-                              } on Exception  {
+                              } on Exception {
                                 showSnackbar(context, "Some error occured");
                               }
                             },

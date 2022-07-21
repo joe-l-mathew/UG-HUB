@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hexcolor/hexcolor.dart';
+// import 'package:hive/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
+import 'package:ug_hub/constants/hive.dart';
 import 'package:ug_hub/provider/add_module_toggle_provider.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/bottom_navigation_bar_provider.dart';
@@ -21,6 +23,7 @@ import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'admob/admob_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 //need to change sha256 on real build
 // addd network check always
@@ -34,12 +37,15 @@ import 'admob/admob_provider.dart';
 //add time and is teacher to user
 //add view sylabus done
 //chech internet
-
+// ignore: prefer_typing_uninitialized_variables
+var hivebox;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   MobileAds.instance.initialize();
+  await Hive.initFlutter();
+  hivebox =await Hive.openBox(hiveAddNumberBox);
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
