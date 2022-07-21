@@ -3,6 +3,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/admob/admob_provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
+import 'package:ug_hub/functions/snackbar_model.dart';
 
 import '../constants/hive.dart';
 import '../main.dart';
@@ -24,24 +25,21 @@ class AdManager {
   // }
 //fun for loading add
   void loadRewardedAd(BuildContext context, {bool isrecall = false}) async {
+    print('called');
     String? adid = await Firestoremethods().getAdId();
     if (adid != null) {
-      if (Provider.of<AdmobProvider>(context, listen: false).add == null ||
-          isrecall) {
-        await RewardedAd.load(
-          //add id here
-
-          adUnitId: adid,
-          request: const AdRequest(),
-          rewardedAdLoadCallback:
-              RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
-            _rewardedAd = ad;
-            Provider.of<AdmobProvider>(context, listen: false).setAdd = ad;
-          }, onAdFailedToLoad: (LoadAdError error) {
-            _rewardedAd = null;
-          }),
-        );
-      }
+      await RewardedAd.load(
+        //add id here
+        adUnitId: adid,
+        request: const AdRequest(),
+        rewardedAdLoadCallback:
+            RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
+          _rewardedAd = ad;
+          Provider.of<AdmobProvider>(context, listen: false).setAdd = ad;
+        }, onAdFailedToLoad: (LoadAdError error) {
+          _rewardedAd = null;
+        }),
+      );
     }
   }
 
@@ -66,8 +64,10 @@ class AdManager {
       rewadd.setImmersiveMode(true);
       rewadd.show(
           onUserEarnedReward: (AdWithoutView ad, RewardItem reward) async {
+        print('no sceen');
         Provider.of<AdmobProvider>(context, listen: false).setAdd = null;
         hivebox.put(hiveAddNumberKey, 0);
+        showSnackbar(context, "Recived 4 hours and 2 downloads as reward");
         await Firestoremethods().addTime(context);
         await Firestoremethods().getUserDetail(context);
       });

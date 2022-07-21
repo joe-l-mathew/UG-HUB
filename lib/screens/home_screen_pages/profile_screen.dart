@@ -1,18 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/auth_methods.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/functions/check_internet.dart';
 import 'package:ug_hub/functions/sent_email.dart';
+import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/screens/user_data_pages/select_branch.dart';
 import 'package:ug_hub/screens/view_reports.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../edit_profile_screen.dart';
 import '../user_data_pages/select_university_screen.dart';
 
@@ -92,7 +95,7 @@ class ProfileScreen extends StatelessWidget {
                                   ? Text(_user.branchName!)
                                   : const Text('Not selected'),
                             ),
-                            _user.college == null||_user.college!.isEmpty
+                            _user.college == null || _user.college!.isEmpty
                                 ? const SizedBox()
                                 : ListTile(
                                     title: const Text("College: "),
@@ -185,6 +188,28 @@ class ProfileScreen extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     tileColor: const Color.fromARGB(179, 182, 186, 236),
                     title: const Text('Contact us'),
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  ListTile(
+                    onTap: () {
+                      try {
+                        launchUrl(
+                            Uri.parse('http://www.instagram.com/ug___hub'),
+                            mode: LaunchMode.externalNonBrowserApplication);
+                      } catch (e) {
+                        showSnackbar(context, "Unable to load in this device");
+                      }
+                    },
+                    leading: const FaIcon(FontAwesomeIcons.instagram),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    tileColor: const Color.fromARGB(179, 182, 186, 236),
+                    title: const Text(
+                      'Follow us on Instagram',
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   const SizedBox(
                     height: 3,
