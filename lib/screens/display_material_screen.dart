@@ -136,9 +136,8 @@ class DisplayMaterialsScreen extends StatelessWidget {
                           width: double.infinity,
                           child: SingleChildScrollView(child: ShimmerWidget()));
                     } else if (snapshot.data!.docs.isEmpty) {
-                      return const SizedBox(
-                        width: double.infinity,
-                        child: SingleChildScrollView(child: ShimmerWidget()),
+                      return const AddNoMaterial(
+                        displayText: 'Add PDF',
                       );
                     } else {
                       return SizedBox(
@@ -261,7 +260,8 @@ class DisplayMaterialsScreen extends StatelessWidget {
                         child: SingleChildScrollView(child: ShimmerWidget()),
                       );
                     } else if (snapshot.data!.docs.isEmpty) {
-                      return const ShimmerWidget();
+                      return const AddNoMaterial(
+                          displayText: "Add Youtube Link");
                     } else {
                       return SizedBox(
                         height: 170,
@@ -390,7 +390,8 @@ class DisplayMaterialsScreen extends StatelessWidget {
                         child: SingleChildScrollView(child: ShimmerWidget()),
                       );
                     } else if (snapshot.data!.docs.isEmpty) {
-                      return const ShimmerWidget();
+                      return const AddNoMaterial(
+                          displayText: "Add Other Links");
                     } else {
                       return SizedBox(
                         height: 170,
@@ -461,6 +462,57 @@ class DisplayMaterialsScreen extends StatelessWidget {
             ],
           ),
         ));
+  }
+}
+
+class AddNoMaterial extends StatelessWidget {
+  final String displayText;
+  const AddNoMaterial({
+    Key? key,
+    required this.displayText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+              child: SimpleBtn1(
+            text: displayText,
+            onPressed: () async {
+              if (Provider.of<UserProvider>(context, listen: false)
+                          .userModel!
+                          .isTermsAccepted ==
+                      null ||
+                  Provider.of<UserProvider>(context, listen: false)
+                          .userModel!
+                          .isTermsAccepted ==
+                      false) {
+                showTermsAndCondition(context);
+              } else {
+                Provider.of<AddModuleToggleProvider>(context, listen: false)
+                    .setSelectedField = 0;
+                bool isConnected = await checkInternet();
+                if (isConnected) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => const AddMaterialsScreen()));
+                } else {
+                  showSnackbar(context, "Please connect to internet");
+                }
+              }
+            },
+          )),
+          Text("No material found be the first one to $displayText"),
+        ],
+      ),
+      width: double.infinity,
+      height: 140,
+      // child: SingleChildScrollView(child: ShimmerWidget()),
+    );
   }
 }
 

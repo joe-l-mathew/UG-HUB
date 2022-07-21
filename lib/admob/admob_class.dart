@@ -25,7 +25,7 @@ class AdManager {
   // }
 //fun for loading add
   void loadRewardedAd(BuildContext context, {bool isrecall = false}) async {
-    print('called');
+    // print('called');
     String? adid = await Firestoremethods().getAdId();
     if (adid != null) {
       await RewardedAd.load(
@@ -64,7 +64,7 @@ class AdManager {
       rewadd.setImmersiveMode(true);
       rewadd.show(
           onUserEarnedReward: (AdWithoutView ad, RewardItem reward) async {
-        print('no sceen');
+        // print('no sceen');
         Provider.of<AdmobProvider>(context, listen: false).setAdd = null;
         hivebox.put(hiveAddNumberKey, 0);
         showSnackbar(context, "Recived 4 hours and 2 downloads as reward");
