@@ -37,6 +37,7 @@ class AdManager {
           _rewardedAd = ad;
           Provider.of<AdmobProvider>(context, listen: false).setAdd = ad;
         }, onAdFailedToLoad: (LoadAdError error) {
+          Provider.of<AdmobProvider>(context, listen: false).setAdd = null;
           _rewardedAd = null;
         }),
       );

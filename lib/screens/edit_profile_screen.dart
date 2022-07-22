@@ -85,13 +85,13 @@ class _EditProfileState extends State<EditProfile> {
 
                       if (result != null) {
                         PlatformFile file1 = result.files.first;
-                        if (file1.size < 1242880) {
+                        if (file1.size < 204288) {
                           final path = result.files.single.path;
                           setState(() {
                             imageFile = File(path.toString());
                           });
                         } else {
-                          showSnackbar(context, "Pick a file lessthan 1MB");
+                          showSnackbar(context, "Pick a file lessthan 200 KB");
                         }
                       }
                     },

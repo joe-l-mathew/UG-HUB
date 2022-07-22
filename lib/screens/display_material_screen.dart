@@ -88,7 +88,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
         appBar: AppBar(
             actions: [
               IconButton(
-                  tooltip: "Sylabus",
+                  tooltip: "Syllabus",
                   onPressed: () async {
                     SubjectModel model =
                         SubjectModel.fromSnap(await path2.get());

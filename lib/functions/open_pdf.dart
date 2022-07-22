@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/hive.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/main.dart';
-
 import '../admob/admob_class.dart';
 import '../admob/admob_provider.dart';
 // import '../provider/user_provider.dart';
@@ -47,10 +46,11 @@ Future<void> openPdf(
   if (cachedFile != null) {
     // print("From cache");
     OpenFile.open(cachedFile.file.path);
-  } 
+  }
   //if no cache found check for add and download
   else {
-    if (hivebox.get(hiveAddNumberKey) >= 2 &&
+    if (hivebox.get(hiveAddNumberKey) != null &&
+        hivebox.get(hiveAddNumberKey) >= 2 &&
         Provider.of<AdmobProvider>(context, listen: false).add != null) {
       // print("Time to show add");
       showDialog(
