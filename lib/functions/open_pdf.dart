@@ -45,7 +45,13 @@ Future<void> openPdf(
   //if cached data available display it
   if (cachedFile != null) {
     // print("From cache");
+
     OpenFile.open(cachedFile.file.path);
+    if (cachedFile.file.path.contains("pptx")) {
+      showSnackbar(
+          context, "Try instaling google slides if you dont have a ppt viewer",
+          duration: 2);
+    }
   }
   //if no cache found check for add and download
   else {
@@ -91,9 +97,19 @@ Future<void> openPdf(
           // print(hivebox.get(hiveAddNumberKey));
         }
         await pr.hide();
-        OpenFile.open(
-          file.path,
-        );
+        try {
+          OpenFile.open(
+            file.path,
+          );
+          if (file.path.contains("pptx")) {
+            showSnackbar(context,
+                "Try instaling google slides if you dont have a ppt viewer",
+                duration: 2);
+          }
+        } on Exception catch (e) {
+          // TODO
+          print("object");
+        }
       } on Exception {
         await pr.hide();
 

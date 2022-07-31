@@ -60,9 +60,7 @@ class DisplayMaterialTile extends StatelessWidget {
         .doc(_moduleModel.moduleId);
     Widget getSelectedIcon() {
       if (fileType == FileType.pdf) {
-        return const Icon(
-          Icons.picture_as_pdf_outlined,
-        );
+        return const FaIcon(FontAwesomeIcons.filePowerpoint);
       } else if (fileType == FileType.youtube) {
         return const FaIcon(
           FontAwesomeIcons.youtube,

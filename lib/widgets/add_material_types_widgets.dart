@@ -88,7 +88,7 @@ class DialogFb1 extends StatelessWidget {
               height: 15,
             ),
             Provider.of<UploadPdfProvider>(context).selectedPdfName == null
-                ? const Text("Select a pdf file",
+                ? const Text("Select a PDF/PPT file",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,

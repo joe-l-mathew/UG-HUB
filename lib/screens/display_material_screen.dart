@@ -116,7 +116,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.only(left: 10, top: 10),
                     child: Text(
-                      "PDF",
+                      "PDF / PPT",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -137,7 +137,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                           child: SingleChildScrollView(child: ShimmerWidget()));
                     } else if (snapshot.data!.docs.isEmpty) {
                       return const AddNoMaterial(
-                        displayText: 'Add PDF',
+                        displayText: 'Add PDF / PPT',
                       );
                     } else {
                       return SizedBox(
@@ -506,7 +506,7 @@ class AddNoMaterial extends StatelessWidget {
               }
             },
           )),
-          Text("No material found be the first one to $displayText"),
+          Text("No material found, Be the first one to $displayText"),
         ],
       ),
       width: double.infinity,

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:new_version/new_version.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
@@ -18,6 +21,7 @@ import '../../functions/check_internet.dart';
 import '../../functions/show_select_semester_bottom_sheet.dart';
 import '../../functions/show_terms_and_condition.dart';
 import '../../widgets/please_select_semester.dart';
+import '../../widgets/update_dialog.dart';
 import '../display_material_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
               .expireTime!
               .isBefore(DateTime.now()) ||
           hivebox.get(hiveAddNumberKey) >= 2) {
-        
         // print("Started loading----------------------------------");
         AdManager().loadRewardedAd(context);
       }
@@ -54,8 +57,34 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       checkInternet(isHome: true);
     });
+    final newVersion = NewVersion(
+      androidId: 'com.education.ughub',
+    );
+
+    Timer(const Duration(milliseconds: 800), () {
+      checkNewVersion(newVersion);
+    });
     // checkInternet(context, isHome: true);
     super.initState();
+  }
+
+  void checkNewVersion(NewVersion newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      if (status.canUpdate) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return UpdateDialog(
+              allowDismissal: true,
+              description: status.releaseNotes!,
+              version: status.storeVersion,
+              appLink: status.appStoreLink,
+            );
+          },
+        );
+      }
+    }
   }
 
   @override

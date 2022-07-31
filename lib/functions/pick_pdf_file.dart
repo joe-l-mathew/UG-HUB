@@ -7,7 +7,7 @@ import 'package:ug_hub/provider/upload_pdf_provider.dart';
 
 Future<void> pickPdfFile(BuildContext context) async {
   FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: false, type: FileType.custom, allowedExtensions: ['pdf']);
+      allowMultiple: false, type: FileType.custom, allowedExtensions: ['pdf','pptx']);
 
   if (result != null) {
     PlatformFile file1 = result.files.first;
