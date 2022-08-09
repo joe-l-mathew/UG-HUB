@@ -36,10 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     Firestoremethods().getSemesterList(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // hivebox.put(hiveAddNumberKey, 0);
       if (Provider.of<UserProvider>(context, listen: false)
               .userModel!
               .expireTime!
               .isBefore(DateTime.now()) ||
+              hivebox.get(hiveAddNumberKey)!=null&&
           hivebox.get(hiveAddNumberKey) >= 2) {
         // print("Started loading----------------------------------");
         AdManager().loadRewardedAd(context);

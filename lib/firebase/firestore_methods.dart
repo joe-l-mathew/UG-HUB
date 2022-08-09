@@ -32,11 +32,28 @@ import '../provider/upload_status_provider.dart';
 class Firestoremethods {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
-  //Check for existing user
-  Future<bool> doesUserExist(String uid) async {
-    var res = await _firestore.collection(collectionUser).get();
-    List docList = res.docs.map((e) => e.id).toList();
-    return docList.contains(uid);
+
+  // Future<void> afterLoginPageRedirector() async {
+  //   String uid = _auth.currentUser!.uid;
+  //   var userSnap = await _firestore.collection(collectionUser).doc(uid).get();
+  //   if(userSnap.exists)
+  //   UserModel myUser = UserModel.fromSnap(userSnap);
+  // }
+
+//Check for existing user need to be decrypetd cause take many reads
+  Future<bool> doesUserExist(BuildContext context) async {
+    String uid = _auth.currentUser!.uid;
+    var res = await _firestore.collection(collectionUser).doc(uid).get();
+    if (res.exists) {
+      print("Exist");
+      Provider.of<UserProvider>(context, listen: false).setUserModel(
+        userModelc: UserModel.fromSnap(res),
+      );
+      return true;
+    } else {
+      // print("Doesnot exist");
+      return false;
+    }
   }
 
 //get user details from firestore
@@ -54,7 +71,7 @@ class Firestoremethods {
   //check for username
 
   Future<bool> doesNameExist(String uid, BuildContext context) async {
-    await getUserDetail(context);
+    // await getUserDetail(context);
 
     if (Provider.of<UserProvider>(context, listen: false).userModel!.name ==
         null) {
@@ -67,7 +84,7 @@ class Firestoremethods {
   //check for university
 
   Future<bool> doesUniversityExist(String uid, BuildContext context) async {
-    await getUserDetail(context);
+    // await getUserDetail(context);
 
     if (Provider.of<UserProvider>(context, listen: false)
             .userModel!
@@ -81,7 +98,7 @@ class Firestoremethods {
 
 //check for branch
   Future<bool> doesBranchtExist(String uid, BuildContext context) async {
-    await getUserDetail(context);
+    // await getUserDetail(context);
     if (Provider.of<UserProvider>(context, listen: false).userModel!.branch ==
         null) {
       return false;
@@ -104,7 +121,7 @@ class Firestoremethods {
         .collection(collectionUser)
         .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
         .update({collectionUserName: name});
-    await getUserDetail(context);
+    // await getUserDetail(context);
     Navigator.push(
         context,
         MaterialPageRoute(

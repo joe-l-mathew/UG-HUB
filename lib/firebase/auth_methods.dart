@@ -54,48 +54,7 @@ class AuthMethods {
         timeout: const Duration(minutes: 2));
   }
 
-//redirect after signing in datas like name, univ, etc will be analysed
-  Future<Widget> afterLoginPageRedirector(BuildContext context) async {
-    if (await _firestoreMethods.doesUserExist(
-        Provider.of<UserProvider>(context, listen: false).userModel!.uid)) {
-      if (await _firestoreMethods.doesBranchtExist(
-          Provider.of<UserProvider>(context, listen: false).userModel!.uid,
-          context)) {
-        await _firestoreMethods.getUserDetail(context);
-        await _firestoreMethods.getBranchModel(context);
-        return const LandingPage();
-      }
-      if (await _firestoreMethods.doesUniversityExist(
-          Provider.of<UserProvider>(context, listen: false).userModel!.uid,
-          context)) {
-        await _firestoreMethods.getUserDetail(context);
-        return const SelectBranchScreen();
-      }
-
-      if (await _firestoreMethods.doesNameExist(
-          Provider.of<UserProvider>(context, listen: false).userModel!.uid,
-          context)) {
-        await _firestoreMethods.getUserDetail(context);
-        return const SelectUniversityScreen();
-      } else {
-        await _firestoreMethods.getUserDetail(context);
-        return EnterNameScreen();
-      }
-    } else {
-      String _uid =
-          Provider.of<UserProvider>(context, listen: false).userModel!.uid;
-      // UserModel user = await UserModel(
-      //     uid:
-      //         Provider.of<UserProvider>(context, listen: false).userModel!.uid);
-      UserModel user = UserModel(
-          uid: _uid, expireTime: DateTime.now().add(const Duration(hours: 1)));
-      await _firestoreMethods.addUserToFirestore(user);
-      await _firestoreMethods.getUserDetail(context);
-      return EnterNameScreen();
-    }
-  }
-
-//login code
+  //login code
   loginWithOtp(
       {required String verificationCode,
       required String smsCode,
@@ -120,6 +79,51 @@ class AuthMethods {
 
     } catch (e) {
       showSnackbar(context, 'Invalid OTP');
+    }
+  }
+
+//redirect after signing in datas like name, univ, etc will be analysed
+
+  Future<Widget> afterLoginPageRedirector(BuildContext context) async {
+    if (await _firestoreMethods.doesUserExist(context)) {
+      if (await _firestoreMethods.doesBranchtExist(
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid,
+          context)) {
+        // print("Running success");
+        // await _firestoreMethods.getUserDetail(context);
+        // await _firestoreMethods.getBranchModel(context);
+        return const LandingPage();
+      }
+      if (await _firestoreMethods.doesUniversityExist(
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid,
+          context)) {
+        // await _firestoreMethods.getUserDetail(context);
+        return const SelectBranchScreen();
+      }
+
+      if (await _firestoreMethods.doesNameExist(
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid,
+          context)) {
+        print("Its running---------2");
+
+        // await _firestoreMethods.getUserDetail(context);
+        return const SelectUniversityScreen();
+      } else {
+        await _firestoreMethods.getUserDetail(context);
+        return EnterNameScreen();
+      }
+    } else {
+      print("Its running---------1");
+      String _uid =
+          Provider.of<UserProvider>(context, listen: false).userModel!.uid;
+      // UserModel user = await UserModel(
+      //     uid:
+      //         Provider.of<UserProvider>(context, listen: false).userModel!.uid);
+      UserModel user = UserModel(
+          uid: _uid, expireTime: DateTime.now().add(const Duration(hours: 1)));
+      await _firestoreMethods.addUserToFirestore(user);
+      await _firestoreMethods.getUserDetail(context);
+      return EnterNameScreen();
     }
   }
 

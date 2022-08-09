@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -46,12 +47,12 @@ class CardFb1 extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.network(
-              imageUrl,
+            CachedNetworkImage(
+              imageUrl: imageUrl,
               height: 90,
+              width: 90,
               fit: BoxFit.cover,
-              errorBuilder: (BuildContext context, Object exception,
-                  StackTrace? stackTrace) {
+              progressIndicatorBuilder: ((context, url, progress) {
                 return Shimmer.fromColors(
                   baseColor: Colors.grey[300]!,
                   highlightColor: Colors.grey[100]!,
@@ -65,26 +66,7 @@ class CardFb1 extends StatelessWidget {
                     width: 90,
                   ),
                 );
-              },
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-                return Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(20))),
-                    height: 90,
-                    width: 90,
-                  ),
-                );
-              },
+              }),
             ),
             const Spacer(),
             Text(text,
@@ -94,20 +76,6 @@ class CardFb1 extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 )),
-            // const SizedBox(
-            //   height: 5,
-            // ),
-            // Text(
-            //   subtitle,
-            //   textAlign: TextAlign.center,
-            //   style: const TextStyle(
-            //       color: Colors.grey,
-            //       fontWeight: FontWeight.normal,
-            //       fontSize: 12),
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
           ],
         ),
       ),
