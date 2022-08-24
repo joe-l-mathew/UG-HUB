@@ -45,7 +45,7 @@ class Firestoremethods {
     String uid = _auth.currentUser!.uid;
     var res = await _firestore.collection(collectionUser).doc(uid).get();
     if (res.exists) {
-      print("Exist");
+      // print("Exist");
       Provider.of<UserProvider>(context, listen: false).setUserModel(
         userModelc: UserModel.fromSnap(res),
       );

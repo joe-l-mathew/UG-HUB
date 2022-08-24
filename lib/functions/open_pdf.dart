@@ -10,6 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/hive.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/main.dart';
+import 'package:ug_hub/unity_ads/unity_ads_class.dart';
+import 'package:ug_hub/unity_ads/unity_provider.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import '../admob/admob_class.dart';
 import '../admob/admob_provider.dart';
 // import '../provider/user_provider.dart';
@@ -57,7 +60,7 @@ Future<void> openPdf(
   else {
     if (hivebox.get(hiveAddNumberKey) != null &&
         hivebox.get(hiveAddNumberKey) >= 2 &&
-        Provider.of<AdmobProvider>(context, listen: false).add != null) {
+        Provider.of<UnityProvider>(context, listen: false).isAdLoaded) {
       // print("Time to show add");
       showDialog(
           context: context,
@@ -66,7 +69,7 @@ Future<void> openPdf(
               yesText: "Continue",
               noText: "Cancel",
               onYes: () {
-                AdManager().showRewardedAd(context);
+                UnityClass().playAds(context);
                 Navigator.pop(dialougeBuilder);
               },
               onNO: () {
@@ -88,9 +91,10 @@ Future<void> openPdf(
           hivebox.put(hiveAddNumberKey, existing + 1);
           // print('-----------------' + hivebox.get(hiveAddNumberKey).toString());
           if (hivebox.get(hiveAddNumberKey) >= 2 &&
-              Provider.of<AdmobProvider>(context, listen: false).add == null) {
+              Provider.of<UnityProvider>(context, listen: false).isAdLoaded ==
+                  false) {
             // print("Load now");
-            AdManager().loadRewardedAd(context);
+            UnityClass().loadAds(context);
           }
         } else {
           hivebox.put(hiveAddNumberKey, 1);

@@ -13,6 +13,7 @@ import 'package:ug_hub/main.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/home_screen_pages/profile_screen.dart';
+import 'package:ug_hub/unity_ads/unity_ads_class.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/subject_banner.dart';
 import '../../admin/add_subject.dart';
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
               hivebox.get(hiveAddNumberKey)!=null&&
           hivebox.get(hiveAddNumberKey) >= 2) {
         // print("Started loading----------------------------------");
-        AdManager().loadRewardedAd(context);
+        UnityClass().loadAds(context);
       }
       if (Provider.of<UserProvider>(context, listen: false)
                   .userModel!

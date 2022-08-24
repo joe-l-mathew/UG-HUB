@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:ug_hub/admob/admob_class.dart';
-import 'package:ug_hub/admob/admob_provider.dart';
+// import 'package:ug_hub/admob/admob_class.dart';
+// import 'package:ug_hub/admob/admob_provider.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/display_material_screen.dart';
+import 'package:ug_hub/unity_ads/unity_ads_class.dart';
+import 'package:ug_hub/unity_ads/unity_provider.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
 import 'package:ug_hub/widgets/module_list_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -131,10 +133,10 @@ class SubjectBanner extends StatelessWidget {
                                 .expireTime!
                                 .isBefore(DateTime.now())) {
                               //check reward null
-                              if (Provider.of<AdmobProvider>(context,
+                              if (Provider.of<UnityProvider>(context,
                                           listen: false)
-                                      .add ==
-                                  null) {
+                                      .isAdLoaded ==
+                                  false) {
                                 //if add not loaded
                                 // print('add iss null');
                                 // AdManager().showRewardedAd(context3);
@@ -169,7 +171,7 @@ class SubjectBanner extends StatelessWidget {
                                         yesText: "Continue",
                                         noText: "Cancel",
                                         onYes: () {
-                                          AdManager().showRewardedAd(context);
+                                          UnityClass().playAds(context);
                                           Navigator.pop(dialougeBuilder);
                                         },
                                         onNO: () {

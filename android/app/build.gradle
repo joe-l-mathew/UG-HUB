@@ -83,4 +83,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'com.unity3d.ads:unity-ads:4.3.0'
+    implementation 'com.google.ads.mediation:unity:4.3.0.0'
 }

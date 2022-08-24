@@ -21,6 +21,7 @@ import 'package:ug_hub/provider/upload_status_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
+import 'package:ug_hub/unity_ads/unity_provider.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'admob/admob_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -45,7 +46,7 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   MobileAds.instance.initialize();
   await Hive.initFlutter();
-  hivebox =await Hive.openBox(hiveAddNumberBox);
+  hivebox = await Hive.openBox(hiveAddNumberBox);
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -65,7 +66,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AdmobProvider()),
+        ChangeNotifierProvider(create: (context) => UnityProvider()),
         ChangeNotifierProvider(create: (context) => DisplayPdfProvider()),
         ChangeNotifierProvider(create: (context) => UploadStatusProvider()),
         ChangeNotifierProvider(create: (context) => ModuleModelProvider()),
