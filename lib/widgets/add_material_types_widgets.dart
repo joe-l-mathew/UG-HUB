@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/provider/upload_pdf_provider.dart';
@@ -7,14 +8,19 @@ import 'package:ug_hub/provider/upload_status_provider.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/button_filled.dart';
 import 'package:ug_hub/widgets/custom_input_field.dart';
+
 import '../functions/check_internet.dart';
 import '../functions/pick_pdf_file.dart';
 import '../provider/auth_provider.dart';
 
 final pdfNameController = TextEditingController();
 
+// ignore: must_be_immutable
 class AddPdfPage extends StatefulWidget {
-  const AddPdfPage({Key? key}) : super(key: key);
+  // const AddPdfPage({Key? key}) : super(key: key);
+
+  final bool isQuestions;
+  const AddPdfPage({Key? key, this.isQuestions = false}) : super(key: key);
 
   @override
   State<AddPdfPage> createState() => _AddPdfPageState();
@@ -34,10 +40,12 @@ class _AddPdfPageState extends State<AddPdfPage> {
                 inputController: pdfNameController,
                 textaboveBorder: "Name",
                 prefixText: '',
-                hintText: 'Enter a display name',
+                hintText: widget.isQuestions
+                    ? "Enter Exam Year"
+                    : 'Enter a display name',
                 keybordType: TextInputType.text),
           ),
-          const DialogFb1(),
+          DialogFb1(isQuestion: widget.isQuestions),
           // Provider.of<UploadPdfProvider>(context).selectedPdfName != null
           //     ? Padding(
           //         padding: const EdgeInsets.only(left: 70, right: 70),
@@ -54,12 +62,15 @@ class _AddPdfPageState extends State<AddPdfPage> {
 
 //custom widget to upload
 class DialogFb1 extends StatelessWidget {
-  const DialogFb1({Key? key}) : super(key: key);
+  final bool isQuestion;
 
   final accentColor = const Color(0xffffffff);
 
+  const DialogFb1({Key? key, this.isQuestion = false}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    // print(isQuestion);
     return Dialog(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -88,11 +99,17 @@ class DialogFb1 extends StatelessWidget {
               height: 15,
             ),
             Provider.of<UploadPdfProvider>(context).selectedPdfName == null
-                ? const Text("Select a PDF/PPT file",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold))
+                ? isQuestion == false
+                    ? const Text("Select a PDF/PPT file",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold))
+                    : const Text("Select a PDF file",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold))
                 : Text(
                     Provider.of<UploadPdfProvider>(context, listen: false)
                         .selectedPdfName!,
@@ -137,8 +154,9 @@ class DialogFb1 extends StatelessWidget {
                                                 listen: false)
                                             .setInputFileName =
                                         pdfNameController.text;
-                                    await Firestoremethods()
-                                        .addPdftoDatabase(context);
+                                    await Firestoremethods().addPdftoDatabase(
+                                        context,
+                                        isQuestion: isQuestion);
                                     showSnackbar(
                                         context, "Uploaded Successfully");
                                     pdfNameController.clear();

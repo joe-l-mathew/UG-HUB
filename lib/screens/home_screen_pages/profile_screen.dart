@@ -21,7 +21,6 @@ import '../user_data_pages/select_university_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final _auth = FirebaseAuth.instance;
@@ -111,49 +110,194 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 3,
                   ),
-                  ListTile(
-                    onTap: () async {
-                      bool connection = await isNetworkAvailable(context);
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(179, 182, 186, 236),
+                    ),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          minVerticalPadding: 0,
+                          onTap: () async {
+                            bool connection = await isNetworkAvailable(context);
 
-                      if (connection) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (builder) =>
-                                    const SelectUniversityScreen()),
-                            (route) => false);
-                      }
-                    },
-                    leading: const Icon(Icons.edit),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    tileColor: const Color.fromARGB(179, 182, 186, 236),
-                    title: const Text('Edit University'),
-                  ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      bool connection = await isNetworkAvailable(context);
+                            if (connection) {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) =>
+                                          const SelectUniversityScreen()),
+                                  (route) => false);
+                            }
+                          },
+                          leading: const Icon(Icons.edit),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          // tileColor: const Color.fromARGB(179, 182, 186, 236),
+                          title: const Text('Edit University'),
+                        ),
+                        const Divider(),
+                        ListTile(
+                          onTap: () async {
+                            bool connection = await isNetworkAvailable(context);
 
-                      if (connection) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (builder) =>
-                                    const SelectBranchScreen()));
-                      }
-                    },
-                    leading: const Icon(Icons.edit),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    tileColor: const Color.fromARGB(179, 182, 186, 236),
-                    title: const Text('Edit Branch'),
+                            if (connection) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) =>
+                                          const SelectBranchScreen()));
+                            }
+                          },
+                          leading: const Icon(Icons.edit),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          // tileColor: const Color.fromARGB(179, 182, 186, 236),
+                          title: const Text('Edit Branch'),
+                        ),
+                        // const SizedBox(
+                        //   height: 3,
+                        // ),
+
+                        // const SizedBox(
+                        //   height: 3,
+                        // ),
+                        const Divider(),
+                        ListTile(
+                          onTap: () {
+                            setEmailToAdmin(subject: "Hello UG-HUB");
+                          },
+                          leading: const Icon(Icons.contact_mail),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          // tileColor: const Color.fromARGB(179, 182, 186, 236),
+                          title: const Text('Contact us'),
+                        ),
+                        // const SizedBox(
+                        //   height: 3,
+                        // ),
+                        const Divider(),
+                        ListTile(
+                          onTap: () {
+                            try {
+                              launchUrl(
+                                  Uri.parse(
+                                      'http://www.instagram.com/ug___hub'),
+                                  mode:
+                                      LaunchMode.externalNonBrowserApplication);
+                            } catch (e) {
+                              showSnackbar(
+                                  context, "Unable to load in this device");
+                            }
+                          },
+                          leading: const FaIcon(FontAwesomeIcons.instagram),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          // tileColor: const Color.fromARGB(179, 182, 186, 236),
+                          title: const Text(
+                            'Follow us on Instagram',
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        // const SizedBox(
+                        //   height: 3,
+                        // ),
+                        const Divider(),
+                        ListTile(
+                          onTap: () async {
+                            bool connection = await isNetworkAvailable(context);
+
+                            if (connection) {
+                              //view reports
+                              showDialog(
+                                  context: context,
+                                  builder: (builderContext) {
+                                    return DialougeWidget(
+                                        yesText: "Delete",
+                                        noText: "Cancel",
+                                        onYes: () async {
+                                          await Firestoremethods()
+                                              .deleteUser(context);
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      const LoginScreen()),
+                                              (route) => false);
+                                        },
+                                        onNO: () {
+                                          Navigator.pop(builderContext);
+                                        },
+                                        icon: const Icon(Icons.logout),
+                                        tittleText: "Do you want to Delete",
+                                        subText:
+                                            'all your uploads and chats remains');
+                                  });
+                            }
+                          },
+                          leading: const Icon(
+                            (Icons.delete),
+                            // color: Colors.,
+                          ),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          // tileColor: const Color.fromARGB(179, 182, 186, 236),
+                          title: const Text('Delete my account'),
+                        ),
+                        // const SizedBox(
+                        //   height: 3,
+                        // ),
+                        const Divider(),
+                        ListTile(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (builderContext) {
+                                  return DialougeWidget(
+                                      yesText: "Sign out",
+                                      noText: "Cancel",
+                                      onYes: () async {
+                                        await AuthMethods()
+                                            .signoutUser(context);
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (builder) =>
+                                                    const LoginScreen()),
+                                            (route) => false);
+                                      },
+                                      onNO: () {
+                                        Navigator.pop(builderContext);
+                                      },
+                                      icon: const Icon(Icons.logout),
+                                      tittleText: "Do you want to Sign out",
+                                      subText: 'You have to login again');
+                                });
+                          },
+                          leading: const Icon(
+                            (Icons.logout),
+                            // color: Colors.,
+                          ),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          // tileColor: const Color.fromARGB(179, 182, 186, 236),
+                          title: const Text('Logout'),
+                        )
+                      ],
+                    ),
                   ),
-                  const SizedBox(
-                    height: 3,
-                  ),
+
+                  // const SizedBox(
+                  //   height: 3,
+                  // ),
+                  // const Divider(),
                   _user.isAdmin == true
                       ? ListTile(
                           onTap: () async {
@@ -176,125 +320,38 @@ class ProfileScreen extends StatelessWidget {
                           title: const Text('View reports'),
                         )
                       : const SizedBox(),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      setEmailToAdmin(subject: "Hello UG-HUB");
-                    },
-                    leading: const Icon(Icons.contact_mail),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    tileColor: const Color.fromARGB(179, 182, 186, 236),
-                    title: const Text('Contact us'),
-                  ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      try {
-                        launchUrl(
-                            Uri.parse('http://www.instagram.com/ug___hub'),
-                            mode: LaunchMode.externalNonBrowserApplication);
-                      } catch (e) {
-                        showSnackbar(context, "Unable to load in this device");
-                      }
-                    },
-                    leading: const FaIcon(FontAwesomeIcons.instagram),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    tileColor: const Color.fromARGB(179, 182, 186, 236),
-                    title: const Text(
-                      'Follow us on Instagram',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      bool connection = await isNetworkAvailable(context);
-
-                      if (connection) {
-                        //view reports
-                        showDialog(
-                            context: context,
-                            builder: (builderContext) {
-                              return DialougeWidget(
-                                  yesText: "Delete",
-                                  noText: "Cancel",
-                                  onYes: () async {
-                                    await Firestoremethods()
-                                        .deleteUser(context);
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (builder) =>
-                                                const LoginScreen()),
-                                        (route) => false);
-                                  },
-                                  onNO: () {
-                                    Navigator.pop(builderContext);
-                                  },
-                                  icon: const Icon(Icons.logout),
-                                  tittleText: "Do you want to Delete",
-                                  subText:
-                                      'all your uploads and chats remains');
-                            });
-                      }
-                    },
-                    leading: const Icon(
-                      (Icons.delete),
-                      // color: Colors.,
-                    ),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    tileColor: const Color.fromARGB(179, 182, 186, 236),
-                    title: const Text('Delete my account'),
-                  ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (builderContext) {
-                            return DialougeWidget(
-                                yesText: "Sign out",
-                                noText: "Cancel",
-                                onYes: () async {
-                                  await AuthMethods().signoutUser(context);
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (builder) =>
-                                              const LoginScreen()),
-                                      (route) => false);
-                                },
-                                onNO: () {
-                                  Navigator.pop(builderContext);
-                                },
-                                icon: const Icon(Icons.logout),
-                                tittleText: "Do you want to Sign out",
-                                subText: 'You have to login again');
-                          });
-                    },
-                    leading: const Icon(
-                      (Icons.logout),
-                      // color: Colors.,
-                    ),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    tileColor: const Color.fromARGB(179, 182, 186, 236),
-                    title: const Text('Logout'),
-                  )
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  setEmailToAdmin(
+                      subject:
+                          "Hello UG Hub Sub:Startup idea or Collge Project assistence");
+                },
+                child: Container(
+                    decoration: const BoxDecoration(
+                        color: Color.fromARGB(179, 182, 186, 236),
+                        borderRadius: BorderRadius.all(Radius.circular(14))),
+                    // height: 300,
+                    child: Column(
+                      children: const [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "Soaftware related assistence for startups or Collage Projects Contact us",
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    )),
+              ),
+            )
           ],
         ),
       ),

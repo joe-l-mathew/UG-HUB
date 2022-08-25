@@ -8,8 +8,10 @@ import 'package:provider/provider.dart';
 // import 'package:ug_hub/admob/admob_provider.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/module_model.dart';
+import 'package:ug_hub/provider/module_id_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/display_material_screen.dart';
+import 'package:ug_hub/screens/display_question_paper_screen.dart';
 import 'package:ug_hub/unity_ads/unity_ads_class.dart';
 import 'package:ug_hub/unity_ads/unity_provider.dart';
 import 'package:ug_hub/widgets/dialouge_widget.dart';
@@ -122,100 +124,123 @@ class SubjectBanner extends StatelessWidget {
                   child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true, // 1st add
-                      itemCount: snapshotModule.data!.docs.length,
+                      itemCount: snapshotModule.data!.docs.length + 1,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
-                          onTap: () {
-                            if (Provider.of<UserProvider>(context,
-                                    listen: false)
-                                .userModel!
-                                .expireTime!
-                                .isBefore(DateTime.now())) {
-                              //check reward null
-                              if (Provider.of<UnityProvider>(context,
-                                          listen: false)
-                                      .isAdLoaded ==
-                                  false) {
-                                //if add not loaded
-                                // print('add iss null');
-                                // AdManager().showRewardedAd(context3);
-                                Provider.of<ModuleModelProvider>(context,
+                            onTap: () {
+                              if (Provider.of<UserProvider>(context,
+                                      listen: false)
+                                  .userModel!
+                                  .expireTime!
+                                  .isBefore(DateTime.now())) {
+                                //check reward null
+                                if (Provider.of<UnityProvider>(context,
                                             listen: false)
-                                        .setModuleModel =
-                                    ModuleModel(
-                                        moduleName: snapshotModule
-                                            .data!.docs[index]
-                                            .data()['name'],
-                                        moduleId:
-                                            snapshotModule.data!.docs[index].id,
-                                        subjectName: snapshot
-                                            .data!.docs[indexofSubject]
-                                            .data()['fullname'],
-                                        subjectId: snapshot
-                                            .data!.docs[indexofSubject].id,
-                                        subjectShortName: snapshot
-                                            .data!.docs[indexofSubject]
-                                            .data()['shortName']);
+                                        .isAdLoaded ==
+                                    false) {
+                                  //if add not loaded
+                                  // print('add iss null');
+                                  // AdManager().showRewardedAd(context3);
+                                  index == snapshotModule.data!.docs.length
+                                      ? Navigator.push(context,
+                                          MaterialPageRoute(builder: (builder) {
+                                          Provider.of<ModuleIdProvider>(context)
+                                              .setModuleId(snapshot.data!
+                                                  .docs[indexofSubject].id);
+                                          return const DisplayQuestionPaperScreen();
+                                        }))
+                                      : Provider.of<ModuleModelProvider>(context, listen: false).setModuleModel = ModuleModel(
+                                          moduleName: snapshotModule.data!.docs[index]
+                                              .data()['name'],
+                                          moduleId: snapshotModule
+                                              .data!.docs[index].id,
+                                          subjectName: snapshot
+                                              .data!.docs[indexofSubject]
+                                              .data()['fullname'],
+                                          subjectId: snapshot
+                                              .data!.docs[indexofSubject].id,
+                                          subjectShortName: snapshot
+                                              .data!.docs[indexofSubject]
+                                              .data()['shortName']);
 
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (builder) =>
-                                            const DisplayMaterialsScreen()));
+                                  index == snapshotModule.data!.docs.length
+                                      ? Navigator.push(context,
+                                          MaterialPageRoute(builder: (builder) {
+                                          Provider.of<ModuleIdProvider>(context)
+                                              .setModuleId(snapshot.data!
+                                                  .docs[indexofSubject].id);
+                                          return const DisplayQuestionPaperScreen();
+                                        }))
+                                      : Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  const DisplayMaterialsScreen()));
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (dialougeBuilder) {
+                                        return DialougeWidget(
+                                          yesText: "Continue",
+                                          noText: "Cancel",
+                                          onYes: () {
+                                            UnityClass().playAds(context);
+                                            Navigator.pop(dialougeBuilder);
+                                          },
+                                          onNO: () {
+                                            Navigator.pop(dialougeBuilder);
+                                          },
+                                          icon: const FaIcon(
+                                              FontAwesomeIcons.rectangleAd),
+                                          tittleText:
+                                              "You have to watch an Ad to continue",
+                                          subText:
+                                              "Get 4 hours uninterrupted use with an Ad",
+                                        );
+                                      });
+                                }
                               } else {
-                                showDialog(
-                                    context: context,
-                                    builder: (dialougeBuilder) {
-                                      return DialougeWidget(
-                                        yesText: "Continue",
-                                        noText: "Cancel",
-                                        onYes: () {
-                                          UnityClass().playAds(context);
-                                          Navigator.pop(dialougeBuilder);
-                                        },
-                                        onNO: () {
-                                          Navigator.pop(dialougeBuilder);
-                                        },
-                                        icon: const FaIcon(
-                                            FontAwesomeIcons.rectangleAd),
-                                        tittleText:
-                                            "You have to watch an Ad to continue",
-                                        subText:
-                                            "Get 4 hours uninterrupted use with an Ad",
-                                      );
-                                    });
-                              }
-                            } else {
-                              Provider.of<ModuleModelProvider>(context,
-                                          listen: false)
-                                      .setModuleModel =
-                                  ModuleModel(
-                                      moduleName: snapshotModule
-                                          .data!.docs[index]
-                                          .data()['name'],
-                                      moduleId:
-                                          snapshotModule.data!.docs[index].id,
-                                      subjectName: snapshot
-                                          .data!.docs[indexofSubject]
-                                          .data()['fullname'],
-                                      subjectId: snapshot
-                                          .data!.docs[indexofSubject].id,
-                                      subjectShortName: snapshot
-                                          .data!.docs[indexofSubject]
-                                          .data()['shortName']);
+                                index == snapshotModule.data!.docs.length
+                                    ? Navigator.push(context,
+                                        MaterialPageRoute(builder: (builder) {
+                                        Provider.of<ModuleIdProvider>(context)
+                                            .setModuleId(snapshot
+                                                .data!.docs[indexofSubject].id);
+                                        return const DisplayQuestionPaperScreen();
+                                      }))
+                                    : Provider.of<ModuleModelProvider>(context, listen: false)
+                                            .setModuleModel =
+                                        ModuleModel(
+                                            moduleName: snapshotModule.data!.docs[index]
+                                                .data()['name'],
+                                            moduleId: snapshotModule
+                                                .data!.docs[index].id,
+                                            subjectName: snapshot
+                                                .data!.docs[indexofSubject]
+                                                .data()['fullname'],
+                                            subjectId: snapshot
+                                                .data!.docs[indexofSubject].id,
+                                            subjectShortName: snapshot
+                                                .data!.docs[indexofSubject]
+                                                .data()['shortName']);
 
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (builder) =>
-                                          const DisplayMaterialsScreen()));
-                            }
-                          },
-                          child: ModuleListTile(
-                              snapshotModule.data!.docs[index].data()['name'],
-                              "No of module : 5"),
-                        );
+                                if (index != snapshotModule.data!.docs.length) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (builder) =>
+                                             const DisplayMaterialsScreen()));
+                                }
+                              }
+                            },
+                            child: index == snapshotModule.data!.docs.length
+                                ? const ModuleListTile(
+                                    "Previous Year Question Paper's", "")
+                                : ModuleListTile(
+                                    snapshotModule.data!.docs[index]
+                                        .data()['name'],
+                                    "No of module : 5"));
                         // return Text(Index.toString());
                       }),
                 );

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-const String placementIdconst = "rewarded1";
+const String placementIdconst = "interstetial";
 
 class UnityProvider with ChangeNotifier {
   bool isAdLoaded = false;

@@ -17,7 +17,7 @@ import 'package:ug_hub/unity_ads/unity_ads_class.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:ug_hub/widgets/subject_banner.dart';
 import '../../admin/add_subject.dart';
-import '../../admob/admob_class.dart';
+// import '../../admob/admob_class.dart';
 import '../../functions/check_internet.dart';
 import '../../functions/show_select_semester_bottom_sheet.dart';
 import '../../functions/show_terms_and_condition.dart';

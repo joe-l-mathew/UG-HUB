@@ -11,45 +11,56 @@ import '../main.dart';
 class UnityClass {
   initializeAds() {
     UnityAds.init(
-      testMode: true,
+      // testMode: true,
       gameId: '4899999',
-      onComplete: () => print('Initialization Complete'),
-      onFailed: (error, message) =>
-          print('Initialization Failed: $error $message'),
+      // onComplete: () => print('Initialization Complete'),
     );
   }
 
   loadAds(BuildContext context) {
-    print("Loading Ads started");
+    // print("Loading Ads started");
     UnityAds.load(
       placementId: placementIdconst,
       onComplete: (placementId) {
-        print('Load Complete $placementId');
+        // print('Load Complete $placementId');
         Provider.of<UnityProvider>(context, listen: false)
             .setAdLoadedStat(true);
       },
       onFailed: (placementId, error, message) {
-        print('Load Failed $placementId: $error $message');
+        // print('Load Failed $placementId: $error $message');
       },
     );
   }
 
   playAds(BuildContext context) {
     UnityAds.showVideoAd(
-      placementId: placementIdconst,
-      onStart: (placementId) => print('Video Ad $placementId started'),
-      onClick: (placementId) => print('Video Ad $placementId click'),
-      onSkipped: (placementId) => print('Video Ad $placementId skipped'),
-      onComplete: (placementId) async {
-        print('Video Ad $placementId completed');
-        Provider.of<UnityProvider>(context, listen: false).isAdLoaded = false;
-        hivebox.put(hiveAddNumberKey, 0);
-        showSnackbar(context, "Recived 4 hours and 2 downloads as reward");
-        await Firestoremethods().addTime(context);
-        await Firestoremethods().getUserDetail(context);
-      },
-      onFailed: (placementId, error, message) =>
-          print('Video Ad $placementId failed: $error $message'),
-    );
+        placementId: placementIdconst,
+        onStart: (placementId) async {
+          Provider.of<UnityProvider>(context, listen: false).isAdLoaded = false;
+          hivebox.put(hiveAddNumberKey, 1);
+          // showSnackbar(context, "Recived 0 hours and 1 downloads as reward");
+          // print('Video Ad $placementId started');
+        },
+        // onClick: (placementId) => print('Video Ad $placementId click'),
+        onSkipped: (placementId) async {
+          Provider.of<UnityProvider>(context, listen: false).isAdLoaded = false;
+          hivebox.put(hiveAddNumberKey, 0);
+          showSnackbar(context, "Recived 2 hours and 2 downloads as reward");
+          await Firestoremethods().addTime(context, duration: 2);
+          await Firestoremethods().getUserDetail(context);
+          // print('Video Ad $placementId skipped');
+        },
+        onComplete: (placementId) async {
+          // print('Video Ad $placementId completed');
+          Provider.of<UnityProvider>(context, listen: false).isAdLoaded = false;
+          hivebox.put(hiveAddNumberKey, -2);
+          showSnackbar(context, "Recived 12 hours and 4 downloads as reward");
+          await Firestoremethods().addTime(context);
+          await Firestoremethods().getUserDetail(context);
+        },
+        onFailed: (placementId, error, message) {
+          Provider.of<UnityProvider>(context, listen: false).isAdLoaded = false;
+          hivebox.put(hiveAddNumberKey, 1);
+        });
   }
 }

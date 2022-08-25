@@ -11,6 +11,7 @@ import '../provider/user_provider.dart';
 class FirebaseStorageMethods {
   final _stroage = FirebaseStorage.instance;
   Future<String> addPdfToStorage(File pdfFile, BuildContext context) async {
+    // print(" storage Started");
     UploadTask task =
         _stroage.ref("PDF").child(const Uuid().v1()).putFile(pdfFile);
     task.snapshotEvents.listen((event) {
@@ -25,6 +26,7 @@ class FirebaseStorageMethods {
     // });
     TaskSnapshot snapshot = await task.whenComplete(() {});
     String downloadUrl = await snapshot.ref.getDownloadURL();
+    // print(downloadUrl);
     return downloadUrl;
   }
 

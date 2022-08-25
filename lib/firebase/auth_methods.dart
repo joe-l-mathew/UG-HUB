@@ -104,7 +104,7 @@ class AuthMethods {
       if (await _firestoreMethods.doesNameExist(
           Provider.of<UserProvider>(context, listen: false).userModel!.uid,
           context)) {
-        print("Its running---------2");
+        // print("Its running---------2");
 
         // await _firestoreMethods.getUserDetail(context);
         return const SelectUniversityScreen();
@@ -113,7 +113,7 @@ class AuthMethods {
         return EnterNameScreen();
       }
     } else {
-      print("Its running---------1");
+      // print("Its running---------1");
       String _uid =
           Provider.of<UserProvider>(context, listen: false).userModel!.uid;
       // UserModel user = await UserModel(

@@ -12,9 +12,9 @@ import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/main.dart';
 import 'package:ug_hub/unity_ads/unity_ads_class.dart';
 import 'package:ug_hub/unity_ads/unity_provider.dart';
-import 'package:unity_ads_plugin/unity_ads_plugin.dart';
-import '../admob/admob_class.dart';
-import '../admob/admob_provider.dart';
+// import 'package:unity_ads_plugin/unity_ads_plugin.dart';
+// import '../admob/admob_class.dart';
+// import '../admob/admob_provider.dart';
 // import '../provider/user_provider.dart';
 import '../utils/color.dart';
 import '../widgets/dialouge_widget.dart';
@@ -110,10 +110,8 @@ Future<void> openPdf(
                 "Try instaling google slides if you dont have a ppt viewer",
                 duration: 2);
           }
-        } on Exception catch (e) {
-          // TODO
-          print("object");
-        }
+        // ignore: empty_catches
+        }catch(e){}
       } on Exception {
         await pr.hide();
 

@@ -14,6 +14,7 @@ import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/bottom_navigation_bar_provider.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/display_pdf_provider.dart';
+import 'package:ug_hub/provider/module_id_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/upload_pdf_provider.dart';
@@ -23,7 +24,7 @@ import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
 import 'package:ug_hub/unity_ads/unity_provider.dart';
 import 'package:ug_hub/utils/color.dart';
-import 'admob/admob_provider.dart';
+// import 'admob/admob_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 //need to change sha256 on real build
@@ -67,6 +68,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UnityProvider()),
+        ChangeNotifierProvider(create: (context) => ModuleIdProvider()),
         ChangeNotifierProvider(create: (context) => DisplayPdfProvider()),
         ChangeNotifierProvider(create: (context) => UploadStatusProvider()),
         ChangeNotifierProvider(create: (context) => ModuleModelProvider()),

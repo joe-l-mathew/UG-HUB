@@ -20,6 +20,7 @@ import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/model/youtube_model.dart';
 import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
+import 'package:ug_hub/provider/module_id_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
 import 'package:ug_hub/provider/upload_pdf_provider.dart';
@@ -259,22 +260,37 @@ class Firestoremethods {
     }
   }
 
-  Future<void> addPdftoDatabase(BuildContext context) async {
+  Future<void> addPdftoDatabase(BuildContext context,
+      {bool isQuestion = false, String? moduleid}) async {
     ModuleModel? _moduleModel =
         Provider.of<ModuleModelProvider>(context, listen: false).getModuleModel;
+
     UserModel _user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
-    var path = _firestore
-        .collection(collectionUniversity)
-        .doc(_user.university)
-        .collection(collectionBranch)
-        .doc(_user.branch)
-        .collection(collectionSemester)
-        .doc(_user.semester)
-        .collection(collectionSubject)
-        .doc(_moduleModel!.subjectId)
-        .collection(collectionModule)
-        .doc(_moduleModel.moduleId);
+
+    var path = isQuestion == false
+        ? _firestore
+            .collection(collectionUniversity)
+            .doc(_user.university)
+            .collection(collectionBranch)
+            .doc(_user.branch)
+            .collection(collectionSemester)
+            .doc(_user.semester)
+            .collection(collectionSubject)
+            .doc(_moduleModel!.subjectId)
+            .collection(collectionModule)
+            .doc(_moduleModel.moduleId)
+        //if question is true
+        : _firestore
+            .collection(collectionUniversity)
+            .doc(_user.university)
+            .collection(collectionBranch)
+            .doc(_user.branch)
+            .collection(collectionSemester)
+            .doc(_user.semester)
+            .collection(collectionSubject)
+            .doc(Provider.of<ModuleIdProvider>(context,listen: false).moduleid);
+
     String downloadUrl = await FirebaseStorageMethods().addPdfToStorage(
         Provider.of<UploadPdfProvider>(context, listen: false).file!, context);
 
@@ -286,9 +302,23 @@ class Firestoremethods {
         uid: Provider.of<UserProvider>(context, listen: false).userModel!.uid,
         fileUrl: downloadUrl,
         likes: []);
-    await path
-        .collection(collectionPdf)
-        .add(uploadPdfModel.toJson(uploadPdfModel));
+    if (isQuestion) {
+      // print("Starting");
+      // print("Pirnting module id_________________");
+    // print(moduleid);
+      await path
+          .collection(collectionQuestions)
+          .add(uploadPdfModel.toJson(uploadPdfModel));
+      // print("added to $path");
+    } else {
+      // print(path);
+      // print(uploadPdfModel.fileUrl);
+      await path
+          .collection(collectionPdf)
+          .add(uploadPdfModel.toJson(uploadPdfModel));
+      // print("added to $path");
+    }
+
     Provider.of<UploadStatusProvider>(context, listen: false).setUploadStatus =
         null;
     Provider.of<UploadPdfProvider>(context, listen: false).setFile = null;
@@ -428,11 +458,11 @@ class Firestoremethods {
         .add(chatReplayModel.toJson());
   }
 
-  Future<void> addTime(BuildContext context) async {
+  Future<void> addTime(BuildContext context,{int duration = 4}) async {
     await _firestore
         .collection(collectionUser)
         .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
-        .update({'expireTime': DateTime.now().add(const Duration(hours: 4))});
+        .update({'expireTime': DateTime.now().add( Duration(hours: duration))});
   }
 
   Future<void> updateProfile(File? profilepic, String name, String? collegeName,

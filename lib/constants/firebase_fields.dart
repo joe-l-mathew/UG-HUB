@@ -12,5 +12,6 @@ const String collectionOtherLink = "OtherLink";
 const String collectionChat = "Chat";
 const String collectionChatReplay = "ChatReplay";
 const String collectionReports = "Reports";
+const String collectionQuestions = "Questions";
 
 enum FileType { youtube, pdf, link, chat }
