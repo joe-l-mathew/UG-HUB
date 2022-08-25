@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hexcolor/hexcolor.dart';
 // import 'package:hive/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -22,6 +22,7 @@ import 'package:ug_hub/provider/upload_status_provider.dart';
 import 'package:ug_hub/provider/user_provider.dart';
 import 'package:ug_hub/screens/flash_screen.dart';
 import 'package:ug_hub/screens/login_screen.dart';
+import 'package:ug_hub/unity_ads/unity_ads_class.dart';
 import 'package:ug_hub/unity_ads/unity_provider.dart';
 import 'package:ug_hub/utils/color.dart';
 // import 'admob/admob_provider.dart';
@@ -45,7 +46,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  MobileAds.instance.initialize();
+  // MobileAds.instance.initialize();
+  UnityClass().initializeAds();
   await Hive.initFlutter();
   hivebox = await Hive.openBox(hiveAddNumberBox);
   await Firebase.initializeApp();
