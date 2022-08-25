@@ -11,7 +11,7 @@ import '../main.dart';
 class UnityClass {
   initializeAds() {
     UnityAds.init(
-      // testMode: true,
+      testMode: true,
       gameId: '4899999',
       // onComplete: () => print('Initialization Complete'),
     );
@@ -22,12 +22,12 @@ class UnityClass {
     UnityAds.load(
       placementId: placementIdconst,
       onComplete: (placementId) {
-        // print('Load Complete $placementId');
+        print('Load Complete $placementId');
         Provider.of<UnityProvider>(context, listen: false)
             .setAdLoadedStat(true);
       },
       onFailed: (placementId, error, message) {
-        // print('Load Failed $placementId: $error $message');
+        print('Load Failed $placementId: $error $message');
       },
     );
   }
