@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ug_hub/utils/color.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 class UpdateDialog extends StatefulWidget {
   final String version;
@@ -53,6 +54,8 @@ class _UpdateDialogState extends State<UpdateDialog> {
   }
 
   Widget content(BuildContext context) {
+    String helloText = Bidi.stripHtmlIfNeeded(widget.description);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -130,9 +133,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
                         Expanded(
                           flex: 5,
                           child: SingleChildScrollView(
-                            child: Text(
-                              widget.description,
-                            ),
+                            child: Text(helloText),
                           ),
                         ),
                       ],

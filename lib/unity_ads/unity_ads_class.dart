@@ -11,30 +11,31 @@ import '../main.dart';
 class UnityClass {
   initializeAds() {
     UnityAds.init(
-      testMode: true,
+      // testMode: true,
       gameId: '4899999',
-      onComplete: () => print('Initialization Complete'),
+      // onComplete: () => print('Initialization Complete'),
     );
+
   }
 
   loadAds(BuildContext context) async {
     bool initStat = await UnityAds.isInitialized();
     if (initStat == true) {
-      print("Loading Ads started");
+      // print("Loading Ads started");
       UnityAds.load(
         placementId: placementIdconst,
         onComplete: (placementId) {
-          print('Load Complete $placementId');
+          // print('Load Complete $placementId');
           Provider.of<UnityProvider>(context, listen: false)
               .setAdLoadedStat(true);
         },
         onFailed: (placementId, error, message) {
-          print('Load Failed $placementId: $error $message');
+          // print('Load Failed $placementId: $error $message');
         },
       );
     } else {
       initializeAds();
-      await Future.delayed(Duration(seconds: 10));
+      await Future.delayed(const Duration(seconds: 10));
       loadAds(context);
     }
   }

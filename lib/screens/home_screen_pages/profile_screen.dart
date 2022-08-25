@@ -342,7 +342,7 @@ class ProfileScreen extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                          "Soaftware related assistence for startups or Collage Projects Contact us",
+                          "For soaftware assistence related to startup or college projects \n Contact us",
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(

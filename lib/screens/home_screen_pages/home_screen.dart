@@ -1,9 +1,9 @@
 import 'dart:async';
-
+import 'package:new_version_plus/new_version_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:new_version/new_version.dart';
+// import 'package:new_version/new_version.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/constants/firebase_fields.dart';
@@ -42,8 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
               .userModel!
               .expireTime!
               .isBefore(DateTime.now()) ||
-              hivebox.get(hiveAddNumberKey)!=null&&
-          hivebox.get(hiveAddNumberKey) >= 2) {
+          hivebox.get(hiveAddNumberKey) != null &&
+              hivebox.get(hiveAddNumberKey) >= 2) {
         // print("Started loading----------------------------------");
         UnityClass().loadAds(context);
       }
@@ -60,18 +60,18 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       checkInternet(isHome: true);
     });
-    final newVersion = NewVersion(
-      androidId: 'com.education.ughub',
-    );
 
     Timer(const Duration(milliseconds: 800), () {
-      checkNewVersion(newVersion);
+      checkNewVersion();
     });
     // checkInternet(context, isHome: true);
     super.initState();
   }
 
-  void checkNewVersion(NewVersion newVersion) async {
+  void checkNewVersion() async {
+    final newVersion = NewVersionPlus(
+      androidId: 'com.education.ughub',
+    );
     final status = await newVersion.getVersionStatus();
     if (status != null) {
       if (status.canUpdate) {
