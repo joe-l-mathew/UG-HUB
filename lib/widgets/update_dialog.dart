@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ug_hub/utils/color.dart';
-import 'package:url_launcher/url_launcher.dart';
+// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:ug_hub/utils/color.dart';
 
 class UpdateDialog extends StatefulWidget {
   final String version;

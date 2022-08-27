@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 //////////////////////////////////////////////
@@ -5,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 ///////////////////////////////////////
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
@@ -31,31 +34,31 @@ class DisplayMaterialsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ModuleModel? _moduleModel =
+    ModuleModel? moduleModel =
         Provider.of<ModuleModelProvider>(context).getModuleModel;
 
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
     var path = FirebaseFirestore.instance
         .collection(collectionUniversity)
-        .doc(_user.university)
+        .doc(user.university)
         .collection(collectionBranch)
-        .doc(_user.branch)
+        .doc(user.branch)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionSubject)
-        .doc(_moduleModel!.subjectId)
+        .doc(moduleModel!.subjectId)
         .collection(collectionModule)
-        .doc(_moduleModel.moduleId);
+        .doc(moduleModel.moduleId);
     var path2 = FirebaseFirestore.instance
         .collection(collectionUniversity)
-        .doc(_user.university)
+        .doc(user.university)
         .collection(collectionBranch)
-        .doc(_user.branch)
+        .doc(user.branch)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionSubject)
-        .doc(_moduleModel.subjectId);
+        .doc(moduleModel.subjectId);
 
     return Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -74,6 +77,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   .setSelectedField = 0;
               bool isConnected = await checkInternet();
               if (isConnected) {
+                // ignore: use_build_context_synchronously
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -102,10 +106,8 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   icon: const FaIcon(FontAwesomeIcons.fileLines))
             ],
             backgroundColor: primaryColor,
-            title: Text(_moduleModel.moduleName +
-                " (" +
-                _moduleModel.subjectShortName +
-                ")")),
+            title: Text(
+                "${moduleModel.moduleName} (${moduleModel.subjectShortName})")),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -162,7 +164,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                               // }
                               return GestureDetector(
                                 onLongPress: () {
-                                  if (_user.uid ==
+                                  if (user.uid ==
                                           snapshot.data!.docs[index]['uid']
                                       //     ||
                                       // _user.isAdmin!
@@ -335,7 +337,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                             docPath: snapshot.data!.docs[index]
                                                 .reference.path,
                                             fileType: FileType.youtube,
-                                            reporterId: _user.uid));
+                                            reporterId: user.uid));
                                   }
                                 },
                                 child: DisplayMaterialTile(
@@ -431,7 +433,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                             docPath: snapshot.data!.docs[index]
                                                 .reference.path,
                                             fileType: FileType.link,
-                                            reporterId: _user.uid));
+                                            reporterId: user.uid));
                                   }
                                 },
                                 child: DisplayMaterialTile(
@@ -475,6 +477,8 @@ class AddNoMaterial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      width: double.infinity,
+      height: 140,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -509,8 +513,6 @@ class AddNoMaterial extends StatelessWidget {
           Text("No material found, Be the first one to $displayText"),
         ],
       ),
-      width: double.infinity,
-      height: 140,
       // child: SingleChildScrollView(child: ShimmerWidget()),
     );
   }

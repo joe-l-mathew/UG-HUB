@@ -47,7 +47,8 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   // MobileAds.instance.initialize();
-  UnityClass().initializeAds();
+  UnityClass().initializeAds(
+  );
   await Hive.initFlutter();
   hivebox = await Hive.openBox(hiveAddNumberBox);
   await Firebase.initializeApp();

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,21 +45,21 @@ class DisplayMaterialTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ModuleModel? _moduleModel =
+    ModuleModel? moduleModel =
         Provider.of<ModuleModelProvider>(context).getModuleModel;
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
     var path = FirebaseFirestore.instance
         .collection(collectionUniversity)
-        .doc(_user.university)
+        .doc(user.university)
         .collection(collectionBranch)
-        .doc(_user.branch)
+        .doc(user.branch)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionSubject)
-        .doc(_moduleModel!.subjectId)
+        .doc(moduleModel!.subjectId)
         .collection(collectionModule)
-        .doc(_moduleModel.moduleId);
+        .doc(moduleModel.moduleId);
     Widget getSelectedIcon() {
       if (fileType == FileType.pdf) {
         return const FaIcon(FontAwesomeIcons.filePowerpoint);
@@ -76,7 +78,7 @@ class DisplayMaterialTile extends StatelessWidget {
         //long press
         onLongPress: () {
           //for uploader show delete button
-          if (_user.uid == snap['uid']
+          if (user.uid == snap['uid']
               // || _user.isAdmin == true
               ) {
             showDialog(
@@ -117,7 +119,7 @@ class DisplayMaterialTile extends StatelessWidget {
                                           null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,
-                                          reporterId: _user.uid,
+                                          reporterId: user.uid,
                                         ),
                                       )));
                           Navigator.pop(contextDialouge);
@@ -132,7 +134,7 @@ class DisplayMaterialTile extends StatelessWidget {
                                           null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,
-                                          reporterId: _user.uid,
+                                          reporterId: user.uid,
                                         ),
                                       )));
                           Navigator.pop(contextDialouge);
@@ -148,7 +150,7 @@ class DisplayMaterialTile extends StatelessWidget {
                                           null,
                                           docPath: snap.reference.path,
                                           fileType: fileType,
-                                          reporterId: _user.uid,
+                                          reporterId: user.uid,
                                         ),
                                       )));
                           Navigator.pop(contextDialouge);
@@ -190,15 +192,23 @@ class DisplayMaterialTile extends StatelessWidget {
         //         });
         // },
         child: Container(
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(179, 182, 186, 236),
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+          ),
+          height: 200,
+          width: 200,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: CircleAvatar(
-                  child: getSelectedIcon(),
                   backgroundColor: primaryColor,
                   radius: 23,
+                  child: getSelectedIcon(),
                 ),
               ),
             ),
@@ -242,15 +252,15 @@ class DisplayMaterialTile extends StatelessWidget {
                           Firestoremethods().likePost(
                               path: path,
                               docId: docId,
-                              uid: _user.uid,
+                              uid: user.uid,
                               likes: likes,
                               collectionName: collectionName);
                         },
                         icon: Icon(
-                          likes.contains(_user.uid)
+                          likes.contains(user.uid)
                               ? Icons.favorite
                               : Icons.favorite_outline,
-                          color: likes.contains(_user.uid)
+                          color: likes.contains(user.uid)
                               ? Colors.red
                               : Colors.black,
                         ),
@@ -261,14 +271,6 @@ class DisplayMaterialTile extends StatelessWidget {
               ),
             ),
           ]),
-          decoration: const BoxDecoration(
-            color: Color.fromARGB(179, 182, 186, 236),
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          height: 200,
-          width: 200,
         ),
       ),
     );

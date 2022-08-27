@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +23,7 @@ class AuthMethods {
   Future<void> verifyPhoneNumber(
       String phoneNumber, BuildContext context) async {
     await _auth.verifyPhoneNumber(
-        phoneNumber: "+91" + phoneNumber,
+        phoneNumber: "+91$phoneNumber",
         verificationCompleted: (PhoneAuthCredential credential) async {
           // print("auto capture success");
           // await _auth.signInWithCredential(credential).then((value) =>

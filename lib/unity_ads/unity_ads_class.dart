@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/unity_ads/unity_provider.dart';
@@ -9,15 +11,16 @@ import '../functions/snackbar_model.dart';
 import '../main.dart';
 
 class UnityClass {
+  //add initializatiob
   initializeAds() {
     UnityAds.init(
-      // testMode: true,
+      testMode: true,
       gameId: '4899999',
       // onComplete: () => print('Initialization Complete'),
     );
-
   }
 
+//load ads
   loadAds(BuildContext context) async {
     bool initStat = await UnityAds.isInitialized();
     if (initStat == true) {
@@ -25,6 +28,7 @@ class UnityClass {
       UnityAds.load(
         placementId: placementIdconst,
         onComplete: (placementId) {
+          // print(placementId);
           // print('Load Complete $placementId');
           Provider.of<UnityProvider>(context, listen: false)
               .setAdLoadedStat(true);
@@ -46,6 +50,7 @@ class UnityClass {
         onStart: (placementId) async {
           Provider.of<UnityProvider>(context, listen: false).isAdLoaded = false;
           hivebox.put(hiveAddNumberKey, 1);
+          await Firestoremethods().addTime(context, duration: 1);
           // showSnackbar(context, "Recived 0 hours and 1 downloads as reward");
           // print('Video Ad $placementId started');
         },
@@ -63,12 +68,13 @@ class UnityClass {
           Provider.of<UnityProvider>(context, listen: false).isAdLoaded = false;
           hivebox.put(hiveAddNumberKey, -2);
           showSnackbar(context, "Recived 12 hours and 4 downloads as reward");
-          await Firestoremethods().addTime(context);
+          await Firestoremethods().addTime(context, duration: 12);
           await Firestoremethods().getUserDetail(context);
         },
-        onFailed: (placementId, error, message) {
+        onFailed: (placementId, error, message) async {
           Provider.of<UnityProvider>(context, listen: false).isAdLoaded = false;
           hivebox.put(hiveAddNumberKey, 1);
+          await Firestoremethods().addTime(context, duration: 10, ismin: true);
         });
   }
 }

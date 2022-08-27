@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/functions/open_pdf.dart';
 import 'package:ug_hub/provider/module_id_provider.dart';
@@ -22,16 +25,16 @@ class DisplayQuestionPaperScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _firestore = FirebaseFirestore.instance;
-    var _firebaseStorage = FirebaseStorage.instance;
-    UserModel? _user = Provider.of<UserProvider>(context).userModel;
+    var firestore = FirebaseFirestore.instance;
+    var firebaseStorage = FirebaseStorage.instance;
+    UserModel? user = Provider.of<UserProvider>(context).userModel;
     var pathx = FirebaseFirestore.instance
         .collection(collectionUniversity)
-        .doc(_user!.university!)
+        .doc(user!.university!)
         .collection(collectionBranch)
-        .doc(_user.branch!)
+        .doc(user.branch!)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionSubject)
         .doc(Provider.of<ModuleIdProvider>(context, listen: false).moduleid);
     var path = pathx.collection(collectionQuestions);
@@ -58,23 +61,10 @@ class DisplayQuestionPaperScreen extends StatelessWidget {
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LinearProgressIndicator();
+            return Center(child: Lottie.asset("assets/loading.json"));
           } else if (snapshot.data!.docs.isEmpty) {
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network(
-                    "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/illustrations%2Fundraw_File_bundle_re_6q1e%201.png?alt=media&token=297b0f81-a805-4a93-858c-32783fcacb50",
-                    fit: BoxFit.cover,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text("No material found!")
-                ],
-              ),
-            );
+                child: Lottie.asset("assets/no_file.json", repeat: false));
           } else {
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
@@ -88,7 +78,7 @@ class DisplayQuestionPaperScreen extends StatelessWidget {
                     },
                     onLongPress: () {
                       //for uploader show delete button
-                      if (_user.uid == snap['uid']
+                      if (user.uid == snap['uid']
                           // || _user.isAdmin == true
                           ) {
                         showDialog(
@@ -99,12 +89,10 @@ class DisplayQuestionPaperScreen extends StatelessWidget {
                                   noText: "Cancel",
                                   onYes: () async {
                                     Navigator.pop(pdfDeleteContext);
-                                    _firebaseStorage
+                                    firebaseStorage
                                         .refFromURL(snap['fileUrl'])
                                         .delete();
-                                    _firestore
-                                        .doc(snap.reference.path)
-                                        .delete();
+                                    firestore.doc(snap.reference.path).delete();
                                     // await Firestoremethods()
                                     //     .deleteUploadFileFromFirestore(
                                     //         type: FileType.pdf,
@@ -138,7 +126,7 @@ class DisplayQuestionPaperScreen extends StatelessWidget {
                                                     docPath:
                                                         snap.reference.path,
                                                     fileType: FileType.pdf,
-                                                    reporterId: _user.uid,
+                                                    reporterId: user.uid,
                                                   ),
                                                 )));
                                     Navigator.pop(contextDialouge);
@@ -181,16 +169,16 @@ class DisplayQuestionPaperScreen extends StatelessWidget {
                         Firestoremethods().likePost(
                             path: pathx,
                             docId: snapshot.data!.docs[index].id,
-                            uid: _user.uid,
+                            uid: user.uid,
                             likes: snapshot.data!.docs[index]['likes'],
                             collectionName: collectionQuestions);
                       },
                       icon: Icon(
-                        snapshot.data!.docs[index]['likes'].contains(_user.uid)
+                        snapshot.data!.docs[index]['likes'].contains(user.uid)
                             ? Icons.favorite
                             : Icons.favorite_outline,
                         color: snapshot.data!.docs[index]['likes']
-                                .contains(_user.uid)
+                                .contains(user.uid)
                             ? Colors.red
                             : Colors.black,
                       ),

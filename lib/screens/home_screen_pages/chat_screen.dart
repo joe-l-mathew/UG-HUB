@@ -19,19 +19,19 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? _user = Provider.of<UserProvider>(context).userModel;
+    UserModel? user = Provider.of<UserProvider>(context).userModel;
     var path = FirebaseFirestore.instance
         .collection(collectionUniversity)
-        .doc(_user!.university!)
+        .doc(user!.university!)
         .collection(collectionBranch)
-        .doc(_user.branch!)
+        .doc(user.branch!)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionChat);
     Stream<QuerySnapshot<Map<String, dynamic>>> snapshot =
         path.orderBy('dateTime', descending: true).limit(15).snapshots();
 
-    final _chatController = TextEditingController();
+    final chatController = TextEditingController();
     return Scaffold(
         appBar: AppBar(
           title: const Text("Chat"),
@@ -42,14 +42,14 @@ class ChatScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  _user.profileUrl == null
+                  user.profileUrl == null
                       ? const CircleAvatar(
                           radius: 15,
                           child: Icon(Icons.person),
                         )
                       : CircleAvatar(
                           backgroundImage:
-                              CachedNetworkImageProvider(_user.profileUrl!),
+                              CachedNetworkImageProvider(user.profileUrl!),
                         ),
                   const SizedBox(
                     width: 4,
@@ -58,21 +58,21 @@ class ChatScreen extends StatelessWidget {
                       child: TextFormField(
                     decoration: const InputDecoration(
                         hintText: 'Enter your message here'),
-                    controller: _chatController,
+                    controller: chatController,
                     style: const TextStyle(),
                   )),
                   TextButton(
                       onPressed: () async {
-                        if (_chatController.text.isNotEmpty) {
+                        if (chatController.text.isNotEmpty) {
                           await Firestoremethods().addAChat(
                               context: context,
                               chatModel: ChatModel(
-                                  chat: _chatController.text,
-                                  username: _user.name!,
-                                  uid: _user.uid,
+                                  chat: chatController.text,
+                                  username: user.name!,
+                                  uid: user.uid,
                                   dateTime: DateTime.now(),
-                                  profileUrl: _user.profileUrl));
-                          _chatController.clear();
+                                  profileUrl: user.profileUrl));
+                          chatController.clear();
                         } else {
                           showSnackbar(context, "Please enter some text");
                         }
@@ -104,7 +104,7 @@ class ChatScreen extends StatelessWidget {
                             child: ListTile(
                                 onLongPress: () {
                                   if (snapshot.data!.docs[index]['uid'] ==
-                                          _user.uid
+                                          user.uid
                                       //      ||
                                       // _user.isAdmin == true
                                       ) {
@@ -160,9 +160,10 @@ class ChatScreen extends StatelessWidget {
                                                                       FileType
                                                                           .chat,
                                                                   reporterId:
-                                                                      _user
+                                                                      user
                                                                           .uid),
                                                             )));
+                                                // ignore: use_build_context_synchronously
                                                 Navigator.pop(contextDialouge);
                                               },
                                               onNO: () {

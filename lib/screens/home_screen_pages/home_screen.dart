@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:new_version_plus/new_version_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -92,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? _userModel = Provider.of<UserProvider>(context).userModel;
+    UserModel? userModel = Provider.of<UserProvider>(context).userModel;
     return Scaffold(
         // backgroundColor: primaryColor,
         floatingActionButton:
@@ -136,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               color: Colors.grey, fontSize: 16),
                                         ),
                                         Text(
-                                          _userModel!.name!,
+                                          userModel!.name!,
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 25,
@@ -152,12 +154,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // Text("KTU")
 
                                 Text(
-                                  _userModel.branchName!,
+                                  userModel.branchName!,
                                   style: const TextStyle(
                                       color: Colors.grey, fontSize: 16),
                                 ),
                                 Text(
-                                  _userModel.universityName!,
+                                  userModel.universityName!,
                                   style: const TextStyle(
                                       color: Colors.grey, fontSize: 16),
                                 ),
@@ -170,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           children: [
                             SizedBox(
-                              child: _userModel.profileUrl == null
+                              height: 170,
+                              child: userModel.profileUrl == null
                                   ? Align(
                                       alignment: Alignment.centerRight,
                                       child: Padding(
@@ -205,11 +208,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                           },
                                           child: Hero(
                                             tag: 'Profile pic',
-                                            child: _userModel.profileUrl != null
+                                            child: userModel.profileUrl != null
                                                 ? CircleAvatar(
                                                     backgroundImage:
                                                         CachedNetworkImageProvider(
-                                                      _userModel.profileUrl!,
+                                                      userModel.profileUrl!,
                                                     ),
                                                   )
                                                 : const CircleAvatar(
@@ -221,7 +224,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                     ),
-                              height: 170,
                             ),
                             Container(
                               decoration: const BoxDecoration(
@@ -276,14 +278,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   StreamBuilder(
                                     stream: FirebaseFirestore.instance
                                         .collection(collectionUniversity)
-                                        .doc(_userModel.university)
+                                        .doc(userModel.university)
                                         .collection(collectionBranch)
-                                        .doc(_userModel.branch)
+                                        .doc(userModel.branch)
                                         .collection(collectionSemester)
-                                        .doc(_userModel.semester)
+                                        .doc(userModel.semester)
                                         .collection(collectionSubject)
-                                        .orderBy('numberOfModule',
-                                            descending: true)
+                                        .orderBy('fullname', descending: false)
                                         .snapshots(),
                                     builder: (BuildContext context,
                                         AsyncSnapshot<

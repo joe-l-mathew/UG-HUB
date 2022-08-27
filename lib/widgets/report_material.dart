@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
@@ -13,7 +15,7 @@ class ReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _commentController = TextEditingController();
+    final commentController = TextEditingController();
     return Scaffold(
       appBar: AppBar(title: const Text("Report")),
       body: Padding(
@@ -25,7 +27,7 @@ class ReportScreen extends StatelessWidget {
             ),
             CustomInputField(
                 maxLength: null,
-                inputController: _commentController,
+                inputController: commentController,
                 textaboveBorder: '',
                 prefixText: '',
                 hintText: "Comments on report",
@@ -35,7 +37,7 @@ class ReportScreen extends StatelessWidget {
                 onPressed: () async {
                   Provider.of<AuthProvider>(context, listen: false)
                       .isLoadingFun(true);
-                  reportModel.comment = _commentController.text;
+                  reportModel.comment = commentController.text;
                   await Firestoremethods().addReport(reportModel);
                   await Provider.of<AuthProvider>(context, listen: false)
                       .isLoadingFun(false);

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_cache_manager/file.dart';
@@ -51,6 +53,7 @@ Future<void> openPdf(
 
     OpenFile.open(cachedFile.file.path);
     if (cachedFile.file.path.contains("pptx")) {
+      // ignore: use_build_context_synchronously
       showSnackbar(
           context, "Try instaling google slides if you dont have a ppt viewer",
           duration: 2);
@@ -77,7 +80,7 @@ Future<void> openPdf(
               },
               icon: const FaIcon(FontAwesomeIcons.rectangleAd),
               tittleText: "Download quota finished !",
-              subText: "Get 2 downloads with an ad",
+              subText: "Get upto 12 Hour unintrupted use and 4 Downloads",
             );
           });
     } else {

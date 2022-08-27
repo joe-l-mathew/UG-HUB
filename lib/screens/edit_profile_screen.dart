@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -25,21 +27,21 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   void initState() {
-    UserModel? _user =
+    UserModel? user =
         Provider.of<UserProvider>(context, listen: false).userModel;
     super.initState();
-    if (_user!.name != null) {
-      _nameController.text = _user.name!;
+    if (user!.name != null) {
+      _nameController.text = user.name!;
     }
-    if (_user.college != null) {
-      _collegeController.text = _user.college!;
+    if (user.college != null) {
+      _collegeController.text = user.college!;
     }
   }
 
   File? imageFile;
   @override
   Widget build(BuildContext context) {
-    UserModel? _user =
+    UserModel? user =
         Provider.of<UserProvider>(context, listen: false).userModel;
     return Scaffold(
       appBar: AppBar(
@@ -62,15 +64,15 @@ class _EditProfileState extends State<EditProfile> {
                       )
                     : CircleAvatar(
                         radius: 30,
-                        backgroundImage: _user!.profileUrl != null
-                            ? NetworkImage(_user.profileUrl!)
+                        backgroundImage: user!.profileUrl != null
+                            ? NetworkImage(user.profileUrl!)
                             : null,
-                        child: _user.profileUrl == null
-                            ? const Icon(Icons.person)
-                            : null,
-                        backgroundColor: _user.profileUrl == null
+                        backgroundColor: user.profileUrl == null
                             ? primaryColor
                             : ThemeData().scaffoldBackgroundColor,
+                        child: user.profileUrl == null
+                            ? const Icon(Icons.person)
+                            : null,
                       ),
                 Positioned(
                   bottom: -10,

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
@@ -10,11 +12,11 @@ import 'package:ug_hub/widgets/heading_text_widget.dart';
 import '../provider/auth_provider.dart';
 
 void addBranch(BuildContext context) {
-  final TextEditingController _displayNameController = TextEditingController();
-  final TextEditingController _numberOfSemesterController =
+  final TextEditingController displayNameController = TextEditingController();
+  final TextEditingController numberOfSemesterController =
       TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _logoUrlNameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController logoUrlNameController = TextEditingController();
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -36,7 +38,7 @@ void addBranch(BuildContext context) {
                 //full name
                 CustomInputField(
                     maxLength: null,
-                    inputController: _displayNameController,
+                    inputController: displayNameController,
                     textaboveBorder: "Display name",
                     prefixText: '',
                     hintText: 'Enter short branch name',
@@ -44,7 +46,7 @@ void addBranch(BuildContext context) {
                 //short name
                 CustomInputField(
                     maxLength: null,
-                    inputController: _nameController,
+                    inputController: nameController,
                     textaboveBorder: "Full name",
                     prefixText: '',
                     hintText: 'Enter Full branch name',
@@ -52,14 +54,14 @@ void addBranch(BuildContext context) {
                 //Logo Url
                 CustomInputField(
                     maxLength: null,
-                    inputController: _logoUrlNameController,
+                    inputController: logoUrlNameController,
                     textaboveBorder: "Logo Url",
                     prefixText: '',
                     hintText: 'Enter Logo Image Url',
                     keybordType: TextInputType.text),
                 CustomInputField(
                     maxLength: null,
-                    inputController: _numberOfSemesterController,
+                    inputController: numberOfSemesterController,
                     textaboveBorder: "Number of semester",
                     prefixText: '',
                     hintText: 'Enter number of semester',
@@ -69,19 +71,19 @@ void addBranch(BuildContext context) {
                 ButtonFilled(
                     text: "Add",
                     onPressed: () async {
-                      if (_logoUrlNameController.text.isNotEmpty &&
-                          _displayNameController.text.isNotEmpty &&
-                          _nameController.text.isNotEmpty &&
-                          _numberOfSemesterController.text.isNotEmpty) {
+                      if (logoUrlNameController.text.isNotEmpty &&
+                          displayNameController.text.isNotEmpty &&
+                          nameController.text.isNotEmpty &&
+                          numberOfSemesterController.text.isNotEmpty) {
                         Provider.of<AuthProvider>(context, listen: false)
                             .isLoadingFun(true);
                         await Firestoremethods().addBranchModel(
                           BranchModel(
-                              displayName: _displayNameController.text,
-                              name: _nameController.text,
-                              logoUrl: _logoUrlNameController.text,
+                              displayName: displayNameController.text,
+                              name: nameController.text,
+                              logoUrl: logoUrlNameController.text,
                               numberOfSemester:
-                                  _numberOfSemesterController.text),
+                                  numberOfSemesterController.text),
                           context,
                         );
                         Provider.of<AuthProvider>(context, listen: false)

@@ -10,7 +10,7 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? _userModel = Provider.of<UserProvider>(context).userModel;
+    UserModel? userModel = Provider.of<UserProvider>(context).userModel;
 
     return Container(
       color: primaryColor,
@@ -29,20 +29,20 @@ class AppBarWidget extends StatelessWidget {
                       fontSize: 15,
                       color: Colors.grey),
                 ),
-                Text(_userModel!.name!),
+                Text(userModel!.name!),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _userModel.profileUrl == null
+            child: userModel.profileUrl == null
             ? const CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Icon(Icons.person),
               )
             : CircleAvatar(
                 backgroundColor: Colors.white,
-                backgroundImage: NetworkImage(_userModel.profileUrl!),
+                backgroundImage: NetworkImage(userModel.profileUrl!),
               ),
           ),
         ],

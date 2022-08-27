@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
@@ -9,9 +11,9 @@ import '../provider/auth_provider.dart';
 import '../widgets/heading_text_widget.dart';
 
 void addUniversity(BuildContext context) {
-  final TextEditingController _displayNameController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _logoUrlNameController = TextEditingController();
+  final TextEditingController displayNameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController logoUrlNameController = TextEditingController();
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -32,7 +34,7 @@ void addUniversity(BuildContext context) {
               //full name
               CustomInputField(
                   maxLength: null,
-                  inputController: _displayNameController,
+                  inputController: displayNameController,
                   textaboveBorder: "Display name",
                   prefixText: '',
                   hintText: 'Enter short university name',
@@ -40,7 +42,7 @@ void addUniversity(BuildContext context) {
               //short name
               CustomInputField(
                   maxLength: null,
-                  inputController: _nameController,
+                  inputController: nameController,
                   textaboveBorder: "Full name",
                   prefixText: '',
                   hintText: 'Enter Full university name',
@@ -48,7 +50,7 @@ void addUniversity(BuildContext context) {
               //Logo Url
               CustomInputField(
                   maxLength: null,
-                  inputController: _logoUrlNameController,
+                  inputController: logoUrlNameController,
                   textaboveBorder: "Logo Url",
                   prefixText: '',
                   hintText: 'Enter Logo Image Url',
@@ -57,15 +59,15 @@ void addUniversity(BuildContext context) {
               ButtonFilled(
                   text: "Add",
                   onPressed: () async {
-                    if (_logoUrlNameController.text.isNotEmpty &&
-                        _displayNameController.text.isNotEmpty &&
-                        _nameController.text.isNotEmpty) {
+                    if (logoUrlNameController.text.isNotEmpty &&
+                        displayNameController.text.isNotEmpty &&
+                        nameController.text.isNotEmpty) {
                       Provider.of<AuthProvider>(context, listen: false)
                           .isLoadingFun(true);
                       await Firestoremethods().addUniversityModel(
-                          _displayNameController.text,
-                          _nameController.text,
-                          _logoUrlNameController.text);
+                          displayNameController.text,
+                          nameController.text,
+                          logoUrlNameController.text);
                       Provider.of<AuthProvider>(context, listen: false)
                           .isLoadingFun(false);
                     } else {

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +16,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _phoneNumberController = TextEditingController();
+    TextEditingController phoneNumberController = TextEditingController();
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
@@ -50,7 +52,7 @@ class LoginScreen extends StatelessWidget {
               CustomInputField(
                   keybordType: TextInputType.phone,
                   maxLength: 10,
-                  inputController: _phoneNumberController,
+                  inputController: phoneNumberController,
                   hintText: "Mobile number",
                   prefixText: "+91 ",
                   textaboveBorder: 'Phone'),
@@ -65,7 +67,7 @@ class LoginScreen extends StatelessWidget {
           text: "Continue",
           onPressed: () async {
             FocusManager.instance.primaryFocus?.unfocus();
-            if (_phoneNumberController.text.length != 10) {
+            if (phoneNumberController.text.length != 10) {
               showSnackbar(context, "Enter a valid phone number");
             } else {
               Provider.of<AuthProvider>(context, listen: false)
@@ -75,12 +77,12 @@ class LoginScreen extends StatelessWidget {
                   .isLoadingFun(false);
               try {
                 if (isConnected) {
-                  int.parse(_phoneNumberController.text);
+                  int.parse(phoneNumberController.text);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (builder) =>
-                              OtpScreen(phoneNo: _phoneNumberController.text)));
+                              OtpScreen(phoneNo: phoneNumberController.text)));
                 } else {
                   showSimpleNotification(
                       const Text(

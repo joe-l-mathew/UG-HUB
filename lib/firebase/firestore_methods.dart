@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -195,7 +197,7 @@ class Firestoremethods {
       await refrence
           .doc(returnValue.id)
           .collection(collectionSemester)
-          .add({'name': "Semester " + (i + 1).toString()});
+          .add({'name': "Semester ${i + 1}"});
     }
   }
 
@@ -215,13 +217,13 @@ class Firestoremethods {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getSemesterList(
       BuildContext context) {
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
     return _firestore
         .collection(collectionUniversity)
-        .doc(_user.university)
+        .doc(user.university)
         .collection(collectionBranch)
-        .doc(_user.branch)
+        .doc(user.branch)
         .collection('Semester')
         .orderBy('name')
         .snapshots();
@@ -230,26 +232,26 @@ class Firestoremethods {
 
   Future<void> addSemesterToUser(BuildContext context,
       {required String semesterId, required String semesterName}) async {
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
     await _firestore
         .collection(collectionUser)
-        .doc(_user.uid)
+        .doc(user.uid)
         .update({"semester": semesterId, "semesterName": semesterName});
     getUserDetail(context);
   }
 
   Future<void> addModule(
       BuildContext context, SubjectModel subjectModel) async {
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
     var path = _firestore
         .collection(collectionUniversity)
-        .doc(_user.university)
+        .doc(user.university)
         .collection(collectionBranch)
-        .doc(_user.branch)
+        .doc(user.branch)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionSubject);
     var res = await path.add(subjectModel.toJson());
     for (int i = 0; i < int.parse(subjectModel.numberOfModule); i++) {
@@ -262,32 +264,32 @@ class Firestoremethods {
 
   Future<void> addPdftoDatabase(BuildContext context,
       {bool isQuestion = false, String? moduleid}) async {
-    ModuleModel? _moduleModel =
+    ModuleModel? moduleModel =
         Provider.of<ModuleModelProvider>(context, listen: false).getModuleModel;
 
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
 
     var path = isQuestion == false
         ? _firestore
             .collection(collectionUniversity)
-            .doc(_user.university)
+            .doc(user.university)
             .collection(collectionBranch)
-            .doc(_user.branch)
+            .doc(user.branch)
             .collection(collectionSemester)
-            .doc(_user.semester)
+            .doc(user.semester)
             .collection(collectionSubject)
-            .doc(_moduleModel!.subjectId)
+            .doc(moduleModel!.subjectId)
             .collection(collectionModule)
-            .doc(_moduleModel.moduleId)
+            .doc(moduleModel.moduleId)
         //if question is true
         : _firestore
             .collection(collectionUniversity)
-            .doc(_user.university)
+            .doc(user.university)
             .collection(collectionBranch)
-            .doc(_user.branch)
+            .doc(user.branch)
             .collection(collectionSemester)
-            .doc(_user.semester)
+            .doc(user.semester)
             .collection(collectionSubject)
             .doc(Provider.of<ModuleIdProvider>(context,listen: false).moduleid);
 
@@ -332,27 +334,27 @@ class Firestoremethods {
       {required String channelName,
       required String youtubeLink,
       required BuildContext context}) async {
-    ModuleModel? _moduleModel =
+    ModuleModel? moduleModel =
         Provider.of<ModuleModelProvider>(context, listen: false).getModuleModel;
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
     YoutubeModel ytModel = YoutubeModel(
         youtubeLink: youtubeLink,
         youtubeChannelName: channelName,
         likes: [],
-        uid: _user.uid,
-        userName: _user.name!);
+        uid: user.uid,
+        userName: user.name!);
     var path = _firestore
         .collection(collectionUniversity)
-        .doc(_user.university)
+        .doc(user.university)
         .collection(collectionBranch)
-        .doc(_user.branch)
+        .doc(user.branch)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionSubject)
-        .doc(_moduleModel!.subjectId)
+        .doc(moduleModel!.subjectId)
         .collection(collectionModule)
-        .doc(_moduleModel.moduleId);
+        .doc(moduleModel.moduleId);
     await path.collection(collectionYoutube).add(ytModel.toJson(ytModel));
   }
 
@@ -360,27 +362,27 @@ class Firestoremethods {
       {required String link,
       required String linkName,
       required BuildContext context}) async {
-    ModuleModel? _moduleModel =
+    ModuleModel? moduleModel =
         Provider.of<ModuleModelProvider>(context, listen: false).getModuleModel;
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
     OtherLinkModel otherLinkModel = OtherLinkModel(
-        uid: _user.uid,
-        userName: _user.name!,
+        uid: user.uid,
+        userName: user.name!,
         link: link,
         linkName: linkName,
         likes: []);
     var path = _firestore
         .collection(collectionUniversity)
-        .doc(_user.university)
+        .doc(user.university)
         .collection(collectionBranch)
-        .doc(_user.branch)
+        .doc(user.branch)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionSubject)
-        .doc(_moduleModel!.subjectId)
+        .doc(moduleModel!.subjectId)
         .collection(collectionModule)
-        .doc(_moduleModel.moduleId);
+        .doc(moduleModel.moduleId);
     await path
         .collection(collectionOtherLink)
         .add(otherLinkModel.toJson(otherLinkModel));
@@ -427,15 +429,15 @@ class Firestoremethods {
 
   Future<void> addAChat(
       {required BuildContext context, required ChatModel chatModel}) async {
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
     await _firestore
         .collection(collectionUniversity)
-        .doc(_user.university)
+        .doc(user.university)
         .collection(collectionBranch)
-        .doc(_user.branch)
+        .doc(user.branch)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionChat)
         .add(chatModel.toJson());
   }
@@ -443,51 +445,58 @@ class Firestoremethods {
   Future<void> addReplay(
       {required BuildContext context,
       required ChatReplayModel chatReplayModel}) async {
-    UserModel _user =
+    UserModel user =
         Provider.of<UserProvider>(context, listen: false).userModel!;
     await _firestore
         .collection(collectionUniversity)
-        .doc(_user.university)
+        .doc(user.university)
         .collection(collectionBranch)
-        .doc(_user.branch)
+        .doc(user.branch)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionChat)
         .doc(chatReplayModel.chatId)
         .collection(collectionChatReplay)
         .add(chatReplayModel.toJson());
   }
 
-  Future<void> addTime(BuildContext context,{int duration = 4}) async {
-    await _firestore
-        .collection(collectionUser)
-        .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
-        .update({'expireTime': DateTime.now().add( Duration(hours: duration))});
+  Future<void> addTime(BuildContext context,{int duration = 4,bool ismin=false}) async {
+    if (ismin==false) {
+  await _firestore
+      .collection(collectionUser)
+      .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
+      .update({'expireTime': DateTime.now().add( Duration(
+        hours: duration))});
+}else{
+  await _firestore
+      .collection(collectionUser)
+      .doc(Provider.of<UserProvider>(context, listen: false).userModel!.uid)
+      .update({'expireTime': DateTime.now().add( Duration(
+        minutes: duration))});
+}
   }
 
   Future<void> updateProfile(File? profilepic, String name, String? collegeName,
       BuildContext context) async {
-    UserModel? _user =
+    UserModel? user =
         Provider.of<UserProvider>(context, listen: false).userModel;
-    var path = _firestore.collection(collectionUser).doc(_user!.uid);
+    var path = _firestore.collection(collectionUser).doc(user!.uid);
     if (profilepic != null) {
       Provider.of<AuthProvider>(context, listen: false).isLoading = true;
       await FirebaseStorage.instance
           .ref('ProfilePic')
-          .child(_user.uid)
+          .child(user.uid)
           .putFile(profilepic);
       String profLink = await FirebaseStorage.instance
           .ref('ProfilePic')
-          .child(_user.uid)
+          .child(user.uid)
           .getDownloadURL();
-      collegeName ??= null;
       await path.update(
           {"profileUrl": profLink, "name": name, "college": collegeName});
       await getUserDetail(context);
 
       Navigator.pop(context);
     } else {
-      collegeName ??= null;
       await path.update({"name": name, "college": collegeName});
       await getUserDetail(context);
       Provider.of<AuthProvider>(context, listen: false).isLoading = false;
@@ -514,11 +523,11 @@ class Firestoremethods {
 
   Future<void> termsAndConditions(BuildContext context) async {
     Provider.of<AuthProvider>(context, listen: false).isLoadingFun(true);
-    UserModel? _user =
+    UserModel? user =
         Provider.of<UserProvider>(context, listen: false).userModel;
     await _firestore
         .collection(collectionUser)
-        .doc(_user!.uid)
+        .doc(user!.uid)
         .update({"isTermsAccepted": true});
     await getUserDetail(context);
     Provider.of<AuthProvider>(context, listen: false).isLoadingFun(false);
@@ -547,9 +556,9 @@ class Firestoremethods {
   }
 
   Future<void> deleteUser(BuildContext context) async {
-    UserModel? _user =
+    UserModel? user =
         Provider.of<UserProvider>(context, listen: false).userModel;
-    await _firestore.collection(collectionUser).doc(_user!.uid).delete();
+    await _firestore.collection(collectionUser).doc(user!.uid).delete();
     await FirebaseStorageMethods().deleteProfiePic(context);
     await AuthMethods().deleteCurrentUser();
   }

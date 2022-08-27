@@ -39,7 +39,7 @@ class SubjectBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? _userModel = Provider.of<UserProvider>(context).userModel;
+    UserModel? userModel = Provider.of<UserProvider>(context).userModel;
     return SizedBox(
       height: 170,
       child: Column(
@@ -97,11 +97,11 @@ class SubjectBanner extends StatelessWidget {
           StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection(collectionUniversity)
-                  .doc(_userModel!.university)
+                  .doc(userModel!.university)
                   .collection(collectionBranch)
-                  .doc(_userModel.branch)
+                  .doc(userModel.branch)
                   .collection(collectionSemester)
-                  .doc(_userModel.semester)
+                  .doc(userModel.semester)
                   .collection(collectionSubject)
                   .doc(subId)
                   .collection(collectionModule)
@@ -196,7 +196,7 @@ class SubjectBanner extends StatelessWidget {
                                           tittleText:
                                               "You have to watch an Ad to continue",
                                           subText:
-                                              "Get 4 hours uninterrupted use with an Ad",
+                                              "Get Upto 12 Hours and 4 Downloads\n by watching an Ad",
                                         );
                                       });
                                 }

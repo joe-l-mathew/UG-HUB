@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
@@ -9,11 +11,11 @@ import 'package:ug_hub/widgets/heading_text_widget.dart';
 import '../provider/auth_provider.dart';
 
 void addSubject(BuildContext context) {
-  final TextEditingController _shortNameController = TextEditingController();
-  final TextEditingController _numberOfModuleController =
+  final TextEditingController shortNameController = TextEditingController();
+  final TextEditingController numberOfModuleController =
       TextEditingController();
-  final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _syllabusLinkController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController syllabusLinkController = TextEditingController();
   showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -35,7 +37,7 @@ void addSubject(BuildContext context) {
                 //short name
                 CustomInputField(
                     maxLength: null,
-                    inputController: _shortNameController,
+                    inputController: shortNameController,
                     textaboveBorder: "Short name",
                     prefixText: '',
                     hintText: 'Enter short subject name',
@@ -43,7 +45,7 @@ void addSubject(BuildContext context) {
                 //full name
                 CustomInputField(
                     maxLength: null,
-                    inputController: _fullNameController,
+                    inputController: fullNameController,
                     textaboveBorder: "Full name",
                     prefixText: '',
                     hintText: 'Enter full subject name',
@@ -58,7 +60,7 @@ void addSubject(BuildContext context) {
                 //     keybordType: TextInputType.text),
                 CustomInputField(
                     maxLength: null,
-                    inputController: _numberOfModuleController,
+                    inputController: numberOfModuleController,
                     textaboveBorder: "Number of module",
                     prefixText: '',
                     hintText: 'Enter number of module',
@@ -67,7 +69,7 @@ void addSubject(BuildContext context) {
                 //add link
                 CustomInputField(
                     maxLength: null,
-                    inputController: _syllabusLinkController,
+                    inputController: syllabusLinkController,
                     textaboveBorder: "Sylabus",
                     prefixText: '',
                     hintText: 'Enter sylabus drive link(make visible on)',
@@ -76,20 +78,21 @@ void addSubject(BuildContext context) {
                 ButtonFilled(
                     text: "Add",
                     onPressed: () async {
-                      if (_shortNameController.text.isNotEmpty &&
-                          _fullNameController.text.isNotEmpty &&
-                          _numberOfModuleController.text.isNotEmpty &&
-                          _syllabusLinkController.text.isNotEmpty) {
+                      if (shortNameController.text.isNotEmpty &&
+                          fullNameController.text.isNotEmpty &&
+                          numberOfModuleController.text.isNotEmpty &&
+                          // ignore: duplicate_ignore, duplicate_ignore
+                          syllabusLinkController.text.isNotEmpty) {
                         Provider.of<AuthProvider>(context, listen: false)
                             .isLoadingFun(true);
                         await Firestoremethods().addModule(
                             context,
                             SubjectModel(
-                                syllabusLink: _syllabusLinkController.text,
-                                shortName: _shortNameController.text,
-                                fullname: _fullNameController.text,
+                                syllabusLink: syllabusLinkController.text,
+                                shortName: shortNameController.text,
+                                fullname: fullNameController.text,
                                 numberOfModule:
-                                    _numberOfModuleController.text));
+                                    numberOfModuleController.text));
                         // await Firestoremethods().addBranchModel(
                         //   BranchModel(
                         //       displayName: _displayNameController.text,
@@ -99,6 +102,7 @@ void addSubject(BuildContext context) {
                         //           _numberOfSemesterController.text),
                         //   context,
                         // );
+                        // ignore: use_build_context_synchronously
                         Provider.of<AuthProvider>(context, listen: false)
                             .isLoadingFun(false);
                         Navigator.pop(builder);

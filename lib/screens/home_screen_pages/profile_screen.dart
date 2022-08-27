@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +25,8 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuth.instance;
-    UserModel? _user = Provider.of<UserProvider>(context).userModel;
+    final auth = FirebaseAuth.instance;
+    UserModel? user = Provider.of<UserProvider>(context).userModel;
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -64,7 +66,7 @@ class ProfileScreen extends StatelessWidget {
                                     aspectRatio: 1,
                                     child: Hero(
                                       tag: "Profile pic",
-                                      child: _user!.profileUrl == null
+                                      child: user!.profileUrl == null
                                           ? const CircleAvatar(
                                               child: Icon(Icons.person),
                                             )
@@ -74,32 +76,32 @@ class ProfileScreen extends StatelessWidget {
                                                       179, 182, 186, 236),
                                               backgroundImage:
                                                   CachedNetworkImageProvider(
-                                                      _user.profileUrl!),
+                                                      user.profileUrl!),
                                             ),
                                     ),
                                   )),
-                              title: Text(_user.name!),
+                              title: Text(user.name!),
                               subtitle: Text(
-                                  _auth.currentUser!.phoneNumber!.substring(3)),
+                                  auth.currentUser!.phoneNumber!.substring(3)),
                             ),
                             ListTile(
                               title: const Text("University: "),
-                              subtitle: _user.universityName != null
-                                  ? Text(_user.universityName!)
+                              subtitle: user.universityName != null
+                                  ? Text(user.universityName!)
                                   : const Text('Not selected'),
                             ),
                             ListTile(
                               title: const Text("Branch: "),
-                              subtitle: _user.branchName != null
-                                  ? Text(_user.branchName!)
+                              subtitle: user.branchName != null
+                                  ? Text(user.branchName!)
                                   : const Text('Not selected'),
                             ),
-                            _user.college == null || _user.college!.isEmpty
+                            user.college == null || user.college!.isEmpty
                                 ? const SizedBox()
                                 : ListTile(
                                     title: const Text("College: "),
-                                    subtitle: _user.college != null
-                                        ? Text(_user.college!)
+                                    subtitle: user.college != null
+                                        ? Text(user.college!)
                                         : const Text('Not selected'),
                                   ),
                           ],
@@ -293,12 +295,29 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  ListTile(
+                    // isThreeLine: true,
+                    onTap: () {
+                      setEmailToAdmin(
+                          subject:
+                              "Hello UG Hub Sub:Startup idea or Collge Project assistence");
+                    },
+                    leading: const Icon(Icons.assistant),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    tileColor: const Color.fromARGB(179, 182, 186, 236),
+                    title: const Text(
+                        'For soaftware assistence related to startup or college projects Contact us'),
+                  ),
 
                   // const SizedBox(
                   //   height: 3,
                   // ),
                   // const Divider(),
-                  _user.isAdmin == true
+                  user.isAdmin == true
                       ? ListTile(
                           onTap: () async {
                             bool connection = await isNetworkAvailable(context);
@@ -323,35 +342,6 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  setEmailToAdmin(
-                      subject:
-                          "Hello UG Hub Sub:Startup idea or Collge Project assistence");
-                },
-                child: Container(
-                    decoration: const BoxDecoration(
-                        color: Color.fromARGB(179, 182, 186, 236),
-                        borderRadius: BorderRadius.all(Radius.circular(14))),
-                    // height: 300,
-                    child: Column(
-                      children: const [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "For soaftware assistence related to startup or college projects \n Contact us",
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        )
-                      ],
-                    )),
-              ),
-            )
           ],
         ),
       ),

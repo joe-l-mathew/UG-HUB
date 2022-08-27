@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, prefer_interpolation_to_compose_strings
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -110,8 +112,8 @@ class ViewReportScreen extends StatelessWidget {
                           },
                           isThreeLine: true,
                           trailing: CircleAvatar(
-                              child: getIcon(path['fileType']),
-                              backgroundColor: primaryColor),
+                              backgroundColor: primaryColor,
+                              child: getIcon(path['fileType'])),
                           leading: Text("Comment: " + path['comment']),
                           subtitle: path['fileType'] == 'chat'
                               ? Column(

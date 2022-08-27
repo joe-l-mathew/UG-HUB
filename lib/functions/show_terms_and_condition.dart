@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
 import 'package:ug_hub/widgets/button_filled.dart';

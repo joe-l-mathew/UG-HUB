@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -29,14 +31,14 @@ class ReplayChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserModel? _user = Provider.of<UserProvider>(context).userModel;
+    UserModel? user = Provider.of<UserProvider>(context).userModel;
     var path = FirebaseFirestore.instance
         .collection(collectionUniversity)
-        .doc(_user!.university!)
+        .doc(user!.university!)
         .collection(collectionBranch)
-        .doc(_user.branch!)
+        .doc(user.branch!)
         .collection(collectionSemester)
-        .doc(_user.semester)
+        .doc(user.semester)
         .collection(collectionChat)
         .doc(docId)
         .collection(collectionChatReplay);
@@ -74,7 +76,7 @@ class ReplayChatScreen extends StatelessWidget {
                             child: ListTile(
                               onLongPress: () {
                                 if (snapshot.data!.docs[index]['uid'] ==
-                                        _user.uid
+                                        user.uid
                                     //      ||
                                     // _user.isAdmin == true
                                     ) {
@@ -128,7 +130,7 @@ class ReplayChatScreen extends StatelessWidget {
                                                                     FileType
                                                                         .chat,
                                                                 reporterId:
-                                                                    _user.uid),
+                                                                    user.uid),
                                                           )));
                                               Navigator.pop(contextDialouge);
                                             },
@@ -172,10 +174,10 @@ class ReplayChatScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    _user.profileUrl != null
+                    user.profileUrl != null
                         ? CircleAvatar(
                             backgroundImage:
-                                CachedNetworkImageProvider(_user.profileUrl!),
+                                CachedNetworkImageProvider(user.profileUrl!),
                           )
                         : const CircleAvatar(
                             radius: 15,
@@ -198,11 +200,11 @@ class ReplayChatScreen extends StatelessWidget {
                               context: context,
                               chatReplayModel: ChatReplayModel(
                                   chat: _replayController.text,
-                                  username: _user.name!,
-                                  uid: _user.uid,
+                                  username: user.name!,
+                                  uid: user.uid,
                                   dateTime: DateTime.now(),
                                   chatId: docId,
-                                  profileUrl: _user.profileUrl),
+                                  profileUrl: user.profileUrl),
                             );
                             _replayController.clear();
                           } else {
