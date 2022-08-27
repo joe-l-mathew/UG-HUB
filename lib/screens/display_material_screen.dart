@@ -29,6 +29,7 @@ import '../constants/firebase_fields.dart';
 import '../provider/add_module_toggle_provider.dart';
 import '../provider/user_provider.dart';
 import '../widgets/display_file_tile.dart';
+import '../widgets/no_material_and_loading_material_widget.dart';
 
 //fix sylabus issue
 
@@ -55,118 +56,119 @@ class DisplayMaterialsScreen extends StatelessWidget {
         .doc(moduleModel!.subjectId)
         .collection(collectionModule)
         .doc(moduleModel.moduleId);
-    var path2 = FirebaseFirestore.instance
-        .collection(collectionUniversity)
-        .doc(user.university)
-        .collection(collectionBranch)
-        .doc(user.branch)
-        .collection(collectionSemester)
-        .doc(user.semester)
-        .collection(collectionSubject)
-        .doc(moduleModel.subjectId);
+    // var path2 = FirebaseFirestore.instance
+    //     .collection(collectionUniversity)
+    //     .doc(user.university)
+    //     .collection(collectionBranch)
+    //     .doc(user.branch)
+    //     .collection(collectionSemester)
+    //     .doc(user.semester)
+    //     .collection(collectionSubject)
+    //     .doc(moduleModel.subjectId);
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            if (Provider.of<UserProvider>(context, listen: false)
-                        .userModel!
-                        .isTermsAccepted ==
-                    null ||
-                Provider.of<UserProvider>(context, listen: false)
-                        .userModel!
-                        .isTermsAccepted ==
-                    false) {
-              showTermsAndCondition(context);
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          if (Provider.of<UserProvider>(context, listen: false)
+                      .userModel!
+                      .isTermsAccepted ==
+                  null ||
+              Provider.of<UserProvider>(context, listen: false)
+                      .userModel!
+                      .isTermsAccepted ==
+                  false) {
+            showTermsAndCondition(context);
+          } else {
+            Provider.of<AddModuleToggleProvider>(context, listen: false)
+                .setSelectedField = 0;
+            bool isConnected = await checkInternet();
+            if (isConnected) {
+              // ignore: use_build_context_synchronously
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (builder) => const AddMaterialsScreen()));
             } else {
-              Provider.of<AddModuleToggleProvider>(context, listen: false)
-                  .setSelectedField = 0;
-              bool isConnected = await checkInternet();
-              if (isConnected) {
-                // ignore: use_build_context_synchronously
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (builder) => const AddMaterialsScreen()));
-              } else {
-                showSnackbar(context, "Please connect to internet");
-              }
+              showSnackbar(context, "Please connect to internet");
             }
-          },
-          child: const Icon(Icons.add),
-        ),
-        appBar: AppBar(
-            actions: [
-              IconButton(
-                  tooltip: "Syllabus",
-                  onPressed: () async {
-                    // SubjectModel model =
-                    //     SubjectModel.fromSnap(await path2.get());
-                    try {
-                      await launchUrl(Uri.parse(sylabusLink),
-                          mode: LaunchMode.externalApplication);
-                    } on Exception {
-                      showSnackbar(context, "Some error occured");
-                    }
-                  },
-                  icon: const FaIcon(FontAwesomeIcons.fileLines))
-            ],
-            backgroundColor: primaryColor,
-            title: Text(
-                "${moduleModel.moduleName} (${moduleModel.subjectShortName})")),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              //List PDF
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 10, top: 10),
-                    child: Text(
-                      "PDF / PPT",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ),
-                ),
-                StreamBuilder(
-                  stream: path
-                      .collection(collectionPdf)
-                      .orderBy('fileName')
-                      .snapshots(),
-                  builder: (BuildContext contexts,
-                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Provider.of<MaterialStatusProvider>(context,
-                                listen: false)
-                            .setPdfStatus(MaterialStatus.loading);
-                      });
-                      //need to change progress indicator
+          }
+        },
+        child: const Icon(Icons.add),
+      ),
+      appBar: AppBar(
+          actions: [
+            IconButton(
+                tooltip: "Syllabus",
+                onPressed: () async {
+                  // SubjectModel model =
+                  //     SubjectModel.fromSnap(await path2.get());
+                  try {
+                    await launchUrl(Uri.parse(sylabusLink),
+                        mode: LaunchMode.externalApplication);
+                  } on Exception {
+                    showSnackbar(context, "Some error occured");
+                  }
+                },
+                icon: const FaIcon(FontAwesomeIcons.fileLines))
+          ],
+          backgroundColor: primaryColor,
+          title: Text(
+              "${moduleModel.moduleName} (${moduleModel.subjectShortName})")),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            //List PDF
+            StreamBuilder(
+              stream: path
+                  .collection(collectionPdf)
+                  .orderBy('fileName')
+                  .snapshots(),
+              builder: (BuildContext contexts,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //   Provider.of<MaterialStatusProvider>(context,
+                  //           listen: false)
+                  //       .setPdfStatus(MaterialStatus.loading);
+                  // });
+                  //need to change progress indicator
 
-                      return const SizedBox(
-                          width: double.infinity,
-                          child: SingleChildScrollView(child: ShimmerWidget()));
-                    } else if (snapshot.data!.docs.isEmpty) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // Add Your Code here.
-                        Provider.of<MaterialStatusProvider>(context,
-                                listen: false)
-                            .setPdfStatus(MaterialStatus.empty);
-                      });
+                  // return const SizedBox(
+                  //     width: double.infinity,
+                  //     child: SingleChildScrollView(child: ShimmerWidget()));
+                  return SizedBox.shrink();
+                } else if (snapshot.data!.docs.isEmpty) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // Add Your Code here.
+                    Provider.of<MaterialStatusProvider>(context, listen: false)
+                        .setPdfStatus(MaterialStatus.empty);
+                  });
 
-                      return const AddNoMaterial(
-                        displayText: 'Add PDF / PPT',
-                      );
-                    } else {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // Add Your Code here.
-                        Provider.of<MaterialStatusProvider>(context,
-                                listen: false)
-                            .setPdfStatus(MaterialStatus.loaded);
-                      });
+                  // return const AddNoMaterial(
+                  //   displayText: 'Add PDF / PPT',
+                  // );
+                  return SizedBox.shrink();
+                } else {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // Add Your Code here.
+                    Provider.of<MaterialStatusProvider>(context, listen: false)
+                        .setPdfStatus(MaterialStatus.loaded);
+                  });
 
-                      return SizedBox(
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10, top: 10),
+                          child: Text(
+                            "PDF / PPT",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
                         height: 170,
                         child: ListView.separated(
                             physics: const BouncingScrollPhysics(),
@@ -252,64 +254,65 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                 ),
                               );
                             }),
-                      );
-                    }
-                  },
-                ),
-              ]),
-              const Divider(),
+                      ),
+                      const Divider(),
+                    ],
+                  );
+                }
+              },
+            ),
 
-              //show youtube files
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 10, top: 10),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Youtube",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ),
-                ),
-                StreamBuilder(
-                  stream: path
-                      .collection(collectionYoutube)
-                      .orderBy('youtubeChannelName')
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // Add Your Code here.
-                        Provider.of<MaterialStatusProvider>(context,
-                                listen: false)
-                            .setYtStatus(MaterialStatus.loading);
-                      });
-                      //need to change progress indicator
-                      return const SizedBox(
-                        width: double.infinity,
-                        child: SingleChildScrollView(child: ShimmerWidget()),
-                      );
-                    } else if (snapshot.data!.docs.isEmpty) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // Add Your Code here.
-                        Provider.of<MaterialStatusProvider>(context,
-                                listen: false)
-                            .setYtStatus(MaterialStatus.empty);
-                      });
-                      // return const AddNoMaterial(
-                      //     displayText: "Add Youtube Link");
-                      return const SizedBox.shrink();
-                    } else {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // Add Your Code here.
-                        Provider.of<MaterialStatusProvider>(context,
-                                listen: false)
-                            .setYtStatus(MaterialStatus.loaded);
-                      });
-                      return SizedBox(
+            //show youtube files
+            StreamBuilder(
+              stream: path
+                  .collection(collectionYoutube)
+                  .orderBy('youtubeChannelName')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //   // Add Your Code here.
+                  //   Provider.of<MaterialStatusProvider>(context,
+                  //           listen: false)
+                  //       .setYtStatus(MaterialStatus.loading);
+                  // });
+                  //need to change progress indicator
+                  // return const SizedBox(
+                  //   width: double.infinity,
+                  //   child: SingleChildScrollView(child: ShimmerWidget()),
+                  // );
+                  return SizedBox.shrink();
+                } else if (snapshot.data!.docs.isEmpty) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // Add Your Code here.
+                    Provider.of<MaterialStatusProvider>(context, listen: false)
+                        .setYtStatus(MaterialStatus.empty);
+                  });
+                  // return const AddNoMaterial(
+                  //     displayText: "Add Youtube Link");
+                  return const SizedBox.shrink();
+                } else {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // Add Your Code here.
+                    Provider.of<MaterialStatusProvider>(context, listen: false)
+                        .setYtStatus(MaterialStatus.loaded);
+                  });
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 10, top: 10),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Youtube",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
                         height: 170,
                         child: ListView.separated(
                             physics: const BouncingScrollPhysics(),
@@ -403,61 +406,63 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                 ),
                               );
                             }),
-                      );
-                    }
-                  },
-                ),
-              ]),
-              const Divider(),
+                      ),
+                      const Divider(),
+                    ],
+                  );
+                }
+              },
+            ),
 
-              //other links//
+            //other links//
 
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 10, top: 10),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Other links",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ),
-                ),
-                StreamBuilder(
-                  stream: path.collection(collectionOtherLink).snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // Add Your Code here.
-                        Provider.of<MaterialStatusProvider>(context,
-                                listen: false)
-                            .setLinkStatus(MaterialStatus.loading);
-                      });
-                      //need to change progress indicator
-                      return const SizedBox(
-                        width: double.infinity,
-                        child: SingleChildScrollView(child: ShimmerWidget()),
-                      );
-                    } else if (snapshot.data!.docs.isEmpty) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // Add Your Code here.
-                        Provider.of<MaterialStatusProvider>(context,
-                                listen: false)
-                            .setLinkStatus(MaterialStatus.empty);
-                      });
-                      return const AddNoMaterial(
-                          displayText: "Add Other Links");
-                    } else {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // Add Your Code here.
-                        Provider.of<MaterialStatusProvider>(context,
-                                listen: false)
-                            .setLinkStatus(MaterialStatus.loaded);
-                      });
-                      return SizedBox(
+            StreamBuilder(
+              stream: path.collection(collectionOtherLink).snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //   // Add Your Code here.
+                  //   Provider.of<MaterialStatusProvider>(context,
+                  //           listen: false)
+                  //       .setLinkStatus(MaterialStatus.loading);
+                  // });
+                  // //need to change progress indicator
+                  // return const SizedBox(
+                  //   width: double.infinity,
+                  //   child: SingleChildScrollView(child: ShimmerWidget()),
+                  // );
+                  return SizedBox.shrink();
+                } else if (snapshot.data!.docs.isEmpty) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // Add Your Code here.
+                    Provider.of<MaterialStatusProvider>(context, listen: false)
+                        .setLinkStatus(MaterialStatus.empty);
+                  });
+                  // return const AddNoMaterial(
+                  //     displayText: "Add Other Links");
+                  return SizedBox.shrink();
+                } else {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // Add Your Code here.
+                    Provider.of<MaterialStatusProvider>(context, listen: false)
+                        .setLinkStatus(MaterialStatus.loaded);
+                  });
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 10, top: 10),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Other links",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
                         height: 170,
                         child: ListView.separated(
                             physics: const BouncingScrollPhysics(),
@@ -518,14 +523,40 @@ class DisplayMaterialsScreen extends StatelessWidget {
                                 ),
                               );
                             }),
-                      );
-                    }
-                  },
-                ),
-              ]),
-            ],
-          ),
-        ));
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
+            StatusPage(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StatusPage extends StatelessWidget {
+  const StatusPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Provider.of<MaterialStatusProvider>(context).pdfStatus ==
+                MaterialStatus.empty &&
+            Provider.of<MaterialStatusProvider>(context).ytStatus ==
+                MaterialStatus.empty &&
+            Provider.of<MaterialStatusProvider>(context).linkStatus ==
+                MaterialStatus.empty
+        ? const NoMaterialFound()
+        : Provider.of<MaterialStatusProvider>(context).pdfStatus ==
+                    MaterialStatus.loading &&
+                Provider.of<MaterialStatusProvider>(context).ytStatus ==
+                    MaterialStatus.loading &&
+                Provider.of<MaterialStatusProvider>(context).linkStatus ==
+                    MaterialStatus.loading
+            ? MaterialLoadingCustom()
+            : const SizedBox.shrink();
   }
 }
 

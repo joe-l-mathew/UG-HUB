@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ug_hub/firebase/firestore_methods.dart';
@@ -93,10 +94,10 @@ class DialogFb1 extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
                 backgroundColor: primaryColor,
                 radius: 25,
-                child: Icon(Icons.cloud_upload)),
+                child: Lottie.asset("assets/upload.json")),
             const SizedBox(
               height: 15,
             ),

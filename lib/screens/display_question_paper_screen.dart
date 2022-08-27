@@ -15,6 +15,7 @@ import '../model/user_model.dart';
 import '../provider/user_provider.dart';
 // import '../widgets/add_material_types_widgets.dart';
 import '../widgets/dialouge_widget.dart';
+import '../widgets/no_material_and_loading_material_widget.dart';
 import '../widgets/report_material.dart';
 import 'add_question_screen.dart';
 
@@ -61,10 +62,9 @@ class DisplayQuestionPaperScreen extends StatelessWidget {
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: Lottie.asset("assets/loading.json"));
+            return const MaterialLoadingCustom();
           } else if (snapshot.data!.docs.isEmpty) {
-            return Center(
-                child: Lottie.asset("assets/no_file.json", repeat: false));
+            return const NoMaterialFound();
           } else {
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
