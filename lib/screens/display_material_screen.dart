@@ -29,8 +29,12 @@ import '../provider/add_module_toggle_provider.dart';
 import '../provider/user_provider.dart';
 import '../widgets/display_file_tile.dart';
 
+//fix sylabus issue
+
 class DisplayMaterialsScreen extends StatelessWidget {
-  const DisplayMaterialsScreen({Key? key}) : super(key: key);
+  final String sylabusLink;
+  const DisplayMaterialsScreen({Key? key, required this.sylabusLink})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -94,10 +98,10 @@ class DisplayMaterialsScreen extends StatelessWidget {
               IconButton(
                   tooltip: "Syllabus",
                   onPressed: () async {
-                    SubjectModel model =
-                        SubjectModel.fromSnap(await path2.get());
+                    // SubjectModel model =
+                    //     SubjectModel.fromSnap(await path2.get());
                     try {
-                      await launchUrl(Uri.parse(model.syllabusLink),
+                      await launchUrl(Uri.parse(sylabusLink),
                           mode: LaunchMode.externalApplication);
                     } on Exception {
                       showSnackbar(context, "Some error occured");

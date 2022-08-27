@@ -176,7 +176,11 @@ class SubjectBanner extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (builder) =>
-                                                  const DisplayMaterialsScreen()));
+                                                  DisplayMaterialsScreen(
+                                                    sylabusLink: snapshot.data!
+                                                        .docs[indexofSubject]
+                                                        .data()['syllabusLink'],
+                                                  )));
                                 } else {
                                   showDialog(
                                       context: context,
@@ -230,7 +234,11 @@ class SubjectBanner extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: (builder) =>
-                                             const DisplayMaterialsScreen()));
+                                              DisplayMaterialsScreen(
+                                                sylabusLink: snapshot
+                                                    .data!.docs[indexofSubject]
+                                                    .data()['syllabusLink'],
+                                              )));
                                 }
                               }
                             },
