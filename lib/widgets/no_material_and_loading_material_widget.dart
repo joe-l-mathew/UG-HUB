@@ -10,7 +10,12 @@ class MaterialLoadingCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Lottie.asset("assets/loading.json"));
+    return Column(
+      children: [
+        Lottie.asset("assets/loading.json", repeat: false),
+        // SizedBox.expand()
+      ],
+    );
   }
 }
 

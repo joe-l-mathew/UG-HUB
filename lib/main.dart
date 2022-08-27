@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter_displaymode/flutter_displaymode.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hexcolor/hexcolor.dart';
 // import 'package:hive/hive.dart';
@@ -88,7 +89,7 @@ class _MyAppState extends State<MyApp> {
       child: OverlaySupport.global(
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'UG HUB',
+            title: 'UG Hub',
             theme: ThemeData(primarySwatch: Colors.indigo)
                 .copyWith(primaryColor: primaryColor),
             home: StreamBuilder(

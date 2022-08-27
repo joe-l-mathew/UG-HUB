@@ -8,19 +8,19 @@ class MaterialStatusProvider with ChangeNotifier {
   MaterialStatus linkStatus = MaterialStatus.loading;
   setPdfStatus(MaterialStatus status) {
     pdfStatus = status;
-    print(pdfStatus);
+    // print(pdfStatus);
     notifyListeners();
   }
 
   setYtStatus(MaterialStatus status) {
     ytStatus = status;
-    print(ytStatus);
+    // print(ytStatus);
     notifyListeners();
   }
 
   setLinkStatus(MaterialStatus status) {
     linkStatus = status;
-    print(linkStatus);
+    // print(linkStatus);
     notifyListeners();
   }
 }

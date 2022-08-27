@@ -59,6 +59,7 @@ dependencies:
   unity_ads_plugin: ^0.3.6
   new_version_plus: ^0.0.1+4
   lottie: ^1.4.2
+  # flutter_displaymode: ^0.4.0
   # expandable: ^5.0.1
 
 dev_dependencies:

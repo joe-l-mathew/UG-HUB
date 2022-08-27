@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 ///////////////////////////////////////
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lottie/lottie.dart';
+// import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:ug_hub/firebase/firestore_methods.dart';
@@ -17,7 +17,7 @@ import 'package:ug_hub/functions/show_terms_and_condition.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/model/report_model.dart';
-import 'package:ug_hub/model/subject_model.dart';
+// import 'package:ug_hub/model/subject_model.dart';
 import 'package:ug_hub/model/user_model.dart';
 import 'package:ug_hub/provider/material_status_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
@@ -135,7 +135,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   // return const SizedBox(
                   //     width: double.infinity,
                   //     child: SingleChildScrollView(child: ShimmerWidget()));
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 } else if (snapshot.data!.docs.isEmpty) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     // Add Your Code here.
@@ -146,7 +146,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   // return const AddNoMaterial(
                   //   displayText: 'Add PDF / PPT',
                   // );
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 } else {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     // Add Your Code here.
@@ -282,7 +282,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   //   width: double.infinity,
                   //   child: SingleChildScrollView(child: ShimmerWidget()),
                   // );
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 } else if (snapshot.data!.docs.isEmpty) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     // Add Your Code here.
@@ -432,7 +432,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   //   width: double.infinity,
                   //   child: SingleChildScrollView(child: ShimmerWidget()),
                   // );
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 } else if (snapshot.data!.docs.isEmpty) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     // Add Your Code here.
@@ -441,7 +441,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                   });
                   // return const AddNoMaterial(
                   //     displayText: "Add Other Links");
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 } else {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     // Add Your Code here.
@@ -529,7 +529,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                 }
               },
             ),
-            StatusPage(),
+            const StatusPage(),
           ],
         ),
       ),
@@ -555,7 +555,7 @@ class StatusPage extends StatelessWidget {
                     MaterialStatus.loading &&
                 Provider.of<MaterialStatusProvider>(context).linkStatus ==
                     MaterialStatus.loading
-            ? MaterialLoadingCustom()
+            ? const MaterialLoadingCustom()
             : const SizedBox.shrink();
   }
 }

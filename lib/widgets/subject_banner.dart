@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-// ignore: unnecessary_import
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-// import 'package:ug_hub/admob/admob_class.dart';
-// import 'package:ug_hub/admob/admob_provider.dart';
 import 'package:ug_hub/functions/snackbar_model.dart';
 import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/provider/module_id_provider.dart';
@@ -18,8 +14,7 @@ import 'package:ug_hub/widgets/dialouge_widget.dart';
 import 'package:ug_hub/widgets/module_list_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/firebase_fields.dart';
-// import '../constants/hive.dart';
-// import '../main.dart';
+import '../functions/reset_material_status.dart';
 import '../model/user_model.dart';
 import '../provider/user_provider.dart';
 import '../utils/color.dart';
@@ -145,6 +140,7 @@ class SubjectBanner extends StatelessWidget {
                                   index == snapshotModule.data!.docs.length
                                       ? Navigator.push(context,
                                           MaterialPageRoute(builder: (builder) {
+                                          resetMaterialStatus(context);
                                           Provider.of<ModuleIdProvider>(context)
                                               .setModuleId(snapshot.data!
                                                   .docs[indexofSubject].id);
@@ -167,6 +163,7 @@ class SubjectBanner extends StatelessWidget {
                                   index == snapshotModule.data!.docs.length
                                       ? Navigator.push(context,
                                           MaterialPageRoute(builder: (builder) {
+                                          resetMaterialStatus(context);
                                           Provider.of<ModuleIdProvider>(context)
                                               .setModuleId(snapshot.data!
                                                   .docs[indexofSubject].id);
@@ -175,12 +172,14 @@ class SubjectBanner extends StatelessWidget {
                                       : Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  DisplayMaterialsScreen(
+                                              builder: (builder) {
+                                                resetMaterialStatus(context);
+                                                return DisplayMaterialsScreen(
                                                     sylabusLink: snapshot.data!
                                                         .docs[indexofSubject]
                                                         .data()['syllabusLink'],
-                                                  )));
+                                                  );
+                                              }));
                                 } else {
                                   showDialog(
                                       context: context,
@@ -208,6 +207,7 @@ class SubjectBanner extends StatelessWidget {
                                 index == snapshotModule.data!.docs.length
                                     ? Navigator.push(context,
                                         MaterialPageRoute(builder: (builder) {
+                                          resetMaterialStatus(context);
                                         Provider.of<ModuleIdProvider>(context)
                                             .setModuleId(snapshot
                                                 .data!.docs[indexofSubject].id);
@@ -233,12 +233,14 @@ class SubjectBanner extends StatelessWidget {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (builder) =>
-                                              DisplayMaterialsScreen(
+                                          builder: (builder) {
+                                            resetMaterialStatus(context);
+                                            return DisplayMaterialsScreen(
                                                 sylabusLink: snapshot
                                                     .data!.docs[indexofSubject]
                                                     .data()['syllabusLink'],
-                                              )));
+                                              );
+                                          }));
                                 }
                               }
                             },
