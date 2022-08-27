@@ -19,6 +19,7 @@ import 'package:ug_hub/model/module_model.dart';
 import 'package:ug_hub/model/report_model.dart';
 import 'package:ug_hub/model/subject_model.dart';
 import 'package:ug_hub/model/user_model.dart';
+import 'package:ug_hub/provider/material_status_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/screens/add_materials.dart';
 import 'package:ug_hub/utils/color.dart';
@@ -63,7 +64,6 @@ class DisplayMaterialsScreen extends StatelessWidget {
         .doc(user.semester)
         .collection(collectionSubject)
         .doc(moduleModel.subjectId);
-
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
@@ -137,15 +137,35 @@ class DisplayMaterialsScreen extends StatelessWidget {
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Provider.of<MaterialStatusProvider>(context,
+                                listen: false)
+                            .setPdfStatus(MaterialStatus.loading);
+                      });
                       //need to change progress indicator
+
                       return const SizedBox(
                           width: double.infinity,
                           child: SingleChildScrollView(child: ShimmerWidget()));
                     } else if (snapshot.data!.docs.isEmpty) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // Add Your Code here.
+                        Provider.of<MaterialStatusProvider>(context,
+                                listen: false)
+                            .setPdfStatus(MaterialStatus.empty);
+                      });
+
                       return const AddNoMaterial(
                         displayText: 'Add PDF / PPT',
                       );
                     } else {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // Add Your Code here.
+                        Provider.of<MaterialStatusProvider>(context,
+                                listen: false)
+                            .setPdfStatus(MaterialStatus.loaded);
+                      });
+
                       return SizedBox(
                         height: 170,
                         child: ListView.separated(
@@ -238,6 +258,7 @@ class DisplayMaterialsScreen extends StatelessWidget {
                 ),
               ]),
               const Divider(),
+
               //show youtube files
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const Padding(
@@ -260,15 +281,34 @@ class DisplayMaterialsScreen extends StatelessWidget {
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // Add Your Code here.
+                        Provider.of<MaterialStatusProvider>(context,
+                                listen: false)
+                            .setYtStatus(MaterialStatus.loading);
+                      });
                       //need to change progress indicator
                       return const SizedBox(
                         width: double.infinity,
                         child: SingleChildScrollView(child: ShimmerWidget()),
                       );
                     } else if (snapshot.data!.docs.isEmpty) {
-                      return const AddNoMaterial(
-                          displayText: "Add Youtube Link");
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // Add Your Code here.
+                        Provider.of<MaterialStatusProvider>(context,
+                                listen: false)
+                            .setYtStatus(MaterialStatus.empty);
+                      });
+                      // return const AddNoMaterial(
+                      //     displayText: "Add Youtube Link");
+                      return const SizedBox.shrink();
                     } else {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // Add Your Code here.
+                        Provider.of<MaterialStatusProvider>(context,
+                                listen: false)
+                            .setYtStatus(MaterialStatus.loaded);
+                      });
                       return SizedBox(
                         height: 170,
                         child: ListView.separated(
@@ -390,15 +430,33 @@ class DisplayMaterialsScreen extends StatelessWidget {
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // Add Your Code here.
+                        Provider.of<MaterialStatusProvider>(context,
+                                listen: false)
+                            .setLinkStatus(MaterialStatus.loading);
+                      });
                       //need to change progress indicator
                       return const SizedBox(
                         width: double.infinity,
                         child: SingleChildScrollView(child: ShimmerWidget()),
                       );
                     } else if (snapshot.data!.docs.isEmpty) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // Add Your Code here.
+                        Provider.of<MaterialStatusProvider>(context,
+                                listen: false)
+                            .setLinkStatus(MaterialStatus.empty);
+                      });
                       return const AddNoMaterial(
                           displayText: "Add Other Links");
                     } else {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // Add Your Code here.
+                        Provider.of<MaterialStatusProvider>(context,
+                                listen: false)
+                            .setLinkStatus(MaterialStatus.loaded);
+                      });
                       return SizedBox(
                         height: 170,
                         child: ListView.separated(

@@ -14,6 +14,7 @@ import 'package:ug_hub/provider/auth_provider.dart';
 import 'package:ug_hub/provider/bottom_navigation_bar_provider.dart';
 import 'package:ug_hub/provider/branch_provider.dart';
 import 'package:ug_hub/provider/display_pdf_provider.dart';
+import 'package:ug_hub/provider/material_status_provider.dart';
 import 'package:ug_hub/provider/module_id_provider.dart';
 import 'package:ug_hub/provider/module_model_provider.dart';
 import 'package:ug_hub/provider/university_provider.dart';
@@ -47,8 +48,7 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   // MobileAds.instance.initialize();
-  UnityClass().initializeAds(
-  );
+  UnityClass().initializeAds();
   await Hive.initFlutter();
   hivebox = await Hive.openBox(hiveAddNumberBox);
   await Firebase.initializeApp();
@@ -70,6 +70,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => MaterialStatusProvider()),
         ChangeNotifierProvider(create: (context) => UnityProvider()),
         ChangeNotifierProvider(create: (context) => ModuleIdProvider()),
         ChangeNotifierProvider(create: (context) => DisplayPdfProvider()),
