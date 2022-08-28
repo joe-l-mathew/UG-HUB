@@ -472,7 +472,7 @@ packages:
     source: hosted
     version: "1.8.1"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
@@ -520,6 +520,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.7"
+  pdf_compressor:
+    dependency: "direct main"
+    description:
+      name: pdf_compressor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   pedantic:
     dependency: transitive
     description:

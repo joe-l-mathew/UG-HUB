@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -97,7 +98,10 @@ class DialogFb1 extends StatelessWidget {
             CircleAvatar(
                 backgroundColor: primaryColor,
                 radius: 25,
-                child: Lottie.asset("assets/upload.json")),
+                child: Lottie.asset("assets/upload.json",
+                    animate: Provider.of<UploadStatusProvider>(context)
+                            .uploadStatus !=
+                        null)),
             const SizedBox(
               height: 15,
             ),
@@ -132,89 +136,99 @@ class DialogFb1 extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            Provider.of<UploadStatusProvider>(context).uploadStatus == null
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SimpleBtn1(
-                        text: "Select",
-                        onPressed: () {
-                          pickPdfFile(context);
-                        },
-                        invertedColors: Provider.of<UploadPdfProvider>(context)
-                                .selectedPdfName !=
-                            null,
-                      ),
-                      Provider.of<UploadPdfProvider>(context).selectedPdfName !=
-                              null
-                          ? SimpleBtn1(
-                              text: "Upload",
-                              onPressed: () async {
-                                if (pdfNameController.text.isNotEmpty) {
-                                  bool isConnected = await checkInternet();
-                                  if (isConnected) {
-                                    Provider.of<UploadPdfProvider>(context,
-                                                listen: false)
-                                            .setInputFileName =
-                                        pdfNameController.text;
-                                    await Firestoremethods().addPdftoDatabase(
-                                        context,
-                                        isQuestion: isQuestion);
-                                    showSnackbar(
-                                        context, "Uploaded Successfully");
-                                    pdfNameController.clear();
-                                    Navigator.pop(context);
-                                  } else {
-                                    showSnackbar(
-                                        context, "No internet connection");
-                                    Provider.of<UploadPdfProvider>(context,
-                                            listen: false)
-                                        .setFile = null;
-                                    Provider.of<UploadPdfProvider>(context,
-                                            listen: false)
-                                        .setFileName = null;
-                                    Provider.of<UploadPdfProvider>(context,
-                                            listen: false)
-                                        .setFileUrl = null;
-                                    Provider.of<UploadPdfProvider>(context,
-                                            listen: false)
-                                        .setInputFileName = null;
-                                    pdfNameController.clear();
-                                    Navigator.pop(context);
-                                  }
-                                } else {
-                                  showSnackbar(
-                                      context, "Please fill File Name");
-                                  // Provider.of<UploadPdfProvider>(context,
-                                  //         listen: false)
-                                  //     .setInputFileName = "pdf name";
-                                  // Firestoremethods().addPdftoDatabase(context);
-                                }
-                              },
-                              invertedColors: false)
-                          : SimpleBtn1(
-                              text: "Upload",
-                              onPressed: () {
-                                showSnackbar(
-                                    context, "Select a file before uploading");
-                              },
-                              invertedColors: true),
-                      //to be deleted
-                      Provider.of<UploadStatusProvider>(context).uploadStatus ==
-                              null
-                          ? Container()
-                          : Text(
-                              'Uploading ${(Provider.of<UploadStatusProvider>(context).uploadStatus! * 100).toStringAsFixed(2)} %')
-                    ],
+            Provider.of<UploadPdfProvider>(context).isCompressing
+                ? SimpleBtn1(
+                    text: "Compressing",
+                    onPressed: () {},
+                    isCompressing: true,
                   )
-                : SimpleBtn1(
-                    text:
-                        'Uploading ${(Provider.of<UploadStatusProvider>(context).uploadStatus! * 100).toStringAsFixed(2)} %',
-                    onPressed: () {
-                      // showSnackbar(
-                      //     context, "Select a file before uploading");
-                    },
-                    invertedColors: true),
+                : Provider.of<UploadStatusProvider>(context).uploadStatus ==
+                        null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SimpleBtn1(
+                            text: "Select",
+                            onPressed: () {
+                              pickPdfFile(context);
+                            },
+                            invertedColors:
+                                Provider.of<UploadPdfProvider>(context)
+                                        .selectedPdfName !=
+                                    null,
+                          ),
+                          Provider.of<UploadPdfProvider>(context)
+                                      .selectedPdfName !=
+                                  null
+                              ? SimpleBtn1(
+                                  text: "Upload",
+                                  onPressed: () async {
+                                    if (pdfNameController.text.isNotEmpty) {
+                                      bool isConnected = await checkInternet();
+                                      if (isConnected) {
+                                        Provider.of<UploadPdfProvider>(context,
+                                                    listen: false)
+                                                .setInputFileName =
+                                            pdfNameController.text;
+                                        await Firestoremethods()
+                                            .addPdftoDatabase(context,
+                                                isQuestion: isQuestion);
+                                        showSnackbar(
+                                            context, "Uploaded Successfully");
+                                        pdfNameController.clear();
+                                        Navigator.pop(context);
+                                      } else {
+                                        showSnackbar(
+                                            context, "No internet connection");
+                                        Provider.of<UploadPdfProvider>(context,
+                                                listen: false)
+                                            .setFile = null;
+                                        Provider.of<UploadPdfProvider>(context,
+                                                listen: false)
+                                            .setFileName = null;
+                                        Provider.of<UploadPdfProvider>(context,
+                                                listen: false)
+                                            .setFileUrl = null;
+                                        Provider.of<UploadPdfProvider>(context,
+                                                listen: false)
+                                            .setInputFileName = null;
+                                        pdfNameController.clear();
+                                        Navigator.pop(context);
+                                      }
+                                    } else {
+                                      showSnackbar(
+                                          context, "Please fill File Name");
+                                      // Provider.of<UploadPdfProvider>(context,
+                                      //         listen: false)
+                                      //     .setInputFileName = "pdf name";
+                                      // Firestoremethods().addPdftoDatabase(context);
+                                    }
+                                  },
+                                  invertedColors: false)
+                              : SimpleBtn1(
+                                  text: "Upload",
+                                  onPressed: () {
+                                    showSnackbar(context,
+                                        "Select a file before uploading");
+                                  },
+                                  invertedColors: true),
+                          //to be deleted
+                          Provider.of<UploadStatusProvider>(context)
+                                      .uploadStatus ==
+                                  null
+                              ? Container()
+                              : Text(
+                                  'Uploading ${(Provider.of<UploadStatusProvider>(context).uploadStatus! * 100).toStringAsFixed(2)} %')
+                        ],
+                      )
+                    : SimpleBtn1(
+                        text:
+                            'Uploading ${(Provider.of<UploadStatusProvider>(context).uploadStatus! * 100).toStringAsFixed(2)} %',
+                        onPressed: () {
+                          // showSnackbar(
+                          //     context, "Select a file before uploading");
+                        },
+                        invertedColors: true),
           ],
         ),
       ),
@@ -226,15 +240,16 @@ class SimpleBtn1 extends StatelessWidget {
   final String text;
   final Function() onPressed;
   final bool invertedColors;
+  final bool isCompressing;
   const SimpleBtn1(
       {required this.text,
       required this.onPressed,
       this.invertedColors = false,
+      this.isCompressing = false,
       Key? key})
       : super(key: key);
   final primaryColor = const Color(0xff4338CA);
   final accentColor = const Color(0xffffffff);
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -251,11 +266,34 @@ class SimpleBtn1 extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             )),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: TextStyle(
-              color: invertedColors ? primaryColor : accentColor, fontSize: 16),
-        ));
+        child: isCompressing
+            ? Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      text,
+                      style: TextStyle(
+                          color: invertedColors ? primaryColor : accentColor,
+                          fontSize: 16),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    // LoadingAnimationWidget.inkDrop(
+                    //     color: Colors.white, size: 14)
+                    LoadingAnimationWidget.beat(color: Colors.white, size: 14)
+                  ],
+                ),
+              )
+            : Text(
+                text,
+                style: TextStyle(
+                    color: invertedColors ? primaryColor : accentColor,
+                    fontSize: 16),
+              ));
   }
 }
 
