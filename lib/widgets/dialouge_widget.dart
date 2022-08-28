@@ -29,7 +29,7 @@ class DialougeWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
         width: MediaQuery.of(context).size.width / 1.4,
-        height: MediaQuery.of(context).size.height / 3.5,
+        height: MediaQuery.of(context).size.height / 3.3,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15.0),
@@ -50,6 +50,7 @@ class DialougeWidget extends StatelessWidget {
             ),
             Text(tittleText,
                 textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18,
@@ -57,12 +58,17 @@ class DialougeWidget extends StatelessWidget {
             const SizedBox(
               height: 3.5,
             ),
-            Text(subText,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300)),
+            Padding(
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              child: Text(subText,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300)),
+            ),
             const SizedBox(
               height: 15,
             ),

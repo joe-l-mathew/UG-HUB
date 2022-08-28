@@ -160,26 +160,31 @@ class SubjectBanner extends StatelessWidget {
                                               .data!.docs[indexofSubject]
                                               .data()['shortName']);
 
-                                  index == snapshotModule.data!.docs.length
-                                      ? Navigator.push(context,
-                                          MaterialPageRoute(builder: (builder) {
-                                          resetMaterialStatus(context);
-                                          Provider.of<ModuleIdProvider>(context)
-                                              .setModuleId(snapshot.data!
-                                                  .docs[indexofSubject].id);
-                                          return const DisplayQuestionPaperScreen();
-                                        }))
-                                      : Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (builder) {
-                                                resetMaterialStatus(context);
-                                                return DisplayMaterialsScreen(
-                                                    sylabusLink: snapshot.data!
-                                                        .docs[indexofSubject]
-                                                        .data()['syllabusLink'],
-                                                  );
-                                              }));
+                                  ///
+                                  // index == snapshotModule.data!.docs.length
+                                  //     ? Navigator.push(context,
+                                  //         MaterialPageRoute(builder: (builder) {
+                                  //         resetMaterialStatus(context);
+                                  //         Provider.of<ModuleIdProvider>(context)
+                                  //             .setModuleId(snapshot.data!
+                                  //                 .docs[indexofSubject].id);
+                                  //         return const DisplayQuestionPaperScreen();
+                                  //       }))
+                                  if (index !=
+                                      snapshotModule.data!.docs.length) {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (builder) {
+                                      resetMaterialStatus(context);
+                                      return DisplayMaterialsScreen(
+                                        sylabusLink: snapshot
+                                            .data!.docs[indexofSubject]
+                                            .data()['syllabusLink'],
+                                      );
+                                    }));
+                                  }
+
+                                  ///
+
                                 } else {
                                   showDialog(
                                       context: context,
@@ -207,7 +212,7 @@ class SubjectBanner extends StatelessWidget {
                                 index == snapshotModule.data!.docs.length
                                     ? Navigator.push(context,
                                         MaterialPageRoute(builder: (builder) {
-                                          resetMaterialStatus(context);
+                                        resetMaterialStatus(context);
                                         Provider.of<ModuleIdProvider>(context)
                                             .setModuleId(snapshot
                                                 .data!.docs[indexofSubject].id);
@@ -230,17 +235,15 @@ class SubjectBanner extends StatelessWidget {
                                                 .data()['shortName']);
 
                                 if (index != snapshotModule.data!.docs.length) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (builder) {
-                                            resetMaterialStatus(context);
-                                            return DisplayMaterialsScreen(
-                                                sylabusLink: snapshot
-                                                    .data!.docs[indexofSubject]
-                                                    .data()['syllabusLink'],
-                                              );
-                                          }));
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (builder) {
+                                    resetMaterialStatus(context);
+                                    return DisplayMaterialsScreen(
+                                      sylabusLink: snapshot
+                                          .data!.docs[indexofSubject]
+                                          .data()['syllabusLink'],
+                                    );
+                                  }));
                                 }
                               }
                             },

@@ -299,18 +299,20 @@ class ProfileScreen extends StatelessWidget {
                     height: 3,
                   ),
                   ListTile(
-                    // isThreeLine: true,
+                    isThreeLine: true,
                     onTap: () {
                       setEmailToAdmin(
                           subject:
                               "Hello UG Hub Sub:Startup idea or Collge Project assistence");
                     },
-                    leading: const Icon(Icons.assistant),
+                    // leading: const Icon(Icons.assistant),
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     tileColor: const Color.fromARGB(179, 182, 186, 236),
                     title: const Text(
                         'For soaftware assistence related to startup or college projects Contact us'),
+                    subtitle: const Text(
+                        "We provide free overhead work for potential startups, College projects will be done in sheduled time and teaching of the tool will be done."),
                   ),
 
                   // const SizedBox(

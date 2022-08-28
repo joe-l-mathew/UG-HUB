@@ -80,7 +80,8 @@ Future<void> openPdf(
               },
               icon: const FaIcon(FontAwesomeIcons.rectangleAd),
               tittleText: "Download quota finished !",
-              subText: "Get upto 12 Hour unintrupted use and 4 Downloads",
+              subText:
+                  "Get upto 12 Hours unintrupted use and 4 Downloads by watching an Ad",
             );
           });
     } else {
@@ -113,8 +114,8 @@ Future<void> openPdf(
                 "Try instaling google slides if you dont have a ppt viewer",
                 duration: 2);
           }
-        // ignore: empty_catches
-        }catch(e){}
+          // ignore: empty_catches
+        } catch (e) {}
       } on Exception {
         await pr.hide();
 
