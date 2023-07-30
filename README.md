@@ -1,6 +1,6 @@
 # ug_hub
 
-A new Flutter project.
+A project made using Flutter and firebase which used for University level micro study material sharing
 
 ## Getting Started
 
