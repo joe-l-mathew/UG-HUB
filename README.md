@@ -1,6 +1,6 @@
 # UG Hub
 
-A project made using Flutter and firebase which used for University level micro study material sharing. The App mainly focouses on providing course based study materials like PDF,PPT, Youtube videos and other links
+A project made using Flutter and firebase which used for University level micro study material sharing. The App mainly focouses on providing course based study materials like PDF,PPT, Youtube videos and other links Used provider for state management, Firebase Auth for phone number auth, Firebase storage for data storage, Cloud Firestore as Db, and Unity ads for Ads
 
 #  TOP FEATURES
 
